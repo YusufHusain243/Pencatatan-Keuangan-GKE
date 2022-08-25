@@ -21,37 +21,37 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/akun" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Daftar Akun</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/sub-akun" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Daftar Sub Akun</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/sub sub-akun" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Daftar Sub Sub-Akun</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/penerimaan" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Catat Penerimaan</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/pengeluaran" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Catat Pengeluaran</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/akun-bank" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Akun Bank</p>
                     </a>
