@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,12 +15,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('pages/dashboard');
-});
-Route::get('/user', function () {
-    return view('pages/user');
-});
+Route::get('/', [DashboardController::class, 'index']);
+
+Route::get('/user', [UserController::class, 'index']);
+Route::post('/user', [UserController::class, 'store']);
+Route::delete('/user/{id}', [UserController::class, 'destroy']);
+Route::get('edit/user/{id}', [UserController::class, 'edit']);
+Route::patch('user/{id}', [UserController::class, 'update']);
+
 Route::get('/akun', function () {
     return view('pages/akun');
 });
