@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KodeController;
+use App\Http\Controllers\SubKodeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,13 +31,15 @@ Route::delete('/kode/{id}', [KodeController::class, 'destroy']);
 Route::get('edit/kode/{id}', [KodeController::class, 'edit']);
 Route::patch('/kode/{id}', [KodeController::class, 'update']);
 
+Route::get('/sub-kode', [SubKodeController::class, 'index']);
+Route::post('/sub-kode', [SubKodeController::class, 'store']);
+Route::delete('/sub-kode/{id}', [SubKodeController::class, 'destroy']);
+Route::get('edit/sub-kode/{id}', [SubKodeController::class, 'edit']);
+Route::patch('/sub-kode/{id}', [SubKodeController::class, 'update']);
 
-// Route::get('/kode', function () {
-//     return view('pages/kode');
+// Route::get('/sub-kode', function () {
+//     return view('pages/sub_kode');
 // });
-Route::get('/sub-kode', function () {
-    return view('pages/sub_kode');
-});
 Route::get('/sub sub-kode', function () {
     return view('pages/sub_sub_kode');
 });
