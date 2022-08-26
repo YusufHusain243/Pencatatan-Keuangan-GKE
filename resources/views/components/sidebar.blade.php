@@ -9,33 +9,33 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <li class="nav-item">
-                    <a href="/" class="nav-link  {{ $title === 'dashboard' ? 'active' : '' }}">
+                    <a href="/" class="nav-link {{ $title === 'dashboard' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/user" class="nav-link  {{ $title === 'user' ? 'active' : '' }}">
+                    <a href="/user" class="nav-link {{ $title === 'user' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>User</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/akun" class="nav-link">
+                    <a href="/kode" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
-                        <p>Daftar Akun</p>
+                        <p>Daftar Kode</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/sub-akun" class="nav-link">
+                    <a href="/sub-kode" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
-                        <p>Daftar Sub Akun</p>
+                        <p>Daftar Sub Kode</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/sub sub-akun" class="nav-link">
+                    <a href="/sub sub-kode" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
-                        <p>Daftar Sub Sub-Akun</p>
+                        <p>Daftar Sub Sub-Kode</p>
                     </a>
                 </li>
                 <li class="nav-item">
