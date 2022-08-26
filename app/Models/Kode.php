@@ -10,4 +10,8 @@ class Kode extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function kodeToSubKode(){
+        return $this->hasMany(SubKode::class, 'id_kode', 'id');
+    }
 }
