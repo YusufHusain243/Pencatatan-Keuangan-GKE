@@ -51,7 +51,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/akun-bank" class="nav-link">
+                    <a href="/akun-bank" class="nav-link {{ $title === 'akun_bank' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Akun Bank</p>
                     </a>
