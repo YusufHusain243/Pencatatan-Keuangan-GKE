@@ -41,9 +41,9 @@
                                 @foreach ($kodes as $kode)
                                     <option value="{{ $kode->id }}">
                                         @if ($kode->jenis_kode == 'Penerimaan')
-                                            4.{{ $kode->no_kode }}
+                                            4.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
                                         @else
-                                            5.{{ $kode->no_kode }}
+                                            5.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
                                         @endif
                                     </option>
                                 @endforeach
@@ -117,7 +117,6 @@
                                 @else
                                     5.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
                                 @endif
-
                             </td>
                             <td>{{ $sub_kode->nama_sub_kode }}</td>
                             <td>{{ $sub_kode->updated_at }}</td>

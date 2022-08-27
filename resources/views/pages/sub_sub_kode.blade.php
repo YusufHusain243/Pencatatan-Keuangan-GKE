@@ -1,35 +1,85 @@
 @extends('../main')
 
-@section('page', 'Daftar Sub Sub-Akun')
+@section('page', 'Daftar Sub Sub-Kode')
 
 @section('container')
+    @if (session()->has('SubSubKodeSuccess'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('SubSubKodeSuccess') }}
+            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                <span>
+                    <i class="mdi mdi-close"></i>
+                </span>
+            </button>
+        </div>
+    @endif
+    @if (session()->has('SubSubKodeError'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('SubSubKodeError') }}
+            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                <span>
+                    <i class="mdi mdi-close"></i>
+                </span>
+            </button>
+        </div>
+    @endif
+
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Tambah Daftar Sub Sub-Akun</h3>
+            <h3 class="card-title">Tambah Daftar Sub Sub-Kode</h3>
         </div>
-        <form>
+        <form action="/sub-sub-kode" method="POST">
+            @csrf
             <div class="card-body">
                 <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="jenis_akun">No Sub Akun</label>
-                            <select class="form-control" id="jenis_akun" required>
-                                <option value="">Pilih No Sub Akun</option>
-                                <option value="">4.1.1</option>
-                                <option value="">4.2.1</option>
+                            <label for="no_sub_kode">No Sub Kode</label>
+                            <select class="form-control @error('no_sub_kode') is-invalid @enderror" id="no_sub_kode"
+                                name="no_sub_kode" required>
+                                <option value="">Pilih No Sub Kode</option>
+                                @foreach ($sub_kodes as $sub_kode)
+                                    <option value="{{ $sub_kode->id }}">
+                                        @if ($sub_kode->subKodeToKode->jenis_kode == 'Penerimaan')
+                                            4.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
+                                            ({{ $sub_kode->nama_sub_kode }})
+                                        @else
+                                            5.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
+                                            ({{ $sub_kode->nama_sub_kode }})
+                                        @endif
+                                    </option>
+                                @endforeach
                             </select>
+                            @error('no_sub_kode')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="no_sub_sub_akun">No Sub Sub-Akun</label>
-                            <input type="number" class="form-control" id="no_sub_sub_akun" placeholder="Masukkan No Sub Sub-Akun">
+                            <label for="no_sub_sub_kode">No Sub Sub-Kode</label>
+                            <input type="number" class="form-control @error('no_sub_sub_kode') is-invalid @enderror"
+                                id="no_sub_sub_kode" name="no_sub_sub_kode" placeholder="Masukkan No Sub Sub-Kode" required>
+                            @error('no_sub_kode')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="nama_sub_sub_akun">Nama Sub Sub-Akun</label>
-                            <input type="text" class="form-control" id="nama_sub_sub_akun" placeholder="Masukkan Nama Sub Sub-Akun">
+                            <label for="nama_sub_sub_kode">Nama Sub Sub-Kode</label>
+                            <input type="text" class="form-control @error('nama_sub_sub_kode') is-invalid @enderror"
+                                id="nama_sub_sub_kode" name="nama_sub_sub_kode" placeholder="Masukkan Nama Sub Sub-Kode"
+                                required>
+                            @error('nama_sub_sub_kode')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
                         </div>
                     </div>
                 </div>
@@ -46,32 +96,58 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>No Sub Sub-Akun</th>
-                        <th>Nama Sub Sub-Akun</th>
+                        <th>No Kode</th>
+                        <th>No Sub Kode</th>
+                        <th>No Sub Sub-Kode</th>
+                        <th>Nama Sub Sub-Kode</th>
                         <th>Last Update</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>001</td>
-                        <td>xxxx</td>
-                        <td>20/10/2022</td>
-                        <td>
-                            <div class="btn-group">
-                                <a class="btn btn-primary" href=""><i class="fas fa-edit"></i></a>
-                                <form action="" method="post">
-                                    @method('delete')
-                                    @csrf
-                                    <button type="submit" class="btn btn-danger"
-                                        onclick="return confirm('Yakin ingin menghapus menu ini?');">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
+                    @foreach ($sub_sub_kodes as $sub_sub_kode)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>
+                                @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan')
+                                    4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}
+                                @else
+                                    5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan')
+                                    4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}
+                                @else
+                                    5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}
+                                @endif
+                            </td>
+                            <td>
+                                @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan')
+                                    4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                @else
+                                    5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                @endif
+                            </td>
+                            <td>{{ $sub_sub_kode->nama_sub_sub_kode }}</td>
+                            <td>{{ $sub_sub_kode->updated_at }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <a class="btn btn-primary" href="/edit/sub-sub-kode/{{ $sub_sub_kode->id }}">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <form action="/sub-sub-kode/{{ $sub_sub_kode->id }}" method="post">
+                                        @method('delete')
+                                        @csrf
+                                        <button type="submit" class="btn btn-danger"
+                                            onclick="return confirm('Yakin ingin menghapus sub sub-kode ini?');">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
         </div>

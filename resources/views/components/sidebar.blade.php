@@ -33,7 +33,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/sub-sub-kode" class="nav-link">
+                    <a href="/sub-sub-kode" class="nav-link {{ $title === 'sub_sub_kode' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Daftar Sub Sub-Kode</p>
                     </a>
