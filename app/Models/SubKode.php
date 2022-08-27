@@ -14,4 +14,8 @@ class SubKode extends Model
     public function subKodeToKode(){
         return $this->belongsTo(Kode::class, 'id_kode', 'id');
     }
+
+    public function subKodeToSubSubKode(){
+        return $this->hasMany(SubSubKode::class, 'id_sub_kode', 'id');
+    }
 }

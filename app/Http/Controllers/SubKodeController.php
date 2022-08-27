@@ -39,24 +39,7 @@ class SubKodeController extends Controller
             return redirect('/sub-kode')->with('SubKodeError', 'Tambah Sub Kode Gagal');
         }
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function edit($id)
     {
         $subKode = SubKode::findOrFail($id);
@@ -69,14 +52,7 @@ class SubKodeController extends Controller
             ]);
         }
     }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
@@ -97,13 +73,7 @@ class SubKodeController extends Controller
             return redirect('/sub-kode')->with('SubKodeError', 'Edit Sub Kode Gagal');
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
+    
     public function destroy($id)
     {
         $data = SubKode::findOrFail($id);

@@ -3,6 +3,7 @@
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KodeController;
 use App\Http\Controllers\SubKodeController;
+use App\Http\Controllers\SubSubKodeController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,12 +38,14 @@ Route::delete('/sub-kode/{id}', [SubKodeController::class, 'destroy']);
 Route::get('edit/sub-kode/{id}', [SubKodeController::class, 'edit']);
 Route::patch('/sub-kode/{id}', [SubKodeController::class, 'update']);
 
-// Route::get('/sub-kode', function () {
-//     return view('pages/sub_kode');
+Route::get('/sub-sub-kode', [SubSubKodeController::class, 'index']);
+Route::post('/sub-sub-kode', [SubSubKodeController::class, 'store']);
+Route::delete('/sub-sub-kode/{id}', [SubSubKodeController::class, 'destroy']);
+Route::get('edit/sub-sub-kode/{id}', [SubSubKodeController::class, 'edit']);
+Route::patch('/sub-sub-kode/{id}', [SubSubKodeController::class, 'update']);
+// Route::get('/sub sub-kode', function () {
+//     return view('pages/sub_sub_kode');
 // });
-Route::get('/sub sub-kode', function () {
-    return view('pages/sub_sub_kode');
-});
 Route::get('/penerimaan', function () {
     return view('pages/penerimaan');
 });
