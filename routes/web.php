@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AkunBankController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KodeController;
 use App\Http\Controllers\SubKodeController;
@@ -43,15 +44,16 @@ Route::post('/sub-sub-kode', [SubSubKodeController::class, 'store']);
 Route::delete('/sub-sub-kode/{id}', [SubSubKodeController::class, 'destroy']);
 Route::get('edit/sub-sub-kode/{id}', [SubSubKodeController::class, 'edit']);
 Route::patch('/sub-sub-kode/{id}', [SubSubKodeController::class, 'update']);
-// Route::get('/sub sub-kode', function () {
-//     return view('pages/sub_sub_kode');
-// });
+
+Route::get('/akun-bank', [AkunBankController::class, 'index']);
+Route::post('/akun-bank', [AkunBankController::class, 'store']);
+Route::delete('/akun-bank/{id}', [AkunBankController::class, 'destroy']);
+Route::get('/edit/akun-bank/{id}', [AkunBankController::class, 'edit']);
+Route::patch('/akun-bank/{id}', [AkunBankController::class, 'update']);
+
 Route::get('/penerimaan', function () {
     return view('pages/penerimaan');
 });
 Route::get('/pengeluaran', function () {
     return view('pages/pengeluaran');
-});
-Route::get('/akun-bank', function () {
-    return view('pages/akun_bank');
 });
