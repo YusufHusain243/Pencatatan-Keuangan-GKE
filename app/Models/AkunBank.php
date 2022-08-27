@@ -10,4 +10,8 @@ class AkunBank extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    public function bankToDetailBank(){
+        return $this->hasMany(DetailBank::class, 'id_bank', 'id');
+    }
 }

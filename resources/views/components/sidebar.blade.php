@@ -39,7 +39,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/penerimaan" class="nav-link">
+                    <a href="/penerimaan" class="nav-link {{ $title === 'penerimaan' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Catat Penerimaan</p>
                     </a>
