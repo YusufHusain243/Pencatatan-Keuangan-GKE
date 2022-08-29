@@ -10,7 +10,7 @@ use App\Models\SubKode;
 use App\Models\SubSubKode;
 use Illuminate\Http\Request;
 
-class DanaController extends Controller
+class PenerimaanController extends Controller
 {
     public function index()
     {
@@ -26,6 +26,28 @@ class DanaController extends Controller
         $danas = Dana::all();
         return view('pages/penerimaan', [
             "title" => "penerimaan",
+            "akun_bank" => $akun_bank,
+            "kodes" => $kodes,
+            "sub_kodes" => $sub_kodes,
+            "sub_sub_kodes" => $sub_sub_kodes,
+            "danas" => $danas,
+        ]);
+    }
+
+    public function indexPengeluaran()
+    {
+        $kodes = Kode::where('jenis_kode', 'Pengeluaran')->get();
+        $sub_kodes = SubKode::join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', 'Pengeluaran')
+            ->get();
+        $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
+            ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', 'Pengeluaran')
+            ->get();
+        $akun_bank = AkunBank::all();
+        $danas = Dana::all();
+        return view('pages/pengeluaran', [
+            "title" => "pengeluaran",
             "akun_bank" => $akun_bank,
             "kodes" => $kodes,
             "sub_kodes" => $sub_kodes,
@@ -180,7 +202,9 @@ class DanaController extends Controller
         if ($data) {
             $result = $data->delete();
             if ($result) {
-                $result = DetailBank::where('id_dana', $id)->delete();
+                if ($data->transaksi == 'Transfer Bank') {
+                    $result = DetailBank::where('id_dana', $id)->delete();
+                }
                 if ($result) {
                     return redirect('/penerimaan')->with('DanaSuccess', 'Hapus Penerimaan Berhasil');
                 }

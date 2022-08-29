@@ -1,13 +1,13 @@
 @extends('../main')
 
-@section('page', 'Edit Penerimaan')
+@section('page', 'Edit Pengeluaran')
 
 @section('container')
     <div class="card card-primary">
         <div class="card-header">
-            <h3 class="card-title">Edit Catat Penerimaan</h3>
+            <h3 class="card-title">Edit Catat Pengeluaran</h3>
         </div>
-        <form action="/penerimaan/{{ $dana->id }}" method="POST">
+        <form action="/pengeluaran/{{ $dana->id }}" method="POST">
             @method('PATCH')
             @csrf
             <div class="card-body">
@@ -19,7 +19,7 @@
                                 @foreach ($kodes as $kode)
                                     <option value="{{ $kode->id }}"
                                         {{ $dana->id_kode === $kode->id ? 'selected' : '' }}>
-                                        4.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
+                                        5.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
                                     </option>
                                 @endforeach
                             </select>
@@ -33,7 +33,7 @@
                                 @foreach ($sub_kodes as $sub_kode)
                                     <option value="{{ $sub_kode->id }}"
                                         {{ $dana->id_sub_kode === $sub_kode->id ? 'selected' : '' }}>
-                                        4.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
+                                        5.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
                                         ({{ $sub_kode->nama_sub_kode }})
                                     </option>
                                 @endforeach
@@ -48,7 +48,7 @@
                                 @foreach ($sub_sub_kodes as $sub_sub_kode)
                                     <option value="{{ $sub_sub_kode->id }}"
                                         {{ $dana->id_sub_sub_kode === $sub_sub_kode->id ? 'selected' : '' }}>
-                                        4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                        5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
                                         ({{ $sub_sub_kode->nama_sub_sub_kode }})
                                     </option>
                                 @endforeach
@@ -110,21 +110,21 @@
                         </div>
                     </div>
                 @else
-                    <div id="pilih_bank" style="display: none;">
-                        <div class="row">
-                            <div class="col-6">
-                                <div class="form-group">
-                                    <label for="akun_bank">Pilih Akun Bank</label>
-                                    <select class="form-control" id="akun_bank" name="akun_bank">
-                                        <option value="">Pilih Akun Bank</option>
-                                        @foreach ($akun_bank as $bank)
-                                            <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
+                <div id="pilih_bank" style="display: none;">
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="akun_bank">Pilih Akun Bank</label>
+                                <select class="form-control" id="akun_bank" name="akun_bank">
+                                    <option value="">Pilih Akun Bank</option>
+                                    @foreach ($akun_bank as $bank)
+                                        <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                     </div>
+                </div>
                 @endif
             </div>
             <div class="card-footer">
