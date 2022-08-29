@@ -4,6 +4,7 @@ use App\Http\Controllers\AkunBankController;
 use App\Http\Controllers\DanaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KodeController;
+use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\SubKodeController;
 use App\Http\Controllers\SubSubKodeController;
 use App\Http\Controllers\UserController;
@@ -63,3 +64,5 @@ Route::patch('/penerimaan/{id}', [DanaController::class, 'update']);
 Route::get('/pengeluaran', function () {
     return view('pages/pengeluaran');
 });
+Route::get('/laporan', [LaporanController::class, 'index']);
+Route::get('/cetak_laporan', [LaporanController::class, 'export']);
