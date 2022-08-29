@@ -36,7 +36,7 @@ class PengeluaranController extends Controller
 
     public function store(Request $request)
     {
-        if (isset($request->akun_bank)) {
+        if ($request->jenis_transaksi == 'Transfer Bank') {
             $validated = $request->validate([
                 'kode_anggaran' => 'required',
                 'sub_kode_anggaran' => 'required',
@@ -60,7 +60,7 @@ class PengeluaranController extends Controller
         }
 
         if ($validated) {
-            if (isset($request->akun_bank)) {
+            if ($request->jenis_transaksi == 'Transfer Bank') {
                 $result = Dana::create([
                     'id_kode' => $request->kode_anggaran,
                     'id_sub_kode' => $request->sub_kode_anggaran,

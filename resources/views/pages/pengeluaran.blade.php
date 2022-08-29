@@ -109,7 +109,7 @@
                         <div class="form-group">
                             <label for="keterangan">Keterangan</label>
                             <input type="text" class="form-control @error('keterangan') is-invalid @enderror"
-                                id="keterangan" name="keterangan" placeholder="Masukkan Keterangan">
+                                id="keterangan" name="keterangan" placeholder="Masukkan Keterangan" required>
                             @error('keterangan')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -123,7 +123,7 @@
                         <div class="form-group">
                             <label for="nominal">Nominal</label>
                             <input type="number" class="form-control @error('nominal') is-invalid @enderror" id="nominal"
-                                name="nominal" placeholder="Masukkan Nominal">
+                                name="nominal" placeholder="Masukkan Nominal" required>
                             @error('nominal')
                                 <div class="invalid-feedback">
                                     {{ $message }}

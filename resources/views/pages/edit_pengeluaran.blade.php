@@ -68,7 +68,7 @@
                         <div class="form-group">
                             <label for="keterangan">Keterangan</label>
                             <input type="text" class="form-control" id="keterangan" name="keterangan"
-                                value="{{ $dana->keterangan }}" placeholder="Masukkan Keterangan">
+                                value="{{ $dana->keterangan }}" placeholder="Masukkan Keterangan" required>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                         <div class="form-group">
                             <label for="nominal">Nominal</label>
                             <input type="number" class="form-control" id="nominal" name="nominal"
-                                value="{{ $dana->nominal }}" placeholder="Masukkan Nominal">
+                                value="{{ $dana->nominal }}" placeholder="Masukkan Nominal" required>
                         </div>
                     </div>
                     <div class="col-6">
@@ -100,7 +100,6 @@
                                 <div class="form-group">
                                     <label for="akun_bank">Pilih Akun Bank</label>
                                     <select class="form-control" id="akun_bank" name="akun_bank">
-                                        <option value="">Pilih Akun Bank</option>
                                         @foreach ($akun_bank as $bank)
                                             <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
                                         @endforeach
@@ -110,21 +109,20 @@
                         </div>
                     </div>
                 @else
-                <div id="pilih_bank" style="display: none;">
-                    <div class="row">
-                        <div class="col-6">
-                            <div class="form-group">
-                                <label for="akun_bank">Pilih Akun Bank</label>
-                                <select class="form-control" id="akun_bank" name="akun_bank">
-                                    <option value="">Pilih Akun Bank</option>
-                                    @foreach ($akun_bank as $bank)
-                                        <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
-                                    @endforeach
-                                </select>
+                    <div id="pilih_bank" style="display: none;">
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="akun_bank">Pilih Akun Bank</label>
+                                    <select class="form-control" id="akun_bank" name="akun_bank">
+                                        @foreach ($akun_bank as $bank)
+                                            <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
                 @endif
             </div>
             <div class="card-footer">
