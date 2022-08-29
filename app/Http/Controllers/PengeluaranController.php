@@ -10,22 +10,22 @@ use App\Models\SubKode;
 use App\Models\SubSubKode;
 use Illuminate\Http\Request;
 
-class DanaController extends Controller
+class PengeluaranController extends Controller
 {
     public function index()
     {
-        $kodes = Kode::where('jenis_kode', 'Penerimaan')->get();
+        $kodes = Kode::where('jenis_kode', 'Pengeluaran')->get();
         $sub_kodes = SubKode::join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', 'Penerimaan')
+            ->where('kodes.jenis_kode', 'Pengeluaran')
             ->get();
         $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', 'Penerimaan')
+            ->where('kodes.jenis_kode', 'Pengeluaran')
             ->get();
         $akun_bank = AkunBank::all();
         $danas = Dana::all();
-        return view('pages/penerimaan', [
-            "title" => "penerimaan",
+        return view('pages/pengeluaran', [
+            "title" => "pengeluaran",
             "akun_bank" => $akun_bank,
             "kodes" => $kodes,
             "sub_kodes" => $sub_kodes,
@@ -36,7 +36,7 @@ class DanaController extends Controller
 
     public function store(Request $request)
     {
-        if (isset($request->akun_bank)) {
+        if ($request->jenis_transaksi == 'Transfer Bank') {
             $validated = $request->validate([
                 'kode_anggaran' => 'required',
                 'sub_kode_anggaran' => 'required',
@@ -60,7 +60,7 @@ class DanaController extends Controller
         }
 
         if ($validated) {
-            if (isset($request->akun_bank)) {
+            if ($request->jenis_transaksi == 'Transfer Bank') {
                 $result = Dana::create([
                     'id_kode' => $request->kode_anggaran,
                     'id_sub_kode' => $request->sub_kode_anggaran,
@@ -87,26 +87,26 @@ class DanaController extends Controller
                 ]);
             }
             if ($result) {
-                return redirect('/penerimaan')->with('DanaSuccess', 'Tambah Penerimaan Berhasil');
+                return redirect('/pengeluaran')->with('DanaSuccess', 'Tambah Pengeluaran Berhasil');
             }
-            return redirect('/penerimaan')->with('DanaError', 'Tambah Penerimaan Gagal');
+            return redirect('/pengeluaran')->with('DanaError', 'Tambah Pengeluaran Gagal');
         }
     }
 
     public function edit($id)
     {
-        $kodes = Kode::where('jenis_kode', 'Penerimaan')->get();
+        $kodes = Kode::where('jenis_kode', 'Pengeluaran')->get();
         $sub_kodes = SubKode::join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', 'Penerimaan')
+            ->where('kodes.jenis_kode', 'Pengeluaran')
             ->get();
         $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', 'Penerimaan')
+            ->where('kodes.jenis_kode', 'Pengeluaran')
             ->get();
         $akun_bank = AkunBank::all();
         $dana = Dana::findOrFail($id);
-        return view('pages/edit_penerimaan', [
-            "title" => "penerimaan",
+        return view('pages/edit_pengeluaran', [
+            "title" => "pengeluaran",
             "akun_bank" => $akun_bank,
             "kodes" => $kodes,
             "sub_kodes" => $sub_kodes,
@@ -168,9 +168,9 @@ class DanaController extends Controller
                 ]);
             }
             if ($result) {
-                return redirect('/penerimaan')->with('DanaSuccess', 'Edit Penerimaan Berhasil');
+                return redirect('/pengeluaran')->with('DanaSuccess', 'Edit Pengeluaran Berhasil');
             }
-            return redirect('/penerimaan')->with('DanaError', 'Edit Penerimaan Gagal');
+            return redirect('/pengeluaran')->with('DanaError', 'Edit Pengeluaran Gagal');
         }
     }
 
@@ -180,11 +180,16 @@ class DanaController extends Controller
         if ($data) {
             $result = $data->delete();
             if ($result) {
-                $result = DetailBank::where('id_dana', $id)->delete();
-                if ($result) {
-                    return redirect('/penerimaan')->with('DanaSuccess', 'Hapus Penerimaan Berhasil');
+                if ($data->transaksi == 'Transfer Bank') {
+                    $data = DetailBank::where('id_dana', $id)->get();
+                    if (isset($data)) {
+                        $result = $data->delete();
+                    }
                 }
-                return redirect('/penerimaan')->with('DanaError', 'Hapus Penerimaan Gagal');
+                if ($result) {
+                    return redirect('/pengeluaran')->with('DanaSuccess', 'Hapus Pengeluaran Berhasil');
+                }
+                return redirect('/pengeluaran')->with('DanaError', 'Hapus Pengeluaran Gagal');
             }
         }
     }
