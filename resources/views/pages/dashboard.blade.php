@@ -8,7 +8,7 @@
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>Saldo Kas</h3>
-                    <p>1.000.000</p>
+                    <p>{{ $saldo_kas }}</p>
                 </div>
                 <a href="#" class="small-box-footer">
                     <i class="fas fa-arrow-circle-right"></i>
@@ -19,7 +19,7 @@
             <div class="small-box bg-success">
                 <div class="inner">
                     <h3>Saldo Bank</h3>
-                    <p>20.000.000</p>
+                    <p>{{ $saldo_bank }}</p>
                 </div>
                 <a href="#" class="small-box-footer">
                     <i class="fas fa-arrow-circle-right"></i>
@@ -30,7 +30,7 @@
             <div class="small-box bg-warning">
                 <div class="inner">
                     <h3>Saldo Akhir</h3>
-                    <p>30.000.000</p>
+                    <p>{{ $saldo_akhir }}</p>
                 </div>
                 <a href="#" class="small-box-footer">
                     <i class="fas fa-arrow-circle-right"></i>
