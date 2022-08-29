@@ -52,7 +52,7 @@ Route::delete('/akun-bank/{id}', [AkunBankController::class, 'destroy']);
 Route::get('/edit/akun-bank/{id}', [AkunBankController::class, 'edit']);
 Route::patch('/akun-bank/{id}', [AkunBankController::class, 'update']);
 
-Route::get('/penerimaan', [DanaController::class, 'indexPenerimaan']);
+Route::get('/penerimaan', [DanaController::class, 'index']);
 Route::post('/penerimaan', [DanaController::class, 'store']);
 Route::delete('/penerimaan/{id}', [DanaController::class, 'destroy']);
 Route::get('/edit/penerimaan/{id}', [DanaController::class, 'edit']);
