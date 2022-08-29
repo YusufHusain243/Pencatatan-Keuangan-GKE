@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AkunBankController;
+use App\Http\Controllers\DanaController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\KodeController;
 use App\Http\Controllers\SubKodeController;
@@ -51,9 +52,10 @@ Route::delete('/akun-bank/{id}', [AkunBankController::class, 'destroy']);
 Route::get('/edit/akun-bank/{id}', [AkunBankController::class, 'edit']);
 Route::patch('/akun-bank/{id}', [AkunBankController::class, 'update']);
 
-Route::get('/penerimaan', function () {
-    return view('pages/penerimaan');
-});
-Route::get('/pengeluaran', function () {
-    return view('pages/pengeluaran');
-});
+Route::get('/penerimaan', [DanaController::class, 'indexPenerimaan']);
+Route::post('/penerimaan', [DanaController::class, 'store']);
+Route::delete('/penerimaan/{id}', [DanaController::class, 'destroy']);
+Route::get('/edit/penerimaan/{id}', [DanaController::class, 'edit']);
+Route::patch('/penerimaan/{id}', [DanaController::class, 'update']);
+
+Route::get('/pengeluaran', [DanaController::class, 'indexPengeluaran']);

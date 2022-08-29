@@ -11,11 +11,18 @@ class SubKode extends Model
 
     protected $guarded = ["id"];
 
-    public function subKodeToKode(){
+    public function subKodeToKode()
+    {
         return $this->belongsTo(Kode::class, 'id_kode', 'id');
     }
 
-    public function subKodeToSubSubKode(){
+    public function subKodeToSubSubKode()
+    {
         return $this->hasMany(SubSubKode::class, 'id_sub_kode', 'id');
+    }
+
+    public function subKodeToDana()
+    {
+        return $this->hasMany(Dana::class, 'id_sub_kode', 'id');
     }
 }
