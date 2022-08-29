@@ -15,9 +15,9 @@ class CreateDanasTable extends Migration
     {
         Schema::create('danas', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_kode');
-            $table->foreignId('id_sub_kode');
-            $table->foreignId('id_sub_sub_kode');
+            $table->foreignId('id_kode')->constrained('kodes')->onDelete('cascade');
+            $table->foreignId('id_sub_kode')->constrained('sub_kodes')->onDelete('cascade');
+            $table->foreignId('id_sub_sub_kode')->constrained('sub_sub_kodes')->onDelete('cascade');
             $table->date('tanggal');
             $table->string('keterangan');
             $table->string('transaksi');

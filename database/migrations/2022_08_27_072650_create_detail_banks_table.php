@@ -15,8 +15,8 @@ class CreateDetailBanksTable extends Migration
     {
         Schema::create('detail_banks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_bank');
-            $table->foreignId('id_dana');
+            $table->foreignId('id_bank')->constrained('akun_banks')->onDelete('cascade');
+            $table->foreignId('id_dana')->constrained('danas')->onDelete('cascade');
             $table->timestamps();
         });
     }
