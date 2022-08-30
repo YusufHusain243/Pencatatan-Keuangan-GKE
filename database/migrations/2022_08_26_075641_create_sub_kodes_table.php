@@ -15,7 +15,7 @@ class CreateSubKodesTable extends Migration
     {
         Schema::create('sub_kodes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_kode');
+            $table->foreignId('id_kode')->constrained('kodes')->onDelete('cascade');
             $table->string('no_sub_kode');
             $table->string('nama_sub_kode');
             $table->timestamps();

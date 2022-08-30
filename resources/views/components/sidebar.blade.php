@@ -45,7 +45,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/pengeluaran" class="nav-link">
+                    <a href="/pengeluaran" class="nav-link {{ $title === 'pengeluaran' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Catat Pengeluaran</p>
                     </a>
