@@ -27,31 +27,31 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/sub-kode" class="nav-link">
+                    <a href="/sub-kode" class="nav-link {{ $title === 'sub_kode' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Daftar Sub Kode</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/sub sub-kode" class="nav-link">
+                    <a href="/sub-sub-kode" class="nav-link {{ $title === 'sub_sub_kode' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Daftar Sub Sub-Kode</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/penerimaan" class="nav-link">
+                    <a href="/penerimaan" class="nav-link {{ $title === 'penerimaan' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Catat Penerimaan</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/pengeluaran" class="nav-link">
+                    <a href="/pengeluaran" class="nav-link {{ $title === 'pengeluaran' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Catat Pengeluaran</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="/akun-bank" class="nav-link">
+                    <a href="/akun-bank" class="nav-link {{ $title === 'akun_bank' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Akun Bank</p>
                     </a>

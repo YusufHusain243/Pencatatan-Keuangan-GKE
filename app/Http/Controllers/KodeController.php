@@ -20,7 +20,7 @@ class KodeController extends Controller
     {
         $validated = $request->validate([
             'jenis_kode' => 'required',
-            'no_kode' => 'required|unique:kodes,no_kode',
+            'no_kode' => 'required',
             'nama_kode' => 'required',
         ]);
 
@@ -77,7 +77,7 @@ class KodeController extends Controller
             if ($result) {
                 return redirect('/kode')->with('KodeSuccess', 'Hapus Kode Berhasil');
             }
-            return redirect('/kode')->with('KodeErrpr', 'Hapus Kode Gagal');
+            return redirect('/kode')->with('KodeError', 'Hapus Kode Gagal');
         }
     }
 }
