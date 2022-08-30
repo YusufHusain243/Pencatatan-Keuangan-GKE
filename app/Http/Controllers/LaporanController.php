@@ -7,6 +7,7 @@ use App\Exports\LaporanExport;
 use App\Models\Dana;
 use App\Models\Kode;
 use App\Models\SubKode;
+use App\Models\SubSubKode;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
@@ -16,9 +17,10 @@ class LaporanController extends Controller
         $danas = Dana::all();
         $kodes = Kode::all();
         $sub_kodes = SubKode::all();
+        $sub_sub_kodes = SubSubKode::all();
         $title = "laporan";
 
-        return view('pages.laporan', compact('title', 'danas', 'kodes', 'sub_kodes'));
+        return view('pages.laporan', compact('title', 'danas', 'kodes', 'sub_kodes', 'sub_sub_kodes'));
     }
 
     public function export()
