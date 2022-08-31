@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class KodeController extends Controller
@@ -21,20 +22,32 @@ class KodeController extends Controller
     {
         $validated = $request->validate([
             'jenis_kode' => 'required',
-            'no_kode' => 'required|unique:kodes,no_kode',
-            'nama_kode' => 'required|unique:kodes,nama_kode',
+            'no_kode' => 'required',
+            'nama_kode' => 'required',
         ]);
 
         if ($validated) {
-            $result = Kode::create([
-                'jenis_kode' => $request->jenis_kode,
-                'no_kode' => $request->no_kode,
-                'nama_kode' => $request->nama_kode,
-            ]);
-            if ($result) {
-                return redirect('/kode')->with('KodeSuccess', 'Tambah Kode Berhasil');
+            $cek = DB::table('kodes')
+                ->where('jenis_kode', '=', $request->jenis_kode)
+                ->where(function ($query) use ($request) {
+                    $query->where('no_kode', '=',  $request->no_kode)
+                        ->orWhere('nama_kode', '=', $request->nama_kode);
+                })
+                ->get();
+
+            if (count($cek) <= 0) {
+                $result = Kode::create([
+                    'jenis_kode' => $request->jenis_kode,
+                    'no_kode' => $request->no_kode,
+                    'nama_kode' => $request->nama_kode,
+                ]);
+                if ($result) {
+                    return redirect('/kode')->with('KodeSuccess', 'Tambah Kode Berhasil');
+                }
+                return redirect('/kode')->with('KodeError', 'Tambah Kode Gagal');
+            } else {
+                return redirect('/kode')->with('KodeError', 'Kode Sudah Ada');
             }
-            return redirect('/kode')->with('KodeError', 'Tambah Kode Gagal');
         }
     }
 
@@ -53,20 +66,44 @@ class KodeController extends Controller
     {
         $validated = $request->validate([
             'jenis_kode' => 'required',
-            'no_kode' =>  ['required', Rule::unique('kodes')->ignore($id)],
-            'nama_kode' =>  ['required', Rule::unique('kodes')->ignore($id)],
+            'no_kode' =>  'required',
+            'nama_kode' =>  'required',
         ]);
 
         if ($validated) {
-            $result = Kode::findOrFail($id)->update([
-                'jenis_kode' => $request->jenis_kode,
-                'no_kode' => $request->no_kode,
-                'nama_kode' => $request->nama_kode,
-            ]);
-            if ($result) {
-                return redirect('/kode')->with('KodeSuccess', 'Edit Kode Berhasil');
+            $cek = DB::table('kodes')
+                ->where('jenis_kode', '=', $request->jenis_kode)
+                ->where(function ($query) use ($request) {
+                    $query->where('no_kode', '=',  $request->no_kode)
+                        ->orWhere('nama_kode', '=', $request->nama_kode);
+                })
+                ->get();
+
+            if (count($cek) <= 0) {
+                $result = Kode::findOrFail($id)->update([
+                    'jenis_kode' => $request->jenis_kode,
+                    'no_kode' => $request->no_kode,
+                    'nama_kode' => $request->nama_kode,
+                ]);
+                if ($result) {
+                    return redirect('/kode')->with('KodeSuccess', 'Edit Kode Berhasil');
+                }
+                return redirect('/kode')->with('KodeError', 'Edit Kode Gagal');
+            } else {
+                if ($cek[0]->id == $id) {
+                    $result = Kode::findOrFail($id)->update([
+                        'jenis_kode' => $request->jenis_kode,
+                        'no_kode' => $request->no_kode,
+                        'nama_kode' => $request->nama_kode,
+                    ]);
+                    if ($result) {
+                        return redirect('/kode')->with('KodeSuccess', 'Edit Kode Berhasil');
+                    }
+                    return redirect('/kode')->with('KodeError', 'Edit Kode Gagal');
+                } else {
+                    return redirect('/kode')->with('KodeError', 'Kode Sudah Ada');
+                }
             }
-            return redirect('/kode')->with('KodeError', 'Edit Kode Gagal');
         }
     }
 
