@@ -22,23 +22,41 @@
                         </a>
                     </li>
                 @endif
-                <li class="nav-item">
-                    <a href="/kode" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Daftar Kode</p>
+                <li
+                    class="nav-item 
+                    {{ $title === 'kode' ? 'menu-is-opening menu-open active' : '' }} 
+                    {{ $title === 'sub_kode' ? 'menu-is-opening menu-open active' : '' }} 
+                    {{ $title === 'sub_sub_kode' ? 'menu-is-opening menu-open active' : '' }}
+                ">
+                    <a href="#" class="nav-link">
+                        <i class="nav-icon fas fa-copy"></i>
+                        <p>
+                            Kode<i class="fas fa-angle-left right"></i>
+                        </p>
                     </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/sub-kode" class="nav-link {{ $title === 'sub_kode' ? 'active' : '' }}">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Daftar Sub Kode</p>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="/sub-sub-kode" class="nav-link {{ $title === 'sub_sub_kode' ? 'active' : '' }}">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>Daftar Sub Sub-Kode</p>
-                    </a>
+                    <ul class="nav nav-treeview">
+                        <div class="col">
+                            <li class="nav-item">
+                                <a href="/kode" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Kode Anggaran</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/sub-kode" class="nav-link {{ $title === 'sub_kode' ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Sub Kode Anggaran</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="/sub-sub-kode"
+                                    class="nav-link {{ $title === 'sub_sub_kode' ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Sub Sub-Kode Anggaran</p>
+                                </a>
+                            </li>
+                        </div>
+                    </ul>
                 </li>
                 <li class="nav-item">
                     <a href="/akun-bank" class="nav-link {{ $title === 'akun_bank' ? 'active' : '' }}">
