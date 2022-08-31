@@ -82,14 +82,16 @@
                                     <a class="btn btn-primary" href="edit/user/{{ $user->id }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="/user/{{ $user->id }}" method="post">
-                                        @method('delete')
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Yakin ingin menghapus user ini?');">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    @if ($user->role == 'bendahara')
+                                        <form action="/user/{{ $user->id }}" method="post">
+                                            @method('delete')
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Yakin ingin menghapus user ini?');">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

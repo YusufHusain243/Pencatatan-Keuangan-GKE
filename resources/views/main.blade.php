@@ -44,6 +44,16 @@
         <div class="content-wrapper">
             <div class="content-header">
                 <div class="container-fluid">
+                    @if (session()->has('LoginSuccess'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('LoginSuccess') }}
+                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                <span>
+                                    <i class="mdi mdi-close"></i>
+                                </span>
+                            </button>
+                        </div>
+                    @endif
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1 class="m-0">

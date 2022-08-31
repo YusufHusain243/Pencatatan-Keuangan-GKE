@@ -14,12 +14,14 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a href="/user" class="nav-link {{ $title === 'user' ? 'active' : '' }}">
-                        <i class="fas fa-circle nav-icon"></i>
-                        <p>User</p>
-                    </a>
-                </li>
+                @if (auth()->user()->role == 'admin')
+                    <li class="nav-item">
+                        <a href="/user" class="nav-link {{ $title === 'user' ? 'active' : '' }}">
+                            <i class="fas fa-circle nav-icon"></i>
+                            <p>User</p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-item">
                     <a href="/kode" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
