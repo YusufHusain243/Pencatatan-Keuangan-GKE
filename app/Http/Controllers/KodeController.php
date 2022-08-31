@@ -46,7 +46,7 @@ class KodeController extends Controller
                 }
                 return redirect('/kode')->with('KodeError', 'Tambah Kode Gagal');
             } else {
-                return redirect('/kode')->with('KodeError', 'Kode Sudah Ada');
+                return redirect('/kode')->with('KodeError', 'Tambah Kode Gagal, Kode Sudah Ada!');
             }
         }
     }

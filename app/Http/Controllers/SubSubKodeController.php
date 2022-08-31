@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SubSubKode;
 use Illuminate\Http\Request;
 use App\Models\SubKode;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 
 class SubSubKodeController extends Controller
@@ -24,20 +25,32 @@ class SubSubKodeController extends Controller
     {
         $validated = $request->validate([
             'no_sub_kode' => 'required',
-            'no_sub_sub_kode' => 'required|unique:sub_sub_kodes,no_sub_sub_kode',
-            'nama_sub_sub_kode' => 'required|unique:sub_sub_kodes,nama_sub_sub_kode',
+            'no_sub_sub_kode' => 'required',
+            'nama_sub_sub_kode' => 'required',
         ]);
 
         if ($validated) {
-            $result = SubSubKode::create([
-                'id_sub_kode' => $request->no_sub_kode,
-                'no_sub_sub_kode' => $request->no_sub_sub_kode,
-                'nama_sub_sub_kode' => $request->nama_sub_sub_kode,
-            ]);
-            if ($result) {
-                return redirect('/sub-sub-kode')->with('SubSubKodeSuccess', 'Tambah Sub Sub-Kode Berhasil');
+            $cek = DB::table('sub_sub_kodes')
+                ->where('id_sub_kode', '=', $request->no_sub_kode)
+                ->where(function ($query) use ($request) {
+                    $query->where('no_sub_sub_kode', '=',  $request->no_sub_sub_kode)
+                        ->orWhere('nama_sub_sub_kode', '=', $request->nama_sub_sub_kode);
+                })
+                ->get();
+
+            if (count($cek) <= 0) {
+                $result = SubSubKode::create([
+                    'id_sub_kode' => $request->no_sub_kode,
+                    'no_sub_sub_kode' => $request->no_sub_sub_kode,
+                    'nama_sub_sub_kode' => $request->nama_sub_sub_kode,
+                ]);
+                if ($result) {
+                    return redirect('/sub-sub-kode')->with('SubSubKodeSuccess', 'Tambah Sub Sub-Kode Berhasil');
+                }
+                return redirect('/sub-sub-kode')->with('SubSubKodeError', 'Tambah Sub Sub-Kode Gagal');
+            } else {
+                return redirect('/sub-sub-kode')->with('SubSubKodeError', 'Tambah Sub Sub-Kode Gagal, Sub Sub-Kode Sudah Ada');
             }
-            return redirect('/sub-sub-kode')->with('SubSubKodeError', 'Tambah Sub Sub-Kode Gagal');
         }
     }
 
@@ -56,20 +69,44 @@ class SubSubKodeController extends Controller
     {
         $validated = $request->validate([
             'no_sub_kode' => 'required',
-            'no_sub_sub_kode' => ['required', Rule::unique('sub_sub_kodes')->ignore($id)],
-            'nama_sub_sub_kode' => ['required', Rule::unique('sub_sub_kodes')->ignore($id)],
+            'no_sub_sub_kode' => 'required',
+            'nama_sub_sub_kode' => 'required',
         ]);
 
         if ($validated) {
-            $result = SubSubKode::findOrFail($id)->update([
-                'id_sub_kode' => $request->no_sub_kode,
-                'no_sub_sub_kode' => $request->no_sub_sub_kode,
-                'nama_sub_sub_kode' => $request->nama_sub_sub_kode,
-            ]);
-            if ($result) {
-                return redirect('/sub-sub-kode')->with('SubSubKodeSuccess', 'Edit Sub Sub-Kode Berhasil');
+            $cek = DB::table('sub_sub_kodes')
+                ->where('id_sub_kode', '=', $request->no_sub_kode)
+                ->where(function ($query) use ($request) {
+                    $query->where('no_sub_sub_kode', '=',  $request->no_sub_sub_kode)
+                        ->orWhere('nama_sub_sub_kode', '=', $request->nama_sub_sub_kode);
+                })
+                ->get();
+
+            if (count($cek) <= 0) {
+                $result = SubSubKode::findOrFail($id)->update([
+                    'id_sub_kode' => $request->no_sub_kode,
+                    'no_sub_sub_kode' => $request->no_sub_sub_kode,
+                    'nama_sub_sub_kode' => $request->nama_sub_sub_kode,
+                ]);
+                if ($result) {
+                    return redirect('/sub-sub-kode')->with('SubSubKodeSuccess', 'Edit Sub Sub-Kode Berhasil');
+                }
+                return redirect('/sub-sub-kode')->with('SubSubKodeError', 'Edit Sub Sub-Kode Gagal');
+            } else {
+                if ($cek[0]->id == $id) {
+                    $result = SubSubKode::findOrFail($id)->update([
+                        'id_sub_kode' => $request->no_sub_kode,
+                        'no_sub_sub_kode' => $request->no_sub_sub_kode,
+                        'nama_sub_sub_kode' => $request->nama_sub_sub_kode,
+                    ]);
+                    if ($result) {
+                        return redirect('/sub-sub-kode')->with('SubSubKodeSuccess', 'Edit Sub Sub-Kode Berhasil');
+                    }
+                    return redirect('/sub-sub-kode')->with('SubSubKodeError', 'Edit Sub Sub-Kode Gagal');
+                } else {
+                    return redirect('/sub-sub-kode')->with('SubSubKodeError', 'Tambah Sub Sub-Kode Gagal, Sub Sub-Kode Sudah Ada');
+                }
             }
-            return redirect('/sub-sub-kode')->with('SubSubKodeError', 'Edit Sub Sub-Kode Gagal');
         }
     }
 

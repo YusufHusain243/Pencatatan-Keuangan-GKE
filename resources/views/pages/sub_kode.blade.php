@@ -14,7 +14,7 @@
         </div>
     @endif
     @if (session()->has('SubKodeError'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('SubKodeError') }}
             <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
                 <span>
