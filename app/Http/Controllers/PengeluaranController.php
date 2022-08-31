@@ -15,12 +15,12 @@ class PengeluaranController extends Controller
     public function index()
     {
         $kodes = Kode::where('jenis_kode', 'Pengeluaran')->get();
-        $sub_kodes = SubKode::join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', 'Pengeluaran')
+        $sub_kodes = Kode::where('jenis_kode', 'Pengeluaran')
+            ->join('sub_kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->get();
-        $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
-            ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', 'Pengeluaran')
+        $sub_sub_kodes = Kode::where('jenis_kode', 'Pengeluaran')
+            ->join('sub_kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
+            ->join('sub_sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->get();
         $akun_bank = AkunBank::all();
         $danas = Dana::all();

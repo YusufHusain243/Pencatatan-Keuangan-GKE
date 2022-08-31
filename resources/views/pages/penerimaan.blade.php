@@ -40,7 +40,7 @@
                                 <option value="">Pilih Kode Anggaran</option>
                                 @foreach ($kodes as $kode)
                                     <option value="{{ $kode->id }}">
-                                        4.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
+                                        {{ $kode->id }} 4.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
                                     </option>
                                 @endforeach
                             </select>
@@ -59,7 +59,7 @@
                                 <option value="">Pilih Sub Kode Anggaran</option>
                                 @foreach ($sub_kodes as $sub_kode)
                                     <option value="{{ $sub_kode->id }}">
-                                        4.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
+                                        4.{{ $sub_kode->no_kode }}.{{ $sub_kode->no_sub_kode }}
                                         ({{ $sub_kode->nama_sub_kode }})
                                     </option>
                                 @endforeach
@@ -79,7 +79,7 @@
                                 <option value="">Pilih Kode Anggaran</option>
                                 @foreach ($sub_sub_kodes as $sub_sub_kode)
                                     <option value="{{ $sub_sub_kode->id }}">
-                                        4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                        4.{{ $sub_sub_kode->no_kode }}.{{ $sub_sub_kode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
                                         ({{ $sub_sub_kode->nama_sub_sub_kode }})
                                     </option>
                                 @endforeach
