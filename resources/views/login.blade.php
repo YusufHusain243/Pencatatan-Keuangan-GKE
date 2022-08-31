@@ -14,15 +14,27 @@
 
 <body class="hold-transition login-page">
     <div class="login-box">
+        @if (session()->has('LoginError'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('LoginError') }}
+                <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                    <span>
+                        <i class="mdi mdi-close"></i>
+                    </span>
+                </button>
+            </div>
+        @endif
         <div class="card">
             <div class="card-body login-card-body">
                 <div class="login-logo">
                     <img src="{{ asset('/img/AdminLTELogo.png') }}" alt="">
                 </div>
                 <h4 class="login-box-msg"><b>SIA</b> Gereja Sinar Kasih</h4>
-                <form action="" method="post">
+                <form action="/login" method="post">
+                    @csrf
                     <div class="input-group mb-3">
-                        <input type="username" class="form-control" placeholder="Masukkan Username">
+                        <input type="username" class="form-control" placeholder="Masukkan Username" name="username"
+                            required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-envelope"></span>
@@ -30,7 +42,8 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Masukkan Password">
+                        <input type="password" class="form-control" placeholder="Masukkan Password" name="password"
+                            required>
                         <div class="input-group-append">
                             <div class="input-group-text">
                                 <span class="fas fa-lock"></span>
