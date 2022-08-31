@@ -21,7 +21,7 @@ class AkunBankController extends Controller
     {
         $validated = $request->validate([
             'nama_bank' => 'required',
-            'no_rek' => 'required|unique:akun_banks,no_rek',
+            'no_rek' => 'required|unique:akun_banks,no_rekening',
         ]);
 
         if ($validated) {
