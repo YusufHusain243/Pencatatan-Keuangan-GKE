@@ -15,8 +15,8 @@ class CreateKodesTable extends Migration
     {
         Schema::create('kodes', function (Blueprint $table) {
             $table->id();
-            $table->string('no_kode');
-            $table->string('nama_kode');
+            $table->string('no_kode')->unique();
+            $table->string('nama_kode')->unique();
             $table->string('jenis_kode');
             $table->timestamps();
         });

@@ -27,12 +27,12 @@ Route::post('/login', [LoginController::class, 'authenticate']);
 
 Route::middleware(['auth', 'isLogin'])->group(function () {
     Route::get('/', [DashboardController::class, 'index']);
-    
-    Route::get('/user', [UserController::class, 'index']);
-    Route::post('/user', [UserController::class, 'store']);
-    Route::delete('/user/{id}', [UserController::class, 'destroy']);
-    Route::get('edit/user/{id}', [UserController::class, 'edit']);
-    Route::patch('user/{id}', [UserController::class, 'update']);
+
+    Route::get('/user', [UserController::class, 'index'])->middleware('isAdmin');
+    Route::post('/user', [UserController::class, 'store'])->middleware('isAdmin');
+    Route::delete('/user/{id}', [UserController::class, 'destroy'])->middleware('isAdmin');
+    Route::get('edit/user/{id}', [UserController::class, 'edit'])->middleware('isAdmin');
+    Route::patch('user/{id}', [UserController::class, 'update'])->middleware('isAdmin');
 
     Route::get('/kode', [KodeController::class, 'index']);
     Route::post('/kode', [KodeController::class, 'store']);
@@ -45,7 +45,7 @@ Route::middleware(['auth', 'isLogin'])->group(function () {
     Route::delete('/sub-kode/{id}', [SubKodeController::class, 'destroy']);
     Route::get('edit/sub-kode/{id}', [SubKodeController::class, 'edit']);
     Route::patch('/sub-kode/{id}', [SubKodeController::class, 'update']);
-    
+
     Route::get('/sub-sub-kode', [SubSubKodeController::class, 'index']);
     Route::post('/sub-sub-kode', [SubSubKodeController::class, 'store']);
     Route::delete('/sub-sub-kode/{id}', [SubSubKodeController::class, 'destroy']);
@@ -63,7 +63,7 @@ Route::middleware(['auth', 'isLogin'])->group(function () {
     Route::delete('/penerimaan/{id}', [PenerimaanController::class, 'destroy']);
     Route::get('/edit/penerimaan/{id}', [PenerimaanController::class, 'edit']);
     Route::patch('/penerimaan/{id}', [PenerimaanController::class, 'update']);
-    
+
     Route::get('/pengeluaran', [PengeluaranController::class, 'index']);
     Route::post('/pengeluaran', [PengeluaranController::class, 'store']);
     Route::delete('/pengeluaran/{id}', [PengeluaranController::class, 'destroy']);

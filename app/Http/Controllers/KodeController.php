@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Kode;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class KodeController extends Controller
 {
@@ -20,8 +21,8 @@ class KodeController extends Controller
     {
         $validated = $request->validate([
             'jenis_kode' => 'required',
-            'no_kode' => 'required',
-            'nama_kode' => 'required',
+            'no_kode' => 'required|unique:kodes,no_kode',
+            'nama_kode' => 'required|unique:kodes,nama_kode',
         ]);
 
         if ($validated) {
@@ -36,7 +37,7 @@ class KodeController extends Controller
             return redirect('/kode')->with('KodeError', 'Tambah Kode Gagal');
         }
     }
-    
+
     public function edit($id)
     {
         $kode = Kode::findOrFail($id);
@@ -47,13 +48,13 @@ class KodeController extends Controller
             ]);
         }
     }
-    
+
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
             'jenis_kode' => 'required',
-            'no_kode' => 'required',
-            'nama_kode' => 'required',
+            'no_kode' =>  ['required', Rule::unique('kodes')->ignore($id)],
+            'nama_kode' =>  ['required', Rule::unique('kodes')->ignore($id)],
         ]);
 
         if ($validated) {
@@ -68,7 +69,7 @@ class KodeController extends Controller
             return redirect('/kode')->with('KodeError', 'Edit Kode Gagal');
         }
     }
-    
+
     public function destroy($id)
     {
         $data = Kode::findOrFail($id);

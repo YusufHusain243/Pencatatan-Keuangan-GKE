@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\SubSubKode;
 use Illuminate\Http\Request;
 use App\Models\SubKode;
+use Illuminate\Validation\Rule;
 
 class SubSubKodeController extends Controller
 {
@@ -23,8 +24,8 @@ class SubSubKodeController extends Controller
     {
         $validated = $request->validate([
             'no_sub_kode' => 'required',
-            'no_sub_sub_kode' => 'required',
-            'nama_sub_sub_kode' => 'required',
+            'no_sub_sub_kode' => 'required|unique:sub_sub_kodes,no_sub_sub_kode',
+            'nama_sub_sub_kode' => 'required|unique:sub_sub_kodes,nama_sub_sub_kode',
         ]);
 
         if ($validated) {
@@ -55,8 +56,8 @@ class SubSubKodeController extends Controller
     {
         $validated = $request->validate([
             'no_sub_kode' => 'required',
-            'no_sub_sub_kode' => 'required',
-            'nama_sub_sub_kode' => 'required',
+            'no_sub_sub_kode' => ['required', Rule::unique('sub_sub_kodes')->ignore($id)],
+            'nama_sub_sub_kode' => ['required', Rule::unique('sub_sub_kodes')->ignore($id)],
         ]);
 
         if ($validated) {

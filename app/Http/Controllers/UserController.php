@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -20,7 +21,7 @@ class UserController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'username' => 'required|min:8',
+            'username' => 'required|min:8|unique:users,username',
             'password' => 'required|min:8',
         ]);
 
@@ -51,7 +52,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $validated = $request->validate([
-            'username' => "required|min:8",
+            'username' =>  ['required', Rule::unique('users')->ignore($id)],
             'new_password' => 'required|min:8',
         ]);
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AkunBank;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AkunBankController extends Controller
 {
@@ -20,7 +21,7 @@ class AkunBankController extends Controller
     {
         $validated = $request->validate([
             'nama_bank' => 'required',
-            'no_rek' => 'required',
+            'no_rek' => 'required|unique:akun_banks,no_rek',
         ]);
 
         if ($validated) {
@@ -48,7 +49,7 @@ class AkunBankController extends Controller
     {
         $validated = $request->validate([
             'nama_bank' => 'required',
-            'no_rek' => 'required',
+            'no_rek' => ['required', Rule::unique('akun_banks')->ignore($id)],
         ]);
 
         if ($validated) {
