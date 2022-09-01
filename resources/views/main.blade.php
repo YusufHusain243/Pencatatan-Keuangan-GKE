@@ -82,7 +82,7 @@
     </script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    
+
     <!-- Sparkline -->
     <script src="{{ asset('/plugins/sparklines/sparkline.js') }}"></script>
     <!-- JQVMap -->
@@ -101,7 +101,6 @@
     <script src="{{ asset('/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('/js/adminlte.js') }}"></script>
-
 
     <!-- DataTables  & Plugins -->
     <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
