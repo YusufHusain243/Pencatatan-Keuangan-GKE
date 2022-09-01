@@ -133,31 +133,92 @@
         $(function() {
             var grafik = ['#grafikMingguan', '#grafikBulanan', '#grafikTahunan', '#grafikPrediksi']
             for (let i = 0; i < grafik.length; i++) {
-                var areaChartData = {
-                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
-                    datasets: [{
-                            label: 'Penerimaan',
-                            backgroundColor: 'rgba(60,141,188,0.9)',
-                            borderColor: 'rgba(60,141,188,0.8)',
-                            pointRadius: false,
-                            pointColor: '#3b8bba',
-                            pointStrokeColor: 'rgba(60,141,188,1)',
-                            pointHighlightFill: '#fff',
-                            pointHighlightStroke: 'rgba(60,141,188,1)',
-                            data: [28, 48, 40, 19, 86, 27, 90]
-                        },
-                        {
-                            label: 'Pengeluaran',
-                            backgroundColor: 'rgba(210, 214, 222, 1)',
-                            borderColor: 'rgba(210, 214, 222, 1)',
-                            pointRadius: false,
-                            pointColor: 'rgba(210, 214, 222, 1)',
-                            pointStrokeColor: '#c1c7d1',
-                            pointHighlightFill: '#fff',
-                            pointHighlightStroke: 'rgba(220,220,220,1)',
-                            data: [65, 59, 80, 81, 56, 55, 40]
-                        },
-                    ],
+                if (grafik[i] == '#grafikMingguan') {
+                    var areaChartData = {
+                        labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
+                        datasets: [{
+                                label: 'Penerimaan',
+                                backgroundColor: 'rgb(60, 179, 113)',
+                                data: [28, 48, 40, 19]
+                            },
+                            {
+                                label: 'Pengeluaran',
+                                backgroundColor: 'rgb(255, 75, 67)',
+                                data: [65, 59, 80, 81]
+                            },
+                        ],
+                    }
+                }
+                if (grafik[i] == '#grafikBulanan') {
+                    var areaChartData = {
+                        labels: [
+                            'Januari',
+                            'Februari',
+                            'Maret',
+                            'April',
+                            'Mei',
+                            'Juni',
+                            'Juli',
+                            'Agustus',
+                            'September',
+                            'Oktober',
+                            'November',
+                            'Desember',
+                        ],
+                        datasets: [{
+                                label: 'Penerimaan',
+                                backgroundColor: 'rgb(60, 179, 113)',
+                                data: [28, 48, 40, 19, 12, 23, 12, 23, 12, 20, 20, 30]
+                            },
+                            {
+                                label: 'Pengeluaran',
+                                backgroundColor: 'rgb(255, 75, 67)',
+                                data: [65, 59, 80, 81, 12, 34, 56, 23, 45, 23, 60, 23]
+                            },
+                        ],
+                    }
+                }
+                if (grafik[i] == '#grafikTahunan') {
+                    var areaChartData = {
+                        labels: [
+                            '2019',
+                            '2020',
+                            '2021',
+                            '2022',
+                        ],
+                        datasets: [{
+                                label: 'Penerimaan',
+                                backgroundColor: 'rgb(60, 179, 113)',
+                                data: [28, 48, 40, 19]
+                            },
+                            {
+                                label: 'Pengeluaran',
+                                backgroundColor: 'rgb(255, 75, 67)',
+                                data: [65, 59, 80, 81]
+                            },
+                        ],
+                    }
+                }
+                if (grafik[i] == '#grafikPrediksi') {
+                    var areaChartData = {
+                        labels: [
+                            '2019',
+                            '2020',
+                            '2021',
+                            '2022',
+                        ],
+                        datasets: [{
+                                label: 'Penerimaan',
+                                backgroundColor: 'rgb(60, 179, 113)',
+                                data: [28, 48, 40, 19]
+                            },
+                            {
+                                label: 'Pengeluaran',
+                                backgroundColor: 'rgb(255, 75, 67)',
+                                data: [65, 59, 80, 81]
+                            },
+                        ],
+                    }
                 }
                 var barChartCanvas = $(grafik[i]).get(0).getContext('2d')
                 var barChartData = $.extend(true, {}, areaChartData)
