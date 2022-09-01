@@ -36,27 +36,6 @@
     <section class="content">
         <div class="row">
             <div class="col-6">
-                <div class="card card-success">
-                    <div class="card-header">
-                        <h3 class="card-title">Grafik Mingguan</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart">
-                            <canvas id="grafikMingguan"
-                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-6">
                 <div class="card card-primary">
                     <div class="card-header">
                         <h3 class="card-title">Grafik Bulanan</h3>
@@ -77,8 +56,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
             <div class="col-6">
                 <div class="card card-warning">
                     <div class="card-header">
@@ -100,7 +77,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-6">
+        </div>
+        <div class="row">
+            <div class="col-12">
                 <div class="card card-danger">
                     <div class="card-header">
                         <h3 class="card-title">Grafik Prediksi</h3>
@@ -131,24 +110,9 @@
 
     <script>
         $(function() {
-            var grafik = ['#grafikMingguan', '#grafikBulanan', '#grafikTahunan', '#grafikPrediksi']
+            var grafik = ['#grafikBulanan', '#grafikTahunan', '#grafikPrediksi']
+
             for (let i = 0; i < grafik.length; i++) {
-                if (grafik[i] == '#grafikMingguan') {
-                    var areaChartData = {
-                        labels: ['Minggu 1', 'Minggu 2', 'Minggu 3', 'Minggu 4'],
-                        datasets: [{
-                                label: 'Penerimaan',
-                                backgroundColor: 'rgb(60, 179, 113)',
-                                data: [28, 48, 40, 19]
-                            },
-                            {
-                                label: 'Pengeluaran',
-                                backgroundColor: 'rgb(255, 75, 67)',
-                                data: [65, 59, 80, 81]
-                            },
-                        ],
-                    }
-                }
                 if (grafik[i] == '#grafikBulanan') {
                     var areaChartData = {
                         labels: [
@@ -168,12 +132,12 @@
                         datasets: [{
                                 label: 'Penerimaan',
                                 backgroundColor: 'rgb(60, 179, 113)',
-                                data: [28, 48, 40, 19, 12, 23, 12, 23, 12, 20, 20, 30]
+                                data: {!! $data_bulan_penerimaan !!},
                             },
                             {
                                 label: 'Pengeluaran',
                                 backgroundColor: 'rgb(255, 75, 67)',
-                                data: [65, 59, 80, 81, 12, 34, 56, 23, 45, 23, 60, 23]
+                                data: {!! $data_bulan_pengeluaran !!},
                             },
                         ],
                     }
