@@ -57,7 +57,7 @@
                 </div>
             </div>
             <div class="col-6">
-                <div class="card card-warning">
+                <div class="card card-primary">
                     <div class="card-header">
                         <h3 class="card-title">Grafik Tahunan</h3>
                         <div class="card-tools">
@@ -80,7 +80,7 @@
         </div>
         <div class="row">
             <div class="col-12">
-                <div class="card card-danger">
+                <div class="card card-primary">
                     <div class="card-header">
                         <h3 class="card-title">Grafik Prediksi</h3>
                         <div class="card-tools">
@@ -144,12 +144,7 @@
                 }
                 if (grafik[i] == '#grafikTahunan') {
                     var areaChartData = {
-                        labels: [
-                            '2019',
-                            '2020',
-                            '2021',
-                            '2022',
-                        ],
+                        labels: {!! $data_tahun !!},
                         datasets: [{
                                 label: 'Penerimaan',
                                 backgroundColor: 'rgb(60, 179, 113)',
