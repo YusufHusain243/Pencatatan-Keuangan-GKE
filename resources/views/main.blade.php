@@ -123,6 +123,7 @@
                 .appendTo("#example1_wrapper .col-md-6:eq(0)");
         });
     </script>
+    @stack('after-script')
 </body>
 
 </html>

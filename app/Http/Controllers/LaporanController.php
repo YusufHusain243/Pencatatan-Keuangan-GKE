@@ -14,13 +14,24 @@ class LaporanController extends Controller
 {
     public function index()
     {
-        $danas = Dana::all();
-        $kodes = Kode::all();
-        $sub_kodes = SubKode::all();
-        $sub_sub_kodes = SubSubKode::all();
         $title = "laporan";
 
-        return view('pages.laporan', compact('title', 'danas', 'kodes', 'sub_kodes', 'sub_sub_kodes'));
+        return view('pages.laporan', compact('title'));
+    }
+
+    public function show(Request $request)
+    {
+        $title = "lihat_laporan";
+
+        $explode = explode('-', $request->daterangepicker);
+        $explode[0] = str_replace(' ', '', $explode[0]);
+        $explode[1] = str_replace(' ', '', $explode[1]);
+        $tanggalAwal = date('Y-m-d', strtotime($explode[0]));
+        $tanggalAkhir = date('Y-m-d', strtotime($explode[1]));
+
+        $kodes = Kode::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->get();
+
+        return view('pages.cetak_laporan', compact('title', 'kodes', 'tanggalAwal', 'tanggalAkhir'));
     }
 
     public function export()
