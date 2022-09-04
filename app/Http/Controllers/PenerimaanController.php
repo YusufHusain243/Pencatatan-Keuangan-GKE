@@ -175,7 +175,7 @@ class PenerimaanController extends Controller
                 ]);
 
                 $result = DetailBank::findOrFail($id)->update([
-                    'id_dana' => $result_dana->id,
+                    'id_dana' => $id,
                     'id_bank' => $request->akun_bank,
                 ]);
             } else {

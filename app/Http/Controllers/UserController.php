@@ -23,6 +23,13 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' => 'required|min:8|unique:users,username',
             'password' => 'required|min:8',
+        ],
+        [
+            'username.unique' => 'Username sudah ada',
+            'username.required' => 'Username tidak boleh kosong',
+            'username.min' => 'Username harus memiliki minimal 8 karakter',
+            'password.required' => 'Password tidak boleh kosong',
+            'password.min' => 'Password harus memiliki minimal 8 karakter',
         ]);
 
         if ($validated) {
@@ -54,6 +61,13 @@ class UserController extends Controller
         $validated = $request->validate([
             'username' =>  ['required', Rule::unique('users')->ignore($id)],
             'new_password' => 'required|min:8',
+        ],
+        [
+            'username.unique' => 'Username sudah ada',
+            'username.required' => 'Username tidak boleh kosong',
+            'username.min' => 'Username harus memiliki minimal 8 karakter',
+            'new_password.required' => 'Password Baru tidak boleh kosong',
+            'new_password.min' => 'Password Baru harus memiliki minimal 8 karakter',
         ]);
 
         if ($validated) {

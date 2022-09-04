@@ -90,6 +90,8 @@
     <script src="{{ asset('/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
     <!-- jQuery Knob Chart -->
     <script src="{{ asset('/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <!-- jQuery Inputmask -->
+    <script src="{{ asset('/plugins/inputmask/jquery.inputmask.js') }}"></script>
     <!-- daterangepicker -->
     <script src="{{ asset('/plugins/moment/moment.min.js') }}"></script>
     <script src="{{ asset('/plugins/daterangepicker/daterangepicker.js') }}"></script>
@@ -129,6 +131,7 @@
                 .appendTo("#example1_wrapper .col-md-6:eq(0)");
         });
     </script>
+    @stack('after-script')
 </body>
 
 </html>

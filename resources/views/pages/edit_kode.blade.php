@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="jenis_kode">Jenis Kode</label>
+                            <label for="jenis_kode">Jenis Kode <code>*</code></label>
                             <select class="form-control @error('jenis_kode') is-invalid @enderror" id="jenis_kode"
                                 name="jenis_kode" required>
                                 <option value="Penerimaan" {{ $kode->jenis_kode === 'Penerimaan' ? 'selected' : '' }}>
@@ -52,8 +52,8 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="no_kode">No Kode</label>
-                            <input type="number" class="form-control @error('no_kode') is-invalid @enderror" id="no_kode"
+                            <label for="no_kode">No Kode <code>*</code></label>
+                            <input type="text" class="form-control @error('no_kode') is-invalid @enderror" id="no_kode"
                                 name="no_kode" placeholder="Masukkan No Kode" value="{{ $kode->no_kode }}" required>
                             @error('no_kode')
                                 <div class="invalid-feedback">
@@ -64,7 +64,7 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="nama_kode">Nama Kode</label>
+                            <label for="nama_kode">Nama Kode <code>*</code></label>
                             <input type="text" class="form-control @error('nama_kode') is-invalid @enderror"
                                 id="nama_kode" name="nama_kode" placeholder="Masukkan Nama Kode"
                                 value="{{ $kode->nama_kode }}" required>
@@ -83,3 +83,25 @@
         </form>
     </div>
 @endsection
+
+@push('after-script')
+    <script>
+        $(document).ready(function() {
+            var jenis_kode = $('#jenis_kode').val();
+            if (jenis_kode == 'Penerimaan') {
+                $('#no_kode').inputmask('4.9');
+            } else if (jenis_kode == 'Pengeluaran') {
+                $('#no_kode').inputmask('5.9');
+            }
+
+            $('#jenis_kode').change(function(e) {
+                $('#no_kode').val('');
+                if (e.target.value == 'Penerimaan') {
+                    $('#no_kode').inputmask('4.9');
+                } else if (e.target.value == 'Pengeluaran') {
+                    $('#no_kode').inputmask('5.9');
+                }
+            });
+        })
+    </script>
+@endpush

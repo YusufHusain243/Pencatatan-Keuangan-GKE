@@ -30,6 +30,7 @@ class SubKodeController extends Controller
         ]);
 
         if ($validated) {
+            $request->no_sub_kode = substr($request->no_sub_kode, -1);
             $cek = DB::table('sub_kodes')
                 ->where('id_kode', '=', $request->no_kode)
                 ->where(function ($query) use ($request) {
@@ -76,6 +77,7 @@ class SubKodeController extends Controller
         ]);
 
         if ($validated) {
+            $request->no_sub_kode = substr($request->no_sub_kode, -1);
             $cek = DB::table('sub_kodes')
                 ->where('id_kode', '=', $request->no_kode)
                 ->where(function ($query) use ($request) {

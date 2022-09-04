@@ -33,7 +33,7 @@
             @csrf
             <div class="card-body">
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Username <code>*</code></label>
                     <input type="text" class="form-control @error('username') is-invalid @enderror" id="username"
                         name="username" placeholder="Masukkan Username" value="{{ $user->username }}" required>
                     @error('username')
@@ -43,7 +43,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="new_password">Password Baru</label>
+                    <label for="new_password">Password Baru <code>*</code></label>
                     <input type="password" class="form-control @error('new_password') is-invalid @enderror" id="new_password"
                         name="new_password" placeholder="Masukkan Password Baru">
                     @error('new_password')

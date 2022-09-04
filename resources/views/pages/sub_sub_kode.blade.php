@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="no_sub_kode">No Sub Kode</label>
+                            <label for="no_sub_kode">No Sub Kode <code>*</code></label>
                             <select class="form-control @error('no_sub_kode') is-invalid @enderror" id="no_sub_kode"
                                 name="no_sub_kode" required>
                                 <option value="">Pilih No Sub Kode</option>
@@ -59,8 +59,8 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="no_sub_sub_kode">No Sub Sub-Kode</label>
-                            <input type="number" class="form-control @error('no_sub_sub_kode') is-invalid @enderror"
+                            <label for="no_sub_sub_kode">No Sub Sub-Kode <code>*</code></label>
+                            <input type="text" class="form-control @error('no_sub_sub_kode') is-invalid @enderror"
                                 id="no_sub_sub_kode" name="no_sub_sub_kode" placeholder="Masukkan No Sub Sub-Kode" required>
                             @error('no_sub_kode')
                                 <div class="invalid-feedback">
@@ -71,7 +71,7 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="nama_sub_sub_kode">Nama Sub Sub-Kode</label>
+                            <label for="nama_sub_sub_kode">Nama Sub Sub-Kode <code>*</code></label>
                             <input type="text" class="form-control @error('nama_sub_sub_kode') is-invalid @enderror"
                                 id="nama_sub_sub_kode" name="nama_sub_sub_kode" placeholder="Masukkan Nama Sub Sub-Kode"
                                 required>
@@ -153,3 +153,19 @@
         </div>
     </div>
 @endsection
+
+@push('after-script')
+    <script>
+        $(document).ready(function() {
+            $('#no_sub_kode').change(function(e) {
+                $('#no_sub_sub_kode').val('');
+                var no_sub_kode = $('#no_sub_kode option:selected').text();
+                var split = no_sub_kode.split('(');
+                var nomor = split[0];
+                nomor = nomor.replace(/\s/g, '');
+
+                $('#no_sub_sub_kode').inputmask(`${nomor}.9`);
+            });
+        });
+    </script>
+@endpush
