@@ -59,7 +59,15 @@
                             <select class="form-control @error('no_kode') is-invalid @enderror" id="no_kode"
                                 name="no_kode" required>
                                 <option value="">Pilih No Kode</option>
+                                @php
+                                    $kodeSelected = 0;
+                                @endphp
                                 @foreach ($kodes as $kode)
+                                    @php
+                                        if ($sub_kode->id_kode === $kode->id) {
+                                            $kodeSelected = $kode->id;
+                                        }
+                                    @endphp
                                     <option value="{{ $kode->id }}"
                                         {{ $sub_kode->id_kode === $kode->id ? 'selected' : '' }}>
                                         @if ($kode->jenis_kode == 'Penerimaan')
@@ -136,7 +144,28 @@
                     }
                     return text;
                 });
-                
+
+            var jenis_kode_awal = $('#jenis_kode').val();
+            var kodeSelected = {{ $kodeSelected }};
+
+            if (jenis_kode_awal == 'Penerimaan') {
+                $("#no_kode option").remove();
+                var PATTERN = /4..*\(/,
+                    filtered = myArray.filter(function(str) {
+                        return PATTERN.test(str);
+                    });
+                makeOption('#no_kode', filtered)
+                $('#no_kode option').val(kodeSelected).attr('selected', true);
+            } else if (jenis_kode_awal == 'Pengeluaran') {
+                $("#no_kode option").remove();
+                var PATTERN = /5..*\(/,
+                    filtered = myArray.filter(function(str) {
+                        return PATTERN.test(str);
+                    });
+                makeOption('#no_kode', filtered)
+                $('#no_kode option').val(kodeSelected).attr('selected', true);
+            }
+
             $('#jenis_kode').change(function(e) {
                 $('#no_sub_kode').val('');
                 if (e.target.value == 'Penerimaan') {

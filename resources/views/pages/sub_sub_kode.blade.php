@@ -32,7 +32,23 @@
             @csrf
             <div class="card-body">
                 <div class="row">
-                    <div class="col-4">
+                    <div class="col-3">
+                        <div class="form-group">
+                            <label for="jenis_kode">Jenis Kode <code>*</code></label>
+                            <select class="form-control @error('jenis_kode') is-invalid @enderror" id="jenis_kode"
+                                name="jenis_kode" required>
+                                <option value="">Pilih Jenis Kode</option>
+                                <option value="Penerimaan">Penerimaan</option>
+                                <option value="Pengeluaran">Pengeluaran</option>
+                            </select>
+                            @error('jenis_kode')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="col-3">
                         <div class="form-group">
                             <label for="no_sub_kode">No Sub Kode <code>*</code></label>
                             <select class="form-control @error('no_sub_kode') is-invalid @enderror" id="no_sub_kode"
@@ -57,7 +73,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="form-group">
                             <label for="no_sub_sub_kode">No Sub Sub-Kode <code>*</code></label>
                             <input type="text" class="form-control @error('no_sub_sub_kode') is-invalid @enderror"
@@ -69,7 +85,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-3">
                         <div class="form-group">
                             <label for="nama_sub_sub_kode">Nama Sub Sub-Kode <code>*</code></label>
                             <input type="text" class="form-control @error('nama_sub_sub_kode') is-invalid @enderror"
@@ -157,10 +173,52 @@
 @push('after-script')
     <script>
         $(document).ready(function() {
+            function makeOption(selector, val) {
+                $(selector)
+                    .append('<option value="" selected>Pilih No Sub Kode</option>');
+                $.each(val, function(i, value) {
+                    $(selector)
+                        .append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                });
+            }
+            var opts = $('#no_sub_kode option');
+
+            var myArray = [];
+
+            var vals = [...opts]
+                .map((val, index) => {
+                    var text = val.textContent;
+                    var value = val.value;
+                    if (value) {
+                        myArray[index] = [value, text];
+                    }
+                    return text;
+                });
+
+            $('#jenis_kode').change(function(e) {
+                $('#no_sub_kode').val('');
+                $('#no_sub_sub_kode').val('');
+                if (e.target.value == 'Penerimaan') {
+                    $("#no_sub_kode option").remove();
+                    var PATTERN = /4\..*\..*\(*[^<]*/,
+                        filtered = myArray.filter(function(str) {
+                            return PATTERN.test(str);
+                        });
+                    makeOption('#no_sub_kode', filtered)
+                } else if (e.target.value == 'Pengeluaran') {
+                    $("#no_sub_kode option").remove();
+                    var PATTERN = /5\..*\..*\(*[^<]*/,
+                        filtered = myArray.filter(function(str) {
+                            return PATTERN.test(str);
+                        });
+                    makeOption('#no_sub_kode', filtered)
+                }
+            });
+
             $('#no_sub_kode').change(function(e) {
                 $('#no_sub_sub_kode').val('');
-                var no_sub_kode = $('#no_sub_kode option:selected').text();
-                var split = no_sub_kode.split('(');
+                var no_kode = $('#no_sub_kode option:selected').text();
+                var split = no_kode.split('(');
                 var nomor = split[0];
                 nomor = nomor.replace(/\s/g, '');
 
