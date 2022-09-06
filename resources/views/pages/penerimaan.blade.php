@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="kode_anggaran">Kode Anggaran</label>
+                            <label for="kode_anggaran">Kode Anggaran <code>*</code></label>
                             <select class="form-control @error('kode_anggaran') is-invalid @enderror" id="kode_anggaran"
                                 name="kode_anggaran" required>
                                 <option value="">Pilih Kode Anggaran</option>
@@ -53,7 +53,7 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="sub_kode_anggaran">Sub Kode Anggaran</label>
+                            <label for="sub_kode_anggaran">Sub Kode Anggaran <code>*</code></label>
                             <select class="form-control @error('sub_kode_anggaran') is-invalid @enderror"
                                 id="sub_kode_anggaran" name="sub_kode_anggaran" required>
                                 <option value="">Pilih Sub Kode Anggaran</option>
@@ -73,7 +73,7 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="sub_sub_kode_anggaran">Sub Sub-Kode Anggaran</label>
+                            <label for="sub_sub_kode_anggaran">Sub Sub-Kode Anggaran <code>*</code></label>
                             <select class="form-control @error('sub_sub_kode_anggaran') is-invalid @enderror"
                                 id="sub_sub_kode_anggaran" name="sub_sub_kode_anggaran" required>
                                 <option value="">Pilih Kode Anggaran</option>
@@ -95,7 +95,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="tanggal">Tanggal</label>
+                            <label for="tanggal">Tanggal <code>*</code></label>
                             <input type="date" class="form-control @error('tanggal') is-invalid @enderror" id="tanggal"
                                 name="tanggal" required>
                             @error('tanggal')
@@ -107,7 +107,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="keterangan">Keterangan</label>
+                            <label for="keterangan">Keterangan <code>*</code></label>
                             <input type="text" class="form-control @error('keterangan') is-invalid @enderror"
                                 id="keterangan" name="keterangan" placeholder="Masukkan Keterangan" required>
                             @error('keterangan')
@@ -121,7 +121,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="nominal">Nominal</label>
+                            <label for="nominal">Nominal <code>*</code></label>
                             <input type="number" class="form-control @error('nominal') is-invalid @enderror" id="nominal"
                                 name="nominal" placeholder="Masukkan Nominal" required>
                             @error('nominal')
@@ -133,7 +133,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="jenis_transaksi">Jenis Transaksi</label>
+                            <label for="jenis_transaksi">Jenis Transaksi <code>*</code></label>
                             <select class="form-control @error('jenis_transaksi') is-invalid @enderror" id="jenis_transaksi"
                                 name="jenis_transaksi" onchange="val()" required>
                                 <option value="">Pilih Jenis Transaksi</option>
@@ -152,7 +152,7 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="akun_bank">Pilih Akun Bank</label>
+                                <label for="akun_bank">Pilih Akun Bank <code>*</code></label>
                                 <select class="form-control @error('akun_bank') is-invalid @enderror" id="akun_bank"
                                     name="akun_bank">
                                     <option value="">Pilih Akun Bank</option>
