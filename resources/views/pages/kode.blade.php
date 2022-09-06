@@ -82,6 +82,13 @@
 
     <div class="card">
         <div class="card-body">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-expanded="false">Filter</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/kode/all">Semua</a>
+                <a class="dropdown-item" href="/kode/penerimaan">Penerimaan</a>
+                <a class="dropdown-item" href="/kode/pengeluaran">Pengeluaran</a>
+            </div>
             <table id="example1" class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>

@@ -37,19 +37,19 @@
                     <ul class="nav nav-treeview">
                         <div class="col">
                             <li class="nav-item">
-                                <a href="/kode" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
+                                <a href="/kode/all" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Kode Anggaran</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/sub-kode" class="nav-link {{ $title === 'sub_kode' ? 'active' : '' }}">
+                                <a href="/sub-kode/all" class="nav-link {{ $title === 'sub_kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Sub Kode Anggaran</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/sub-sub-kode"
+                                <a href="/sub-sub-kode/all"
                                     class="nav-link {{ $title === 'sub_sub_kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Sub Sub-Kode Anggaran</p>
@@ -80,6 +80,12 @@
                     <a href="#" class="nav-link">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Cetak Laporan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/forecasting" class="nav-link {{ $title === 'forecasting' ? 'active' : '' }}">
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Forecasting</p>
                     </a>
                 </li>
             </ul>

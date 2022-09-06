@@ -10,10 +10,25 @@ use Illuminate\Validation\Rule;
 
 class SubKodeController extends Controller
 {
-    public function index()
+    public function index($param)
     {
-        $sub_kodes = SubKode::all();
         $kodes = Kode::all();
+        switch ($param) {
+            case "all":
+                $sub_kodes = Kode::join('sub_kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
+                    ->get();
+                break;
+            case "penerimaan":
+                $sub_kodes = Kode::where('jenis_kode', 'Penerimaan')
+                    ->join('sub_kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
+                    ->get();
+                break;
+            case "pengeluaran":
+                $sub_kodes = Kode::where('jenis_kode', 'Pengeluaran')
+                    ->join('sub_kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
+                    ->get();
+                break;
+        }
         return view('pages/sub_kode', [
             "title" => "sub_kode",
             "sub_kodes" => $sub_kodes,
@@ -46,11 +61,11 @@ class SubKodeController extends Controller
                     'nama_sub_kode' => $request->nama_sub_kode,
                 ]);
                 if ($result) {
-                    return redirect('/sub-kode')->with('SubKodeSuccess', 'Tambah Sub Kode Berhasil');
+                    return redirect('/sub-kode/all')->with('SubKodeSuccess', 'Tambah Sub Kode Berhasil');
                 }
-                return redirect('/sub-kode')->with('SubKodeError', 'Tambah Sub Kode Gagal');
+                return redirect('/sub-kode/all')->with('SubKodeError', 'Tambah Sub Kode Gagal');
             } else {
-                return redirect('/sub-kode')->with('SubKodeError', 'Tambah Sub Kode Gagal, Sub Kode Sudah Ada!');
+                return redirect('/sub-kode/all')->with('SubKodeError', 'Tambah Sub Kode Gagal, Sub Kode Sudah Ada!');
             }
         }
     }
@@ -93,9 +108,9 @@ class SubKodeController extends Controller
                     'nama_sub_kode' => $request->nama_sub_kode,
                 ]);
                 if ($result) {
-                    return redirect('/sub-kode')->with('SubKodeSuccess', 'Edit Sub Kode Berhasil');
+                    return redirect('/sub-kode/all')->with('SubKodeSuccess', 'Edit Sub Kode Berhasil');
                 }
-                return redirect('/sub-kode')->with('SubKodeError', 'Edit Sub Kode Gagal');
+                return redirect('/sub-kode/all')->with('SubKodeError', 'Edit Sub Kode Gagal');
             } else {
                 if ($cek[0]->id == $id) {
                     $result = SubKode::findOrFail($id)->update([
@@ -104,11 +119,11 @@ class SubKodeController extends Controller
                         'nama_sub_kode' => $request->nama_sub_kode,
                     ]);
                     if ($result) {
-                        return redirect('/sub-kode')->with('SubKodeSuccess', 'Edit Sub Kode Berhasil');
+                        return redirect('/sub-kode/all')->with('SubKodeSuccess', 'Edit Sub Kode Berhasil');
                     }
-                    return redirect('/sub-kode')->with('SubKodeError', 'Edit Sub Kode Gagal');
+                    return redirect('/sub-kode/all')->with('SubKodeError', 'Edit Sub Kode Gagal');
                 } else {
-                    return redirect('/sub-kode')->with('SubKodeError', 'Tambah Sub Kode Gagal, Sub Kode Sudah Ada!');
+                    return redirect('/sub-kode/all')->with('SubKodeError', 'Tambah Sub Kode Gagal, Sub Kode Sudah Ada!');
                 }
             }
         }
@@ -120,9 +135,9 @@ class SubKodeController extends Controller
         if ($data) {
             $result = $data->delete();
             if ($result) {
-                return redirect('/sub-kode')->with('SubKodeSuccess', 'Hapus Sub Kode Berhasil');
+                return redirect('/sub-kode/all')->with('SubKodeSuccess', 'Hapus Sub Kode Berhasil');
             }
-            return redirect('/sub-kode')->with('SubKodeError', 'Hapus Sub Kode Gagal');
+            return redirect('/sub-kode/all')->with('SubKodeError', 'Hapus Sub Kode Gagal');
         }
     }
 }

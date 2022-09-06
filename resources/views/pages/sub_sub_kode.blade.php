@@ -108,6 +108,13 @@
 
     <div class="card">
         <div class="card-body">
+            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"
+                aria-expanded="false">Filter</button>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="/sub-sub-kode/all">Semua</a>
+                <a class="dropdown-item" href="/sub-sub-kode/penerimaan">Penerimaan</a>
+                <a class="dropdown-item" href="/sub-sub-kode/pengeluaran">Pengeluaran</a>
+            </div>
             <table id="example1" class="table table-bordered table-striped table-responsive-md">
                 <thead>
                     <tr>
@@ -125,24 +132,24 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>
-                                @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan')
-                                    4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}
+                                @if ($sub_sub_kode->jenis_kode == 'Penerimaan')
+                                    4.{{ $sub_sub_kode->no_kode }}
                                 @else
-                                    5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}
+                                    5.{{ $sub_sub_kode->no_kode }}
                                 @endif
                             </td>
                             <td>
-                                @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan')
-                                    4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}
+                                @if ($sub_sub_kode->jenis_kode == 'Penerimaan')
+                                    4.{{ $sub_sub_kode->no_kode }}.{{ $sub_sub_kode->no_sub_kode }}
                                 @else
-                                    5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}
+                                    5.{{ $sub_sub_kode->no_kode }}.{{ $sub_sub_kode->no_sub_kode }}
                                 @endif
                             </td>
                             <td>
-                                @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan')
-                                    4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                @if ($sub_sub_kode->jenis_kode == 'Penerimaan')
+                                    4.{{ $sub_sub_kode->no_kode }}.{{ $sub_sub_kode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
                                 @else
-                                    5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                    5.{{ $sub_sub_kode->no_kode }}.{{ $sub_sub_kode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
                                 @endif
                             </td>
                             <td>{{ $sub_sub_kode->nama_sub_sub_kode }}</td>

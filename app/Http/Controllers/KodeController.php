@@ -9,9 +9,19 @@ use Illuminate\Validation\Rule;
 
 class KodeController extends Controller
 {
-    public function index()
+    public function index($param)
     {
-        $kodes = Kode::all();
+        switch ($param) {
+            case "all":
+                $kodes = Kode::all();
+                break;
+            case "penerimaan":
+                $kodes = Kode::where('jenis_kode', 'Penerimaan')->get();
+                break;
+            case "pengeluaran":
+                $kodes = Kode::where('jenis_kode', 'Pengeluaran')->get();
+                break;
+        }
         return view('pages/kode', [
             "title" => "kode",
             "kodes" => $kodes
@@ -43,11 +53,11 @@ class KodeController extends Controller
                     'nama_kode' => $request->nama_kode,
                 ]);
                 if ($result) {
-                    return redirect('/kode')->with('KodeSuccess', 'Tambah Kode Berhasil');
+                    return redirect('/kode/all')->with('KodeSuccess', 'Tambah Kode Berhasil');
                 }
-                return redirect('/kode')->with('KodeError', 'Tambah Kode Gagal');
+                return redirect('/kode/all')->with('KodeError', 'Tambah Kode Gagal');
             } else {
-                return redirect('/kode')->with('KodeError', 'Tambah Kode Gagal, Kode Sudah Ada!');
+                return redirect('/kode/all')->with('KodeError', 'Tambah Kode Gagal, Kode Sudah Ada!');
             }
         }
     }
@@ -88,9 +98,9 @@ class KodeController extends Controller
                     'nama_kode' => $request->nama_kode,
                 ]);
                 if ($result) {
-                    return redirect('/kode')->with('KodeSuccess', 'Edit Kode Berhasil');
+                    return redirect('/kode/all')->with('KodeSuccess', 'Edit Kode Berhasil');
                 }
-                return redirect('/kode')->with('KodeError', 'Edit Kode Gagal');
+                return redirect('/kode/all')->with('KodeError', 'Edit Kode Gagal');
             } else {
                 if ($cek[0]->id == $id) {
                     $result = Kode::findOrFail($id)->update([
@@ -99,11 +109,11 @@ class KodeController extends Controller
                         'nama_kode' => $request->nama_kode,
                     ]);
                     if ($result) {
-                        return redirect('/kode')->with('KodeSuccess', 'Edit Kode Berhasil');
+                        return redirect('/kode/all')->with('KodeSuccess', 'Edit Kode Berhasil');
                     }
-                    return redirect('/kode')->with('KodeError', 'Edit Kode Gagal');
+                    return redirect('/kode/all')->with('KodeError', 'Edit Kode Gagal');
                 } else {
-                    return redirect('/kode')->with('KodeError', 'Kode Sudah Ada');
+                    return redirect('/kode/all')->with('KodeError', 'Kode Sudah Ada');
                 }
             }
         }
@@ -115,9 +125,9 @@ class KodeController extends Controller
         if ($data) {
             $result = $data->delete();
             if ($result) {
-                return redirect('/kode')->with('KodeSuccess', 'Hapus Kode Berhasil');
+                return redirect('/kode/all')->with('KodeSuccess', 'Hapus Kode Berhasil');
             }
-            return redirect('/kode')->with('KodeError', 'Hapus Kode Gagal');
+            return redirect('/kode/all')->with('KodeError', 'Hapus Kode Gagal');
         }
     }
 }

@@ -19,15 +19,20 @@ class AkunBankController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'nama_bank' => 'required',
-            'no_rek' => 'required|unique:akun_banks,no_rekening',
-        ]);
+        $validated = $request->validate(
+            [
+                'nama_bank' => 'required',
+                'no_rekening' => 'required|unique:akun_banks,no_rekening',
+            ],
+            [
+                'no_rekening.unique' => 'Nomor Rekening sudah ada',
+            ]
+        );
 
         if ($validated) {
             $result = AkunBank::create([
                 'nama_bank' => $request->nama_bank,
-                'no_rekening' => $request->no_rek,
+                'no_rekening' => $request->no_rekening,
             ]);
             if ($result) {
                 return redirect('/akun-bank')->with('AkunBankSuccess', 'Tambah Akun Bank Berhasil');
@@ -47,15 +52,20 @@ class AkunBankController extends Controller
 
     public function update(Request $request, $id)
     {
-        $validated = $request->validate([
-            'nama_bank' => 'required',
-            'no_rek' => ['required', Rule::unique('akun_banks')->ignore($id)],
-        ]);
+        $validated = $request->validate(
+            [
+                'nama_bank' => 'required',
+                'no_rekening' => ['required', Rule::unique('akun_banks')->ignore($id)],
+            ],
+            [
+                'no_rekening.unique' => 'Nomor Rekening sudah ada',
+            ]
+        );
 
         if ($validated) {
             $result = AkunBank::findOrFail($id)->update([
                 'nama_bank' => $request->nama_bank,
-                'no_rekening' => $request->no_rek,
+                'no_rekening' => $request->no_rekening,
             ]);
             if ($result) {
                 return redirect('/akun-bank')->with('AkunBankSuccess', 'Edit Akun Bank Berhasil');

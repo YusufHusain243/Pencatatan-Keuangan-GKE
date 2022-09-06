@@ -40,7 +40,7 @@
                                 <option value="">Pilih Kode Anggaran</option>
                                 @foreach ($kodes as $kode)
                                     <option value="{{ $kode->id }}">
-                                        {{ $kode->id }} 4.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
+                                        4.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
                                     </option>
                                 @endforeach
                             </select>

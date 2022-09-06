@@ -27,11 +27,11 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="no_rek">No Rekening <code>*</code></label>
-                            <input type="text" class="form-control @error('no_rek') is-invalid @enderror" id="no_rek"
-                                name="no_rek" placeholder="Masukkan No Rekening" value="{{ $akun_bank->no_rekening }}"
-                                required>
-                            @error('no_rek')
+                            <label for="no_rekening">No Rekening <code>*</code></label>
+                            <input type="text" class="form-control @error('no_rekening') is-invalid @enderror"
+                                id="no_rekening" name="no_rekening" placeholder="Masukkan No Rekening"
+                                value="{{ $akun_bank->no_rekening }}" required>
+                            @error('no_rekening')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -49,8 +49,8 @@
 
 @push('after-script')
     <script>
-        $(document).ready(function () {
-            $('#no_rek').inputmask('9{10,16}');
+        $(document).ready(function() {
+            $('#no_rekening').inputmask('9{10,16}');
         });
     </script>
 @endpush
