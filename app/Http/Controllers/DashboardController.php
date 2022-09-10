@@ -11,11 +11,20 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        //get saldo kas
-        $saldo_kas = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+        // get saldo penerimaan
+        $saldo_penerimaan = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->where('danas.transaksi', '=', 'Tunai/Cash')
             ->sum('danas.nominal');
+
+        // get saldo pengeluaran
+        $saldo_pengeluaran = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', '=', 'Pengeluaran')
+            ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->sum('danas.nominal');
+
+        // get saldo kas
+        $saldo_kas = ($saldo_penerimaan-$saldo_pengeluaran);
 
         // get saldo bank
         $saldo_bank = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
@@ -24,7 +33,7 @@ class DashboardController extends Controller
             ->sum('danas.nominal');
 
         // sum saldo akhir
-        $saldo_akhir = $saldo_kas + $saldo_bank;
+        $saldo_akhir = ($saldo_kas + $saldo_bank);
 
         // ----start get grafik bulanan----
         $num_bulan = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];

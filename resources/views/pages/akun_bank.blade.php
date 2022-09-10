@@ -28,7 +28,7 @@
         <div class="card-header">
             <h3 class="card-title">Tambah Akun Bank</h3>
         </div>
-        <form action="/akun-bank" method="POST">
+        <form action="/akun-bank" method="POST" id="form">
             @csrf
             <div class="card-body">
                 <div class="row">
@@ -47,8 +47,10 @@
                     <div class="col-6">
                         <div class="form-group">
                             <label for="no_rekening">No Rekening <code>*</code></label>
-                            <input type="text" class="form-control @error('no_rekening') is-invalid @enderror" id="no_rekening"
-                                name="no_rekening" placeholder="Masukkan No Rekening" required>
+                            <input type="text" class="form-control @error('no_rekening') is-invalid @enderror"
+                                id="no_rekening" name="no_rekening" placeholder="Masukkan No Rekening" minlength="10"
+                                required>
+                            <small class="form-text text-danger" id="tooltip">No. Rekening setidaknya memiliki 10 karakter</small>
                             @error('no_rekening')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -108,8 +110,36 @@
 
 @push('after-script')
     <script>
-        $(document).ready(function () {
-            $('#no_rekening').inputmask('9{10,16}');
+        $(document).ready(function() {
+            let isvalid = false;
+            $("#tooltip").hide();
+            $('#no_rekening').inputmask({
+                    mask: "*{10,16}",
+                    definitions: {
+                        '*': {
+                            validator: "[0-9]"
+                        }
+                    },
+                    removeMaskOnSubmit: true,
+                    onincomplete: function() {
+                        isvalid = false
+                    },
+                    oncomplete: function() {
+                        isvalid = true
+                    }
+                }),
+                $("#form").submit(function(e) {
+                    if (!isvalid) {
+                        $("#tooltip").show();
+                        let tooltip = setInterval(function() {
+                            clearInterval(tooltip);
+                            $("#tooltip").hide();
+                        }, 3000);
+                        e.preventDefault();
+                        return
+                    }
+                    $("form").submit();
+                });
         });
     </script>
 @endpush

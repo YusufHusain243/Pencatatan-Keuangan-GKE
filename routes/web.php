@@ -62,7 +62,7 @@ Route::middleware(['auth', 'isLogin'])->group(function () {
     Route::post('/penerimaan', [PenerimaanController::class, 'store']);
     Route::delete('/penerimaan/{id}', [PenerimaanController::class, 'destroy']);
     Route::get('/edit/penerimaan/{id}', [PenerimaanController::class, 'edit']);
-    Route::patch('/penerimaan/{id}', [PenerimaanController::class, 'update']);
+    Route::put('/penerimaan/{id}', [PenerimaanController::class, 'update']);
 
     Route::get('/pengeluaran', [PengeluaranController::class, 'index']);
     Route::post('/pengeluaran', [PengeluaranController::class, 'store']);

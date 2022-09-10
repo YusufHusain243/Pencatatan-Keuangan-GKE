@@ -60,6 +60,7 @@ class PengeluaranController extends Controller
         }
 
         if ($validated) {
+            $request->nominal = (int) filter_var($request->nominal, FILTER_SANITIZE_NUMBER_INT);
             if ($request->jenis_transaksi == 'Transfer Bank') {
                 $result = Dana::create([
                     'id_kode' => $request->kode_anggaran,
@@ -98,7 +99,7 @@ class PengeluaranController extends Controller
         $kodes = Kode::where('jenis_kode', 'Pengeluaran')->get();
         $sub_kodes = SubKode::join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', 'Pengeluaran')
-            ->get();
+            ->get(['kodes.id AS idKodes', 'kodes.*', 'sub_kodes.*']);
         $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', 'Pengeluaran')
@@ -117,7 +118,7 @@ class PengeluaranController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (isset($request->akun_bank)) {
+        if ($request->jenis_transaksi === 'Tunai/Cash') {
             $validated = $request->validate([
                 'kode_anggaran' => 'required',
                 'sub_kode_anggaran' => 'required',
@@ -126,7 +127,6 @@ class PengeluaranController extends Controller
                 'keterangan' => 'required',
                 'nominal' => 'required',
                 'jenis_transaksi' => 'required',
-                'akun_bank' => 'required',
             ]);
         } else {
             $validated = $request->validate([
@@ -137,11 +137,20 @@ class PengeluaranController extends Controller
                 'keterangan' => 'required',
                 'nominal' => 'required',
                 'jenis_transaksi' => 'required',
+                'akun_bank' => 'required',
             ]);
         }
 
         if ($validated) {
-            if (isset($request->akun_bank)) {
+            $request->nominal = (int) filter_var($request->nominal, FILTER_SANITIZE_NUMBER_INT);
+            $data_penerimaan = Dana::findOrFail($id);
+            if ($data_penerimaan->transaksi == 'Transfer Bank') {
+                if ($request->jenis_transaksi == 'Tunai/Cash') {
+                    $detail_bank = DetailBank::where('id_dana', $id)->where('id_bank', $request->akun_bank)->first();
+                    $result = DetailBank::findOrFail($detail_bank->id)->delete();
+                }
+            }
+            if ($request->jenis_transaksi == 'Transfer Bank') {
                 $result_dana = Dana::findOrFail($id)->update([
                     'id_kode' => $request->kode_anggaran,
                     'id_sub_kode' => $request->sub_kode_anggaran,
@@ -152,10 +161,21 @@ class PengeluaranController extends Controller
                     'transaksi' => $request->jenis_transaksi,
                 ]);
 
-                $result = DetailBank::findOrFail($id)->update([
-                    'id_dana' => $id,
-                    'id_bank' => $request->akun_bank,
-                ]);
+                if ($result_dana) {
+                    $check_detail_bank = DetailBank::where('id_dana', $id)->where('id_bank', $request->akun_bank)->first();
+
+                    if ($check_detail_bank) {
+                        $result = DetailBank::findOrFail($check_detail_bank->id)->update([
+                            'id_dana' => $id,
+                            'id_bank' => $request->akun_bank,
+                        ]);
+                    } else {
+                        $result = DetailBank::create([
+                            'id_dana' => $id,
+                            'id_bank' => $request->akun_bank,
+                        ]);
+                    }
+                }
             } else {
                 $result = Dana::findOrFail($id)->update([
                     'id_kode' => $request->kode_anggaran,
