@@ -14,11 +14,17 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                <li class="nav-header">AKUN BANK</li>
+                <li class="nav-item">
+                    <a href="/akun-bank" class="nav-link {{ $title === 'akun_bank' ? 'active' : '' }}">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Kelola Akun Bank</p>
+                    </a>
+                </li>
                 <li class="nav-header">SETTINGS</li>
                 <li
                     class="nav-item 
                     {{ $title === 'user' ? 'menu-is-opening menu-open active' : '' }} 
-                    {{ $title === 'akun_bank' ? 'menu-is-opening menu-open active' : '' }} 
                     {{ $title === 'kode' ? 'menu-is-opening menu-open active' : '' }} 
                     {{ $title === 'sub_kode' ? 'menu-is-opening menu-open active' : '' }} 
                     {{ $title === 'sub_sub_kode' ? 'menu-is-opening menu-open active' : '' }}
@@ -40,12 +46,6 @@
                                     </a>
                                 </li>
                             @endif
-                            <li class="nav-item">
-                                <a href="/akun-bank" class="nav-link {{ $title === 'akun_bank' ? 'active' : '' }}">
-                                    <i class="far fa-circle nav-icon"></i>
-                                    <p>Akun Bank</p>
-                                </a>
-                            </li>
                             <li class="nav-item">
                                 <a href="/kode/all" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
