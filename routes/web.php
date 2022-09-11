@@ -3,6 +3,7 @@
 use App\Http\Controllers\AkunBankController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ForecastingController;
 use App\Http\Controllers\KodeController;
 use App\Http\Controllers\PenerimaanController;
 use App\Http\Controllers\PengeluaranController;
@@ -69,6 +70,12 @@ Route::middleware(['auth', 'isLogin'])->group(function () {
     Route::delete('/pengeluaran/{id}', [PengeluaranController::class, 'destroy']);
     Route::get('/edit/pengeluaran/{id}', [PengeluaranController::class, 'edit']);
     Route::patch('/pengeluaran/{id}', [PengeluaranController::class, 'update']);
+
+    Route::get('/forecasting', [ForecastingController::class, 'index']);
+    Route::post('/forecasting', [ForecastingController::class, 'store']);
+    Route::delete('/forecasting/{id}', [ForecastingController::class, 'destroy']);
+    Route::get('/edit/forecasting/{id}', [ForecastingController::class, 'edit']);
+    Route::patch('/forecasting/{id}', [ForecastingController::class, 'update']);
 
     Route::get('/logout', [LoginController::class, 'logout']);
 });

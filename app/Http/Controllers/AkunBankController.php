@@ -25,6 +25,8 @@ class AkunBankController extends Controller
                 'no_rekening' => 'required|unique:akun_banks,no_rekening',
             ],
             [
+                'nama_bank.required' => 'Nama Bank Tidak Boleh Kosong',
+                'no_rekening.required' => 'Nomor Rekening Tidak Boleh Kosong',
                 'no_rekening.unique' => 'Nomor Rekening sudah ada',
             ]
         );
@@ -55,9 +57,11 @@ class AkunBankController extends Controller
         $validated = $request->validate(
             [
                 'nama_bank' => 'required',
-                'no_rekening' => ['required', Rule::unique('akun_banks')->ignore($id)],
+                'no_rekening' => ['required|unique:akun_banks,no_rekening', Rule::unique('akun_banks')->ignore($id)],
             ],
             [
+                'nama_bank.required' => 'Nama Bank Tidak Boleh Kosong',
+                'no_rekening.required' => 'Nomor Rekening Tidak Boleh Kosong',
                 'no_rekening.unique' => 'Nomor Rekening sudah ada',
             ]
         );

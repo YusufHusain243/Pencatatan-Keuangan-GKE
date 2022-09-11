@@ -148,12 +148,12 @@
                         datasets: [{
                                 label: 'Penerimaan',
                                 backgroundColor: 'rgb(60, 179, 113)',
-                                data: [28, 48, 40, 19]
+                                data: {!! $data_tahun_penerimaan !!}
                             },
                             {
                                 label: 'Pengeluaran',
                                 backgroundColor: 'rgb(255, 75, 67)',
-                                data: [65, 59, 80, 81]
+                                data: {!! $data_tahun_pengeluaran !!}
                             },
                         ],
                     }
