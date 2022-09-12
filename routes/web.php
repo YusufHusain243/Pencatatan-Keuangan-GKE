@@ -72,6 +72,10 @@ Route::middleware(['auth', 'isLogin'])->group(function () {
     Route::get('/edit/pengeluaran/{id}', [PengeluaranController::class, 'edit']);
     Route::patch('/pengeluaran/{id}', [PengeluaranController::class, 'update']);
 
+    Route::get('/laporan', [LaporanController::class, 'index']);
+    Route::post('/lihat_laporan', [LaporanController::class, 'show'])->name('lihat_laporan');
+    Route::get('/export_laporan', [LaporanController::class, 'export']);
+
     Route::get('/forecasting', [ForecastingController::class, 'index']);
     Route::post('/forecasting', [ForecastingController::class, 'store']);
     Route::delete('/forecasting/{id}', [ForecastingController::class, 'destroy']);
