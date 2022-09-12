@@ -89,8 +89,7 @@
                         <div class="form-group">
                             <label for="nama_sub_sub_kode">Nama Sub Sub-Kode <code>*</code></label>
                             <input type="text" class="form-control @error('nama_sub_sub_kode') is-invalid @enderror"
-                                id="nama_sub_sub_kode" name="nama_sub_sub_kode" placeholder="Masukkan Nama Sub Sub-Kode"
-                                required>
+                                id="nama_sub_sub_kode" name="nama_sub_sub_kode" placeholder="Masukkan Nama Sub Sub-Kode">
                             @error('nama_sub_sub_kode')
                                 <div class="invalid-feedback">
                                     {{ $message }}

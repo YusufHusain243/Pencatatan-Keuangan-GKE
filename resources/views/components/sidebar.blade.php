@@ -100,7 +100,7 @@
                 </li>
                 <li class="nav-header">LAPORAN</li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link">
+                    <a href="/laporan" class="nav-link {{ $title === 'laporan' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Cetak Laporan</p>
                     </a>

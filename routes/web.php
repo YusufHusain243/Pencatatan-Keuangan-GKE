@@ -5,11 +5,12 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\ForecastingController;
 use App\Http\Controllers\KodeController;
-use App\Http\Controllers\PenerimaanController;
-use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\SubKodeController;
 use App\Http\Controllers\SubSubKodeController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PenerimaanController;
+use App\Http\Controllers\PengeluaranController;
 use Illuminate\Support\Facades\Route;
 
 /*

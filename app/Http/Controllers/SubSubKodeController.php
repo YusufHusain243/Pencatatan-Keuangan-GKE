@@ -45,7 +45,7 @@ class SubSubKodeController extends Controller
         $validated = $request->validate([
             'no_sub_kode' => 'required',
             'no_sub_sub_kode' => 'required',
-            'nama_sub_sub_kode' => 'required',
+            'nama_sub_sub_kode' => 'nullable',
         ]);
 
         if ($validated) {
@@ -90,7 +90,7 @@ class SubSubKodeController extends Controller
         $validated = $request->validate([
             'no_sub_kode' => 'required',
             'no_sub_sub_kode' => 'required',
-            'nama_sub_sub_kode' => 'required',
+            'nama_sub_sub_kode' => 'nullable',
         ]);
 
         if ($validated) {

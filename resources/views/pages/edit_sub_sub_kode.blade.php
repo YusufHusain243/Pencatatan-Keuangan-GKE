@@ -106,7 +106,7 @@
                             <label for="nama_sub_sub_kode">Nama Sub Sub-Kode</label>
                             <input type="text" class="form-control @error('nama_sub_sub_kode') is-invalid @enderror"
                                 id="nama_sub_sub_kode" name="nama_sub_sub_kode" placeholder="Masukkan Nama Sub Sub-Kode"
-                                value="{{ $sub_sub_kode->nama_sub_sub_kode }}" required>
+                                value="{{ $sub_sub_kode->nama_sub_sub_kode }}">
                             @error('nama_sub_sub_kode')
                                 <div class="invalid-feedback">
                                     {{ $message }}
