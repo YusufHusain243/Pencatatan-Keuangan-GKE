@@ -29,9 +29,46 @@ class LaporanController extends Controller
         $tanggalAwal = date('Y-m-d', strtotime($explode[0]));
         $tanggalAkhir = date('Y-m-d', strtotime($explode[1]));
 
-        $kodes = Kode::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->get();
+        // $kodes = Kode::whereBetween('created_at', [$tanggalAwal, $tanggalAkhir])->get();
+        // $kodes = Kode::join('danas', 'danas.id_kode', '=', 'kodes.id')
+        // ->whereBetween('danas.tanggal', [$tanggalAwal, $tanggalAkhir])
+        // ->get();
+        $kodes = Kode::with(['kodeToSubKode'])
+            ->whereHas('kodeToSubKode', function ($q) use ($tanggalAwal, $tanggalAkhir) {
+                $q->whereBetween('created_at', [$tanggalAwal, $tanggalAkhir]);
+            })
+            ->get();
 
-        return view('pages.cetak_laporan', compact('title', 'kodes', 'tanggalAwal', 'tanggalAkhir'));
+        // dd($kodes[0]->KodeToSubKode[0]->subKodeToSubSubKode[0]->SubSubKodeToDana);
+
+
+        // get saldo penerimaan
+        $saldo_penerimaan = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', '=', 'Penerimaan')
+            ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
+            ->sum('danas.nominal');
+
+        // get saldo pengeluaran
+        $saldo_pengeluaran = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', '=', 'Pengeluaran')
+            ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
+            ->sum('danas.nominal');
+        // get saldo kas
+        $saldo_kas = ($saldo_penerimaan - $saldo_pengeluaran);
+
+        // get saldo bank
+        $saldo_bank = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', '=', 'Penerimaan')
+            ->where('danas.transaksi', '=', 'Transfer Bank')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
+            ->sum('danas.nominal');
+
+        // sum saldo akhir
+        $saldo_akhir = ($saldo_kas + $saldo_bank);
+
+        return view('pages.cetak_laporan', compact('title', 'kodes', 'tanggalAwal', 'tanggalAkhir', 'saldo_akhir'));
     }
 
     public function export()

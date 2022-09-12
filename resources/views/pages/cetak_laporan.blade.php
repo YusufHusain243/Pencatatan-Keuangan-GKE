@@ -235,26 +235,32 @@
                         <td class="py-0 px-2 font-weight-bold">Keterangan :</td>
                     </tr>
                     <tr>
-                        <td class="py-0 px-2 font-weight-bold border-bottom-0">Saldo terakhir tanggal, {{ date('d F Y') }}
-                            <span class="float-right">Rp. @currency(0)</span></td>
+                        <td class="py-0 px-2 font-weight-bold border-bottom-0">Saldo terakhir tanggal, {{ date('d F Y', strtotime($tanggalAwal)) }}
+                            <span class="float-right">Rp. @currency($saldo_akhir)</span>
+                        </td>
                     </tr>
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0">Penerimaan,
                             {{ date('d F Y', strtotime($tanggalAwal)) }} - {{ date('d F Y', strtotime($tanggalAkhir)) }}
-                            <span class="float-right"><u>Rp. @currency($jumlahPenerimaan)</u></span></td>
+                            <span class="float-right"><u>Rp. @currency($jumlahPenerimaan)</u></span>
+                        </td>
                     </tr>
                     <tr>
+                        @php
+                            $jumlahSaldoPenerimaan = $jumlahPenerimaan + $saldo_akhir;
+                        @endphp
                         <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0"><span class="float-right">Rp.
-                                @currency(0)</span></td>
+                                @currency($jumlahSaldoPenerimaan)</span></td>
                     </tr>
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0">Pengeluaran,
                             {{ date('d F Y', strtotime($tanggalAwal)) }} - {{ date('d F Y', strtotime($tanggalAkhir)) }}
-                            <span class="float-right"><u>Rp. @currency($jumlahPengeluaran)</u></span></td>
+                            <span class="float-right"><u>Rp. @currency($jumlahPengeluaran)</u></span>
+                        </td>
                     </tr>
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-top-0">Saldo terakhir tanggal,
-                            {{ date('d F Y') }}<span class="float-right">Rp. @currency(0)</span></td>
+                            {{ date('d F Y', strtotime($tanggalAkhir)) }}<span class="float-right">Rp. @currency($saldo_akhir)</span></td>
                     </tr>
                 </tbody>
             </table>
