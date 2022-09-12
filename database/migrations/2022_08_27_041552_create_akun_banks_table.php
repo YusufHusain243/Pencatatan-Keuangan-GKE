@@ -16,7 +16,7 @@ class CreateAkunBanksTable extends Migration
         Schema::create('akun_banks', function (Blueprint $table) {
             $table->id();
             $table->string('nama_bank');
-            $table->string('no_rekening')->unique();
+            $table->string('no_rekening');
             $table->timestamps();
         });
     }

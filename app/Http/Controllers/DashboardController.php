@@ -24,13 +24,18 @@ class DashboardController extends Controller
             ->sum('danas.nominal');
 
         // get saldo kas
-        $saldo_kas = ($saldo_penerimaan-$saldo_pengeluaran);
+        $saldo_kas = ($saldo_penerimaan - $saldo_pengeluaran);
 
         // get saldo bank
-        $saldo_bank = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+        $saldo_bank_penerimaan = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->where('danas.transaksi', '=', 'Transfer Bank')
             ->sum('danas.nominal');
+        $saldo_bank_pengeluaran = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', '=', 'Pengeluaran')
+            ->where('danas.transaksi', '=', 'Transfer Bank')
+            ->sum('danas.nominal');
+        $saldo_bank = $saldo_bank_penerimaan - $saldo_bank_pengeluaran;
 
         // sum saldo akhir
         $saldo_akhir = ($saldo_kas + $saldo_bank);
