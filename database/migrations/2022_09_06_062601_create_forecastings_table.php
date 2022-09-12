@@ -15,9 +15,9 @@ class CreateForecastingsTable extends Migration
     {
         Schema::create('forecastings', function (Blueprint $table) {
             $table->id();
-            $table->year('tahun', 4)->unique();
-            $table->bigInteger('penerimaan');
-            $table->bigInteger('pengeluaran');
+            $table->year('tahun', 4);
+            $table->float('penerimaan');
+            $table->float('pengeluaran');
             $table->timestamps();
         });
     }

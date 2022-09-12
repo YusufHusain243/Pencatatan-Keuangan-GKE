@@ -76,11 +76,16 @@ Route::middleware(['auth', 'isLogin'])->group(function () {
     Route::post('/lihat_laporan', [LaporanController::class, 'show'])->name('lihat_laporan');
     Route::get('/export_laporan', [LaporanController::class, 'export']);
 
-    Route::get('/forecasting', [ForecastingController::class, 'index']);
-    Route::post('/forecasting', [ForecastingController::class, 'store']);
-    Route::delete('/forecasting/{id}', [ForecastingController::class, 'destroy']);
-    Route::get('/edit/forecasting/{id}', [ForecastingController::class, 'edit']);
-    Route::patch('/forecasting/{id}', [ForecastingController::class, 'update']);
+    Route::get('/data-forecasting', [ForecastingController::class, 'index']);
+    Route::post('/data-forecasting', [ForecastingController::class, 'store']);
+    Route::delete('/data-forecasting/{id}', [ForecastingController::class, 'destroy']);
+    Route::get('/edit/data-forecasting/{id}', [ForecastingController::class, 'edit']);
+    Route::patch('/data-forecasting/{id}', [ForecastingController::class, 'update']);
+
+    Route::get('/forecasting-penerimaan', [ForecastingController::class, 'forecastingPenerimaan']);
+    Route::post('/forecasting-penerimaan/prediksi', [ForecastingController::class, 'hitungForecasting']);
+    Route::get('/forecasting-pengeluaran', [ForecastingController::class, 'forecastingPengeluaran']);
+    Route::post('/forecasting-pengeluaran/prediksi', [ForecastingController::class, 'hitungForecasting']);
 
     Route::get('/logout', [LoginController::class, 'logout']);
 });

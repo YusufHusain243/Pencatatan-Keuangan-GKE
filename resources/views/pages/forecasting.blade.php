@@ -14,7 +14,7 @@
         </div>
     @endif
     @if (session()->has('ForecastingError'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('ForecastingError') }}
             <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
                 <span>
@@ -28,7 +28,7 @@
         <div class="card-header">
             <h3 class="card-title">Add Data</h3>
         </div>
-        <form method="POST" action="/forecasting">
+        <form method="POST" action="/data-forecasting">
             @csrf
             <div class="card-body">
                 <div class="row">
@@ -97,10 +97,10 @@
                             <td>{{ $forecasting->pengeluaran }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="edit/forecasting/{{ $forecasting->id }}">
+                                    <a class="btn btn-primary" href="edit/data-forecasting/{{ $forecasting->id }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="/forecasting/{{ $forecasting->id }}" method="post">
+                                    <form action="/data-forecasting/{{ $forecasting->id }}" method="post">
                                         @method('delete')
                                         @csrf
                                         <button type="submit" class="btn btn-danger"

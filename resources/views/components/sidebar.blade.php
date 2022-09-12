@@ -107,9 +107,23 @@
                 </li>
                 <li class="nav-header">PERAMALAN</li>
                 <li class="nav-item">
-                    <a href="/forecasting" class="nav-link {{ $title === 'forecasting' ? 'active' : '' }}">
+                    <a href="/data-forecasting" class="nav-link {{ $title === 'forecasting' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
-                        <p>Forecasting</p>
+                        <p>Kelola Data</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/forecasting-penerimaan"
+                        class="nav-link {{ $title === 'forecasting-penerimaan' ? 'active' : '' }}">
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Prediksi Penerimaan</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/forecasting-pengeluaran"
+                        class="nav-link {{ $title === 'forecasting-pengeluaran' ? 'active' : '' }}">
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Prediksi Pengeluaran</p>
                     </a>
                 </li>
             </ul>

@@ -14,7 +14,7 @@
         </div>
     @endif
     @if (session()->has('ForecastingError'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('ForecastingError') }}
             <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
                 <span>
@@ -28,7 +28,7 @@
         <div class="card-header">
             <h3 class="card-title">Edit Data</h3>
         </div>
-        <form method="POST" action="/forecasting/{{ $forecasting->id }}">
+        <form method="POST" action="/data-forecasting/{{ $forecasting->id }}">
             @method('PATCH')
             @csrf
             <div class="card-body">

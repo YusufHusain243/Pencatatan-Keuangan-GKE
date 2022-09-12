@@ -16,17 +16,70 @@ class ForecastingController extends Controller
         ]);
     }
 
+    public function forecastingPenerimaan()
+    {
+        $data_forecastings = Forecasting::all();
+        return view('pages/forecasting_penerimaan', [
+            "title" => "forecasting-penerimaan",
+            "data_forecastings" => $data_forecastings
+        ]);
+    }
+
+    public function forecastingPengeluaran()
+    {
+        $data_forecastings = Forecasting::all();
+        return view('pages/forecasting_pengeluaran', [
+            "title" => "forecasting-pengeluaran",
+            "data_forecastings" => $data_forecastings
+        ]);
+    }
+
+    public function hitungForecasting(Request $request)
+    {
+        $data_forecastings = Forecasting::all();
+
+        $jenis = $request->jenis;
+        $x = $request->x;
+        $y = $request->y;
+        $xx = $request->xx;
+        $xy = $request->xy;
+        $n = $request->n;
+        $tahun = $request->tahun_prediksi;
+
+        $b = ((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x)));
+        $a = ($y - ($b * $x)) / $n;
+        $result = ($a + ($b * $tahun));
+
+        if ($jenis == 'penerimaan') {
+            return view('pages/forecasting_penerimaan', [
+                "title" => "forecasting-penerimaan",
+                "data_forecastings" => $data_forecastings,
+                "result" => $result,
+                "tahun" => $tahun,
+                "a" => $a,
+                "b" => $b,
+            ]);
+        } else {
+            return view('pages/forecasting_pengeluaran', [
+                "title" => "forecasting-pengeluaran",
+                "data_forecastings" => $data_forecastings,
+                "result" => $result,
+                "tahun" => $tahun,
+                "a" => $a,
+                "b" => $b,
+            ]);
+        }
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate(
             [
-                'tahun' => 'required|unique:forecastings,tahun|min:4',
+                'tahun' => 'required',
                 'penerimaan' => 'required',
                 'pengeluaran' => 'required',
             ],
             [
-                'tahun.unique' => 'Tahun sudah ada',
-                'tahun.min' => 'Tahun harus memiliki minimal 4 karakter',
                 'tahun.required' => 'Tahun tidak boleh kosong',
                 'penerimaan.required' => 'Penerimaan tidak boleh kosong',
                 'pengeluaran.required' => 'Pengeluaran tidak boleh kosong',
@@ -34,15 +87,20 @@ class ForecastingController extends Controller
         );
 
         if ($validated) {
-            $result = Forecasting::create([
-                'tahun' => $request->tahun,
-                'penerimaan' => $request->penerimaan,
-                'pengeluaran' => $request->pengeluaran,
-            ]);
-            if ($result) {
-                return redirect('/forecasting')->with('ForecastingSuccess', 'Tambah Data Berhasil');
+            $cek = Forecasting::where('tahun', $request->tahun)->get();
+            if (count($cek) <= 0) {
+                $result = Forecasting::create([
+                    'tahun' => $request->tahun,
+                    'penerimaan' => $request->penerimaan,
+                    'pengeluaran' => $request->pengeluaran,
+                ]);
+                if ($result) {
+                    return redirect('/data-forecasting')->with('ForecastingSuccess', 'Tambah Data Berhasil');
+                }
+                return redirect('/data-forecasting')->with('ForecastingError', 'Tambah Data Gagal');
+            } else {
+                return redirect('/data-forecasting')->with('ForecastingError', 'Tambah Data Gagal, Data Tahun Sudah Ada');
             }
-            return redirect('/forecasting')->with('ForecastingError', 'Tambah Data Gagal');
         }
     }
 
@@ -61,13 +119,11 @@ class ForecastingController extends Controller
     {
         $validated = $request->validate(
             [
-                'tahun' => 'required|unique:forecastings,tahun|min:4',
+                'tahun' => 'required',
                 'penerimaan' => 'required',
                 'pengeluaran' => 'required',
             ],
             [
-                'tahun.unique' => 'Tahun sudah ada',
-                'tahun.min' => 'Tahun harus memiliki minimal 4 karakter',
                 'tahun.required' => 'Tahun tidak boleh kosong',
                 'penerimaan.required' => 'Penerimaan tidak boleh kosong',
                 'pengeluaran.required' => 'Pengeluaran tidak boleh kosong',
@@ -75,15 +131,32 @@ class ForecastingController extends Controller
         );
 
         if ($validated) {
-            $result = Forecasting::findOrFail($id)->update([
-                'tahun' => $request->tahun,
-                'penerimaan' => $request->penerimaan,
-                'pengeluaran' => $request->pengeluaran,
-            ]);
-            if ($result) {
-                return redirect('/forecasting')->with('ForecastingSuccess', 'Tambah Data Berhasil');
+            $cek = Forecasting::where('tahun', $request->tahun)->get();
+            if (count($cek) <= 0) {
+                $result = Forecasting::findOrFail($id)->update([
+                    'tahun' => $request->tahun,
+                    'penerimaan' => $request->penerimaan,
+                    'pengeluaran' => $request->pengeluaran,
+                ]);
+                if ($result) {
+                    return redirect('/data-forecasting')->with('ForecastingSuccess', 'Edit Data Berhasil');
+                }
+                return redirect('/data-forecasting')->with('ForecastingError', 'Edit Data Gagal');
+            } else {
+                if ($cek[0]->id == $id) {
+                    $result = Forecasting::findOrFail($id)->update([
+                        'tahun' => $request->tahun,
+                        'penerimaan' => $request->penerimaan,
+                        'pengeluaran' => $request->pengeluaran,
+                    ]);
+                    if ($result) {
+                        return redirect('/data-forecasting')->with('ForecastingSuccess', 'Edit Data Berhasil');
+                    }
+                    return redirect('/data-forecasting')->with('ForecastingError', 'Edit Data Gagal');
+                } else {
+                    return redirect('/data-forecasting')->with('ForecastingError', 'Edit Data Gagal, Tahun Sudah Ada');
+                }
             }
-            return redirect('/forecasting')->with('ForecastingError', 'Tambah Data Gagal');
         }
     }
 
@@ -93,9 +166,9 @@ class ForecastingController extends Controller
         if ($data) {
             $result = $data->delete();
             if ($result) {
-                return redirect('/forecasting')->with('ForecastingSuccess', 'Hapus Data Berhasil');
+                return redirect('/data-forecasting')->with('ForecastingSuccess', 'Hapus Data Berhasil');
             }
-            return redirect('/forecasting')->with('ForecastingError', 'Hapus Data Gagal');
+            return redirect('/data-forecasting')->with('ForecastingError', 'Hapus Data Gagal');
         }
     }
 }
