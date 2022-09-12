@@ -36,6 +36,6 @@ class LaporanController extends Controller
 
     public function export()
     {
-        return Excel::download(new LaporanExport, 'laporan-' . date('d-m-Y') . '.xlsx');
+        // return Excel::download(new LaporanExport, 'laporan-' . date('d-m-Y') . '.xlsx');
     }
 }
