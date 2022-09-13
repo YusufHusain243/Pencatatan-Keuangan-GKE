@@ -235,8 +235,7 @@
                         <td class="py-0 px-2 font-weight-bold">Keterangan :</td>
                     </tr>
                     <tr>
-                        <td class="py-0 px-2 font-weight-bold border-bottom-0">Saldo terakhir tanggal,
-                            {{ date('d F Y', strtotime($tanggalAwal)) }}
+                        <td class="py-0 px-2 font-weight-bold border-bottom-0">Saldo terakhir tanggal, {{ date('d F Y', strtotime($tanggalAwal)) }}
                             <span class="float-right">Rp. @currency($saldo_akhir)</span>
                         </td>
                     </tr>
@@ -249,7 +248,6 @@
                     <tr>
                         @php
                             $jumlahSaldoPenerimaan = $jumlahPenerimaan + $saldo_akhir;
-                            $jumlahSaldoPengeluaran = $jumlahSaldoPenerimaan - $jumlahPengeluaran;
                         @endphp
                         <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0"><span class="float-right">Rp.
                                 @currency($jumlahSaldoPenerimaan)</span></td>
@@ -262,25 +260,8 @@
                     </tr>
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-top-0">Saldo terakhir tanggal,
-                            {{ date('d F Y', strtotime($tanggalAkhir)) }}<span class="float-right">Rp.
-                                @currency($jumlahSaldoPengeluaran)</span></td>
+                            {{ date('d F Y', strtotime($tanggalAkhir)) }}<span class="float-right">Rp. @currency($saldo_akhir)</span></td>
                     </tr>
-                    <tr>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0">Tempat Penyimpanan :</td>
-                    </tr>
-                    <tr>
-                        <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0 pl-5">Kas Tunai<span
-                                class="float-right">Rp. @currency($saldo_tunai)</span></td>
-                    </tr>
-                    @foreach ($saldo_banks as $saldo_bank)
-                        <tr>
-                            <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0 pl-5">{{ $saldo_bank['nama_bank'] }}<span
-                                    class="float-right">Rp. @currency($saldo_bank['nominalDana'])</span></td>
-                        </tr>
-                    @endforeach
                 </tbody>
             </table>
         </div>
