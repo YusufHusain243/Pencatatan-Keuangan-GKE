@@ -46,28 +46,38 @@ class ForecastingController extends Controller
         $n = $request->n;
         $tahun = $request->tahun_prediksi;
 
-        $b = ((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x)));
-        $a = ($y - ($b * $x)) / $n;
-        $result = ($a + ($b * $tahun));
-
-        if ($jenis == 'penerimaan') {
-            return view('pages/forecasting_penerimaan', [
-                "title" => "forecasting-penerimaan",
-                "data_forecastings" => $data_forecastings,
-                "result" => $result,
-                "tahun" => $tahun,
-                "a" => $a,
-                "b" => $b,
-            ]);
+        if ($n <= 1) {
+            if ($jenis == 'penerimaan') {
+                echo "<script>alert('Data Peramalan harus lebih dari 1');</script>";
+                echo "<script>window.location.href = '/forecasting-penerimaan';</script>";
+            } else {
+                echo "<script>alert('Data Peramalan harus lebih dari 1');</script>";
+                echo "<script>window.location.href = '/forecasting-pengeluaran';</script>";
+            }
         } else {
-            return view('pages/forecasting_pengeluaran', [
-                "title" => "forecasting-pengeluaran",
-                "data_forecastings" => $data_forecastings,
-                "result" => $result,
-                "tahun" => $tahun,
-                "a" => $a,
-                "b" => $b,
-            ]);
+            $b = ((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x)));
+            $a = ($y - ($b * $x)) / $n;
+            $result = ($a + ($b * $tahun));
+
+            if ($jenis == 'penerimaan') {
+                return view('pages/forecasting_penerimaan', [
+                    "title" => "forecasting-penerimaan",
+                    "data_forecastings" => $data_forecastings,
+                    "result" => $result,
+                    "tahun" => $tahun,
+                    "a" => $a,
+                    "b" => $b,
+                ]);
+            } else {
+                return view('pages/forecasting_pengeluaran', [
+                    "title" => "forecasting-pengeluaran",
+                    "data_forecastings" => $data_forecastings,
+                    "result" => $result,
+                    "tahun" => $tahun,
+                    "a" => $a,
+                    "b" => $b,
+                ]);
+            }
         }
     }
 

@@ -38,8 +38,7 @@
                             <label for="tahun">Tahun <code>*</code></label>
                             <input type="text" minlength="4" maxlength="4"
                                 class="form-control @error('tahun') is-invalid @enderror" id="datepicker" name="tahun"
-                                placeholder="Masukkan Tahun" required autocomplete="off" value="{{ $forecasting->tahun }}"
-                                readonly>
+                                placeholder="Masukkan Tahun" required autocomplete="off" value="{{ $forecasting->tahun }}">
                             @error('tahun')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -82,20 +81,20 @@
     </div>
 @endsection
 
+@push('after-style')
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css"
+        rel="stylesheet" />
+@endpush
+
 @push('after-script')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
     <script>
         $(function() {
-            $('#datepicker').datepicker({
-                changeYear: true,
-                showButtonPanel: true,
-                dateFormat: 'yy',
-                onClose: function(dateText, inst) {
-                    var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-                    $(this).datepicker('setDate', new Date(year, 1));
-                }
-            });
-            $(".date-picker-year").focus(function() {
-                $(".ui-datepicker-month").hide();
+            $("#datepicker").datepicker({
+                format: "yyyy",
+                viewMode: "years",
+                minViewMode: "years",
+                orientation: "bottom"
             });
         });
         $(function() {
@@ -109,18 +108,4 @@
             });
         });
     </script>
-    <style>
-        .ui-datepicker-calendar {
-            display: none;
-        }
-
-        .ui-datepicker-month {
-            display: none;
-        }
-
-        .ui-datepicker-next,
-        .ui-datepicker-prev {
-            display: none;
-        }
-    </style>
 @endpush

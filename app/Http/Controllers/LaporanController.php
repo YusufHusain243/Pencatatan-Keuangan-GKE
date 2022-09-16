@@ -120,8 +120,10 @@ class LaporanController extends Controller
         return view('pages.cetak_laporan', compact('title', 'kodes', 'tanggalAwal', 'tanggalAkhir', 'saldo_akhir', 'saldo_tunai', 'saldo_banks'));
     }
 
-    public function export()
+    public function export(Request $request)
     {
-        // return Excel::download(new LaporanExport, 'laporan-' . date('d-m-Y') . '.xlsx');
+        $tanggalAwal = $request->tanggalAwal;
+        $tanggalAkhir = $request->tanggalAkhir;
+        return Excel::download(new LaporanExport($tanggalAwal, $tanggalAkhir), 'laporan-' . date('d-m-Y') . '.xlsx');
     }
 }

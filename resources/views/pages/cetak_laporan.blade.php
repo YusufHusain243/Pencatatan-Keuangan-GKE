@@ -6,7 +6,13 @@
     <div class="card">
         <div class="card-body">
             <div class="mb-4">
-                <a href="{{ asset('/cetak_laporan') }}" class="btn btn-primary">Cetak</a>
+                {{-- <a href="{{ asset('/export_laporan') }}" class="btn btn-primary">Cetak</a> --}}
+                <form action="{{ asset('/export_laporan') }}" method="post">
+                    @csrf
+                    <input type="hidden" name="tanggalAwal" value="{{ $tanggalAwal }}">
+                    <input type="hidden" name="tanggalAkhir" value="{{ $tanggalAkhir }}">
+                    <button class="btn btn-primary">Cetak</button>
+                </form>
             </div>
             <table class="table table-bordered">
                 <thead>
@@ -187,13 +193,7 @@
                                     @endif
                                 </td>
                                 <td class="py-0 px-2">
-                                    @php
-                                        $kode_persembahan_syukur = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . '.' . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode;
-                                    @endphp
-                                    @if ($kode_persembahan_syukur == '1.2')
-                                        <span class="mr-3">-</span><span
-                                            class="mr-3">P.S</span>{{ $sub_sub_kode->nama_sub_sub_kode }}
-                                    @else
+                                    @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
                                         {{ $sub_sub_kode->nama_sub_sub_kode }}
                                     @endif
                                 </td>
@@ -277,8 +277,8 @@
                     </tr>
                     @foreach ($saldo_banks as $saldo_bank)
                         <tr>
-                            <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0 pl-5">{{ $saldo_bank['nama_bank'] }}<span
-                                    class="float-right">Rp. @currency($saldo_bank['nominalDana'])</span></td>
+                            <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0 pl-5">
+                                {{ $saldo_bank['nama_bank'] }}<span class="float-right">Rp. @currency($saldo_bank['nominalDana'])</span></td>
                         </tr>
                     @endforeach
                 </tbody>

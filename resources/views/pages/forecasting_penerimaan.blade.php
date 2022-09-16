@@ -18,62 +18,68 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                    $i = 1;
-                    $x = 0;
-                    $y = 0;
-                    $xx = 0;
-                    $xy = 0;
-                    ?>
-                    @foreach ($data_forecastings as $data_forecasting)
+                    @if (count($data_forecastings) > 0)
+                        <?php
+                        $i = 1;
+                        $x = 0;
+                        $y = 0;
+                        $xx = 0;
+                        $xy = 0;
+                        ?>
+                        @foreach ($data_forecastings as $data_forecasting)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $data_forecasting->tahun }}</td>
+                                <td>{{ $data_forecasting->penerimaan }}</td>
+                                <td>{{ $i }}</td>
+                                <td>{{ $data_forecasting->penerimaan }}</td>
+                                <td>{{ $i * $i }}</td>
+                                <td>{{ $i * $data_forecasting->penerimaan }}</td>
+                            </tr>
+                            <?php
+                            $x += $i;
+                            $y += $data_forecasting->penerimaan;
+                            $xx += $i * $i;
+                            $xy += $i * $data_forecasting->penerimaan;
+                            $i++;
+                            ?>
+                        @endforeach
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $data_forecasting->tahun }}</td>
-                            <td>{{ $data_forecasting->penerimaan }}</td>
-                            <td>{{ $i }}</td>
-                            <td>{{ $data_forecasting->penerimaan }}</td>
-                            <td>{{ $i * $i }}</td>
-                            <td>{{ $i * $data_forecasting->penerimaan }}</td>
+                            <td class="text-center font-weight-bold" colspan="3">Jumlah</td>
+                            <td class="font-weight-bold">{{ $x }}</td>
+                            <td class="font-weight-bold">{{ $y }}</td>
+                            <td class="font-weight-bold">{{ $xx }}</td>
+                            <td class="font-weight-bold">{{ $xy }}</td>
                         </tr>
-                        <?php
-                        $x += $i;
-                        $y += $data_forecasting->penerimaan;
-                        $xx += $i * $i;
-                        $xy += $i * $data_forecasting->penerimaan;
-                        $i++;
-                        ?>
-                    @endforeach
-                    <tr>
-                        <td class="text-center font-weight-bold" colspan="3">Jumlah</td>
-                        <td class="font-weight-bold">{{ $x }}</td>
-                        <td class="font-weight-bold">{{ $y }}</td>
-                        <td class="font-weight-bold">{{ $xx }}</td>
-                        <td class="font-weight-bold">{{ $xy }}</td>
-                    </tr>
-                    <tr>
-                        <?php
-                        $avg_x = $x / ($i - 1);
-                        $avg_y = $y / ($i - 1);
-                        $avg_xx = $xx / ($i - 1);
-                        $avg_xy = $xy / ($i - 1);
-                        ?>
-                        <td class="text-center font-weight-bold" colspan="3">Rata Rata</td>
-                        <td class="font-weight-bold">{{ $avg_x }}</td>
-                        <td class="font-weight-bold">{{ $avg_y }}</td>
-                        <td class="font-weight-bold">{{ $avg_xx }}</td>
-                        <td class="font-weight-bold">{{ $avg_xy }}</td>
-                    </tr>
+                        <tr>
+                            <?php
+                            $avg_x = $x / ($i - 1);
+                            $avg_y = $y / ($i - 1);
+                            $avg_xx = $xx / ($i - 1);
+                            $avg_xy = $xy / ($i - 1);
+                            ?>
+                            <td class="text-center font-weight-bold" colspan="3">Rata Rata</td>
+                            <td class="font-weight-bold">{{ $avg_x }}</td>
+                            <td class="font-weight-bold">{{ $avg_y }}</td>
+                            <td class="font-weight-bold">{{ $avg_xx }}</td>
+                            <td class="font-weight-bold">{{ $avg_xy }}</td>
+                        </tr>
+                    @else
+                        <tr>
+                            <td colspan="7" class="text-center">Data Kosong</td>
+                        </tr>
+                    @endif
                 </tbody>
             </table>
             <br>
             <form action="/forecasting-penerimaan/prediksi" method="post">
                 @csrf
                 <input type="hidden" name="jenis" value="penerimaan">
-                <input type="hidden" name="x" value="{{ $x }}">
-                <input type="hidden" name="y" value="{{ $y }}">
-                <input type="hidden" name="xx" value="{{ $xx }}">
-                <input type="hidden" name="xy" value="{{ $xy }}">
-                <input type="hidden" name="n" value="{{ $i - 1 }}">
+                <input type="hidden" name="x" value="{{ $x ?? '' }}">
+                <input type="hidden" name="y" value="{{ $y ?? '' }}">
+                <input type="hidden" name="xx" value="{{ $xx ?? '' }}">
+                <input type="hidden" name="xy" value="{{ $xy ?? '' }}">
+                <input type="hidden" name="n" value="{{ isset($i) ? $i - 1 : '' }}">
                 <span>Prediksi Penerimaan Untuk</span>
                 <select name="tahun_prediksi" id="tahun_prediksi">
                     <option value="1" @if (isset($tahun)) {{ $tahun === '1' ? 'selected' : '' }} @endif>

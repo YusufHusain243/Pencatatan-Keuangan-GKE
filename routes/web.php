@@ -74,7 +74,7 @@ Route::middleware(['auth', 'isLogin'])->group(function () {
 
     Route::get('/laporan', [LaporanController::class, 'index']);
     Route::post('/lihat_laporan', [LaporanController::class, 'show'])->name('lihat_laporan');
-    Route::get('/export_laporan', [LaporanController::class, 'export']);
+    Route::post('/export_laporan', [LaporanController::class, 'export']);
 
     Route::get('/data-forecasting', [ForecastingController::class, 'index']);
     Route::post('/data-forecasting', [ForecastingController::class, 'store']);
