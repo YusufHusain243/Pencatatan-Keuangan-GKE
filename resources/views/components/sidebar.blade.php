@@ -14,6 +14,15 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
+                @if (auth()->user()->role == 'admin')
+                    <li class="nav-header">USERS</li>
+                    <li class="nav-item">
+                        <a href="/user" class="nav-link {{ $title === 'user' ? 'active' : '' }}">
+                            <i class="fas fa-circle nav-icon"></i>
+                            <p>Kelola User</p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-header">KODE ANGGARAN</li>
                 <li
                     class="nav-item 
@@ -52,15 +61,6 @@
                         </div>
                     </ul>
                 </li>
-                @if (auth()->user()->role == 'admin')
-                    <li class="nav-header">USERS</li>
-                    <li class="nav-item">
-                        <a href="/user" class="nav-link {{ $title === 'user' ? 'active' : '' }}">
-                            <i class="fas fa-circle nav-icon"></i>
-                            <p>Kelola User</p>
-                        </a>
-                    </li>
-                @endif
                 <li class="nav-header">PENCATATAN</li>
                 <li
                     class="nav-item 
