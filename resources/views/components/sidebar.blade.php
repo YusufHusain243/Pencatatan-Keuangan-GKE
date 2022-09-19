@@ -14,10 +14,9 @@
                         <p>Dashboard</p>
                     </a>
                 </li>
-                <li class="nav-header">SETTINGS</li>
+                <li class="nav-header">KODE ANGGARAN</li>
                 <li
                     class="nav-item 
-                    {{ $title === 'user' ? 'menu-is-opening menu-open active' : '' }} 
                     {{ $title === 'kode' ? 'menu-is-opening menu-open active' : '' }} 
                     {{ $title === 'sub_kode' ? 'menu-is-opening menu-open active' : '' }} 
                     {{ $title === 'sub_sub_kode' ? 'menu-is-opening menu-open active' : '' }}
@@ -25,42 +24,43 @@
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
                         <p>
-                            Master<i class="fas fa-angle-left right"></i>
+                            Kelola Kode <i class="fas fa-angle-left right"></i>
                             <span class="badge badge-info right" id="countMaster"></span>
                         </p>
                     </a>
                     <ul class="nav nav-treeview menu-master">
                         <div class="col">
-                            @if (auth()->user()->role == 'admin')
-                                <li class="nav-item">
-                                    <a href="/user" class="nav-link {{ $title === 'user' ? 'active' : '' }}">
-                                        <i class="far fa-circle nav-icon"></i>
-                                        <p>User</p>
-                                    </a>
-                                </li>
-                            @endif
                             <li class="nav-item">
                                 <a href="/kode/all" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Kode Akun</p>
+                                    <p>Kode Anggaran</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/sub-kode/all" class="nav-link {{ $title === 'sub_kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Sub Kode Akun</p>
+                                    <p>Sub Kode Anggaran</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/sub-sub-kode/all"
                                     class="nav-link {{ $title === 'sub_sub_kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Sub Sub-Kode Akun</p>
+                                    <p>Sub Sub-Kode Anggaran</p>
                                 </a>
                             </li>
                         </div>
                     </ul>
                 </li>
+                @if (auth()->user()->role == 'admin')
+                    <li class="nav-header">USERS</li>
+                    <li class="nav-item">
+                        <a href="/user" class="nav-link {{ $title === 'user' ? 'active' : '' }}">
+                            <i class="fas fa-circle nav-icon"></i>
+                            <p>Kelola User</p>
+                        </a>
+                    </li>
+                @endif
                 <li class="nav-header">PENCATATAN</li>
                 <li
                     class="nav-item 
