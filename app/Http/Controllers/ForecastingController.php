@@ -4,12 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Forecasting;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class ForecastingController extends Controller
 {
     public function index()
     {
-        $forecastings = Forecasting::all();
+        $forecastings = Forecasting::orderBy('tahun', 'ASC')->get();
         return view('pages/forecasting', [
             "title" => "forecasting",
             "forecastings" => $forecastings
@@ -18,7 +19,7 @@ class ForecastingController extends Controller
 
     public function forecastingPenerimaan()
     {
-        $data_forecastings = Forecasting::all();
+        $data_forecastings = Forecasting::orderBy('tahun', 'ASC')->get();
         return view('pages/forecasting_penerimaan', [
             "title" => "forecasting-penerimaan",
             "data_forecastings" => $data_forecastings
@@ -27,7 +28,7 @@ class ForecastingController extends Controller
 
     public function forecastingPengeluaran()
     {
-        $data_forecastings = Forecasting::all();
+        $data_forecastings = Forecasting::orderBy('tahun', 'ASC')->get();
         return view('pages/forecasting_pengeluaran', [
             "title" => "forecasting-pengeluaran",
             "data_forecastings" => $data_forecastings
@@ -38,13 +39,15 @@ class ForecastingController extends Controller
     {
         $data_forecastings = Forecasting::all();
 
-        $jenis = $request->jenis;
-        $x = $request->x;
-        $y = $request->y;
-        $xx = $request->xx;
-        $xy = $request->xy;
-        $n = $request->n;
-        $tahun = $request->tahun_prediksi;
+        $year = decrypt($request->year);
+        $jenis = decrypt($request->jenis);
+        $x = decrypt($request->x);
+        $y = decrypt($request->y);
+        $xx = decrypt($request->xx);
+        $xy = decrypt($request->xy);
+        $avg_x = decrypt($request->avg_x);
+        $avg_y = decrypt($request->avg_y);
+        $n = decrypt($request->n);
 
         if ($n <= 1) {
             if ($jenis == 'penerimaan') {
@@ -55,27 +58,35 @@ class ForecastingController extends Controller
                 echo "<script>window.location.href = '/forecasting-pengeluaran';</script>";
             }
         } else {
-            $b = ((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x)));
-            $a = ($y - ($b * $x)) / $n;
-            $result = ($a + ($b * $tahun));
+            for ($i = 0; $i <= count($year) + 4; $i++) {
+                $b = ((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x)));
+                $a = ($avg_y - ($b * $avg_x));
+                $result = ($a + ($b * $i));
+
+                if ($i <= count($year) - 1) {
+                    $temp_data['tahun'] = (int) $year[$i]->tahun;
+                } else {
+                    $temp_data['tahun'] = $year->last()->tahun + $i;
+                }
+                $temp_data['nominal'] = round($result, 2);
+                $result_data[] = $temp_data;
+            }
 
             if ($jenis == 'penerimaan') {
                 return view('pages/forecasting_penerimaan', [
                     "title" => "forecasting-penerimaan",
                     "data_forecastings" => $data_forecastings,
-                    "result" => $result,
-                    "tahun" => $tahun,
-                    "a" => $a,
-                    "b" => $b,
+                    "result_data" => json_encode($result_data),
+                    "a" => round($a, 2),
+                    "b" => round($b, 2),
                 ]);
             } else {
                 return view('pages/forecasting_pengeluaran', [
                     "title" => "forecasting-pengeluaran",
                     "data_forecastings" => $data_forecastings,
-                    "result" => $result,
-                    "tahun" => $tahun,
-                    "a" => $a,
-                    "b" => $b,
+                    "result_data" => json_encode($result_data),
+                    "a" => round($a, 2),
+                    "b" => round($b, 2),
                 ]);
             }
         }

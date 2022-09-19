@@ -63,10 +63,10 @@
                         </tr>
                         <tr>
                             <?php
-                            $avg_x = $x / ($i - 1);
-                            $avg_y = $y / ($i - 1);
-                            $avg_xx = $xx / ($i - 1);
-                            $avg_xy = $xy / ($i - 1);
+                            $avg_x = round($x / ($i - 1), 2);
+                            $avg_y = round($y / ($i - 1), 2);
+                            $avg_xx = round($xx / ($i - 1), 2);
+                            $avg_xy = round($xy / ($i - 1), 2);
                             ?>
                             <td class="text-center font-weight-bold" colspan="3">Rata Rata</td>
                             <td class="font-weight-bold">{{ $avg_x }}</td>
@@ -84,56 +84,45 @@
             <br>
             <form action="/forecasting-pengeluaran/prediksi" method="post">
                 @csrf
-                <input type="hidden" name="jenis" value="pengeluaran">
-                <input type="hidden" name="x" value="{{ $x ?? '' }}">
-                <input type="hidden" name="y" value="{{ $y ?? '' }}">
-                <input type="hidden" name="xx" value="{{ $xx ?? '' }}">
-                <input type="hidden" name="xy" value="{{ $xy ?? '' }}">
-                <input type="hidden" name="n" value="{{ isset($i) ? $i - 1 : '' }}">
-                <span>Prediksi Pengeluaran Untuk</span>
-                <select name="tahun_prediksi" id="tahun_prediksi">
-                    <option value="1" @if (isset($tahun)) {{ $tahun === '1' ? 'selected' : '' }} @endif>
-                        1
-                    </option>
-                    <option value="2" @if (isset($tahun)) {{ $tahun === '2' ? 'selected' : '' }} @endif>
-                        2
-                    </option>
-                    <option value="3" @if (isset($tahun)) {{ $tahun === '3' ? 'selected' : '' }} @endif>
-                        3
-                    </option>
-                    <option value="4" @if (isset($tahun)) {{ $tahun === '4' ? 'selected' : '' }} @endif>
-                        4
-                    </option>
-                    <option value="5" @if (isset($tahun)) {{ $tahun === '5' ? 'selected' : '' }} @endif>
-                        5
-                    </option>
-                    <option value="6" @if (isset($tahun)) {{ $tahun === '6' ? 'selected' : '' }} @endif>
-                        6
-                    </option>
-                    <option value="7" @if (isset($tahun)) {{ $tahun === '7' ? 'selected' : '' }} @endif>
-                        7
-                    </option>
-                    <option value="8" @if (isset($tahun)) {{ $tahun === '8' ? 'selected' : '' }} @endif>
-                        8
-                    </option>
-                    <option value="9"
-                        @if (isset($tahun)) {{ $tahun === '9' ? 'selected' : '' }} @endif>
-                        9
-                    </option>
-                    <option value="10"
-                        @if (isset($tahun)) {{ $tahun === '10' ? 'selected' : '' }} @endif>
-                        10
-                    </option>
-                </select>
-                <span>Tahun Kedepan</span>
+                <input type="hidden" name="jenis"
+                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt('pengeluaran') ?? '' }}">
+                <input type="hidden" name="x" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($x) ?? '' }}">
+                <input type="hidden" name="y" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($y) ?? '' }}">
+                <input type="hidden" name="xx" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($xx) ?? '' }}">
+                <input type="hidden" name="xy" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($xy) ?? '' }}">
+                <input type="hidden" name="avg_x"
+                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($avg_x) ?? '' }}">
+                <input type="hidden" name="avg_y"
+                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($avg_y) ?? '' }}">
+                <input type="hidden" name="n"
+                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($i - 1) ?? '' }}">
+                <input type="hidden" name="year"
+                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data_forecastings) ?? '' }}">
                 <button type="submit" class="btn btn-sm btn-primary text-bold">Prediksi</button>
-                <br>
             </form>
-            @if (isset($result))
-                <span>Rumus Regresi Linear : y = {{ $a }} + {{ $b }} * {{ $tahun }}</span>
-                <br>
-                <span> Prediksi Pengeluaran Untuk {{ $tahun }} Tahun Kedepan Adalah = {{ $result }}</span>
+        </div>
+    </div>
+
+    <div class="card card-primary">
+        <div class="card-header">
+            <h3 class="card-title">Hasil Prediksi</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (isset($result_data))
+                <span>Rumus Regresi Linear : Y = {{ $a }} + {{ $b }} * X</span>
             @endif
+            <div class="chart">
+                <canvas id="hasil_prediksi"
+                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+            </div>
         </div>
     </div>
 @endsection

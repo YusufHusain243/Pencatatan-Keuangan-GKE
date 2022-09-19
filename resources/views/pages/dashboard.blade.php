@@ -78,29 +78,6 @@
                 </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Grafik Prediksi</h3>
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-tool" data-card-widget="remove">
-                                <i class="fas fa-times"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="chart">
-                            <canvas id="grafikPrediksi"
-                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
     </section>
 
     <!-- jQuery -->
@@ -154,27 +131,6 @@
                                 label: 'Pengeluaran',
                                 backgroundColor: 'rgb(255, 75, 67)',
                                 data: {!! $data_tahun_pengeluaran !!}
-                            },
-                        ],
-                    }
-                }
-                if (grafik[i] == '#grafikPrediksi') {
-                    var areaChartData = {
-                        labels: [
-                            '2019',
-                            '2020',
-                            '2021',
-                            '2022',
-                        ],
-                        datasets: [{
-                                label: 'Penerimaan',
-                                backgroundColor: 'rgb(60, 179, 113)',
-                                data: [28, 48, 40, 19]
-                            },
-                            {
-                                label: 'Pengeluaran',
-                                backgroundColor: 'rgb(255, 75, 67)',
-                                data: [65, 59, 80, 81]
                             },
                         ],
                     }
