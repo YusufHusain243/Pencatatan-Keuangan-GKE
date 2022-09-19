@@ -35,7 +35,7 @@
                     <label for="username">Username <code>*</code></label>
                     <input type="text" class="form-control @error('username') is-invalid @enderror" id="username"
                         name="username" placeholder="Enter Username" required>
-                        <small class="form-text text-muted">Minimal 8 karakter</small>
+                    <small class="form-text text-muted">Minimal 8 karakter</small>
                     @error('username')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -67,6 +67,7 @@
                         <th>No</th>
                         <th>User ID</th>
                         <th>Username</th>
+                        <th>Role</th>
                         <th>Last Update</th>
                         <th>Action</th>
                     </tr>
@@ -77,6 +78,7 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->username }}</td>
+                            <td>{{ $user->role }}</td>
                             <td>{{ $user->updated_at }}</td>
                             <td>
                                 <div class="btn-group">

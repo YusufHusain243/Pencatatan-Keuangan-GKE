@@ -1,6 +1,6 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <a href="/" class="brand-link">
-        <img src="{{ asset('/img/AdminLTELogo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+        <img src="{{ asset('/img/logo.png') }}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
             style="opacity: .8">
         <span class="brand-text font-weight-light">Gereja Sinar Kasih</span>
     </a>
@@ -12,13 +12,6 @@
                     <a href="/" class="nav-link {{ $title === 'dashboard' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Dashboard</p>
-                    </a>
-                </li>
-                <li class="nav-header">AKUN BANK</li>
-                <li class="nav-item">
-                    <a href="/akun-bank" class="nav-link {{ $title === 'akun_bank' ? 'active' : '' }}">
-                        <i class="far fa-circle nav-icon"></i>
-                        <p>Kelola Akun Bank</p>
                     </a>
                 </li>
                 <li class="nav-header">SETTINGS</li>
@@ -49,20 +42,20 @@
                             <li class="nav-item">
                                 <a href="/kode/all" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Kode Anggaran</p>
+                                    <p>Kode Akun</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/sub-kode/all" class="nav-link {{ $title === 'sub_kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Sub Kode Anggaran</p>
+                                    <p>Sub Kode Akun</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/sub-sub-kode/all"
                                     class="nav-link {{ $title === 'sub_sub_kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
-                                    <p>Sub Sub-Kode Anggaran</p>
+                                    <p>Sub Sub-Kode Akun</p>
                                 </a>
                             </li>
                         </div>
@@ -97,6 +90,13 @@
                             </li>
                         </div>
                     </ul>
+                </li>
+                <li class="nav-header">AKUN BANK</li>
+                <li class="nav-item">
+                    <a href="/akun-bank" class="nav-link {{ $title === 'akun_bank' ? 'active' : '' }}">
+                        <i class="fas fa-circle nav-icon"></i>
+                        <p>Kelola Akun Bank</p>
+                    </a>
                 </li>
                 <li class="nav-header">LAPORAN</li>
                 <li class="nav-item">

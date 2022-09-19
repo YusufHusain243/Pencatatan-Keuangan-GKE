@@ -27,35 +27,39 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <div class="login-logo">
-                    <img src="{{ asset('/img/AdminLTELogo.png') }}" alt="">
+                    <img src="{{ asset('/img/logo.png') }}" width="150" alt="">
                 </div>
-                <h4 class="login-box-msg"><b>SIA</b> Gereja Sinar Kasih</h4>
-                <form action="/login" method="post">
-                    @csrf
-                    <div class="input-group mb-3">
-                        <input type="username" class="form-control" placeholder="Masukkan Username" name="username"
-                            required>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-envelope"></span>
+                <h4 class="login-box-msg">Sistem Pencatatan KAS <br><b>GKE Sinar Kasih</b></h4>
+                <div class="card">
+                    <div class="card-body">
+                        <form action="/login" method="post">
+                            @csrf
+                            <div class="input-group mb-3">
+                                <input type="username" class="form-control" placeholder="Masukkan Username" name="username"
+                                    required>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-envelope"></span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="input-group mb-3">
-                        <input type="password" class="form-control" placeholder="Masukkan Password" name="password"
-                            required>
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
+                            <div class="input-group mb-3">
+                                <input type="password" class="form-control" placeholder="Masukkan Password" name="password"
+                                    required>
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                        <span class="fas fa-lock"></span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-primary btn-block">Sign In</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                        </div>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
     </div>

@@ -53,10 +53,10 @@
                         </tr>
                         <tr>
                             <?php
-                            $avg_x = $x / ($i - 1);
-                            $avg_y = $y / ($i - 1);
-                            $avg_xx = $xx / ($i - 1);
-                            $avg_xy = $xy / ($i - 1);
+                            $avg_x = round($x / ($i - 1));
+                            $avg_y = round($y / ($i - 1));
+                            $avg_xx = round($xx / ($i - 1));
+                            $avg_xy = round($xy / ($i - 1));
                             ?>
                             <td class="text-center font-weight-bold" colspan="3">Rata Rata</td>
                             <td class="font-weight-bold">{{ $avg_x }}</td>
@@ -80,7 +80,7 @@
                 <input type="hidden" name="xx" value="{{ $xx ?? '' }}">
                 <input type="hidden" name="xy" value="{{ $xy ?? '' }}">
                 <input type="hidden" name="n" value="{{ isset($i) ? $i - 1 : '' }}">
-                <span>Prediksi Penerimaan Untuk</span>
+                <span>Prediksi Penerimaan Untuk Tahun Ke - </span>
                 <select name="tahun_prediksi" id="tahun_prediksi">
                     <option value="1" @if (isset($tahun)) {{ $tahun === '1' ? 'selected' : '' }} @endif>
                         1
@@ -114,14 +114,13 @@
                         10
                     </option>
                 </select>
-                <span>Tahun Kedepan</span>
                 <button type="submit" class="btn btn-sm btn-primary text-bold">Prediksi</button>
                 <br>
             </form>
             @if (isset($result))
                 <span>Rumus Regresi Linear : y = {{ $a }} + {{ $b }} * {{ $tahun }}</span>
                 <br>
-                <span> Prediksi Penerimaan Untuk {{ $tahun }} Tahun Kedepan Adalah = {{ $result }}</span>
+                <span> Prediksi Penerimaan Untuk Tahun Ke - {{ $tahun }} Adalah = {{ $result }}</span>
             @endif
         </div>
     </div>
