@@ -85,18 +85,39 @@ class ForecastingController extends Controller
                     }
                 }
 
-                // if ($i <= count($year) - 1) {
-                //     $temp_data_prediction['x'] = (int) $year[$i]->tahun;
-                //     // $temp_data_prediction['tahun'] = (int) $year[$i]->tahun;
-                // } else {
-                //     $temp_data_prediction['x'] = $year->last()->tahun + $i;
-                //     // $temp_data_prediction['tahun'] = $year->last()->tahun + $i;
-                // }
-
                 $temp_data_prediction['y'] = round($result, 2);
                 $result_data_prediction[] = $temp_data_prediction;
 
                 $result_data[] = $temp_data;
+            }
+
+            for ($j = count($year); $j <= count($year) + 4; $j++) {
+                if ($jenis == 'penerimaan') {
+                    if ($year->last()->penerimaan < $result_data_prediction[$j]['y']) {
+                        $temp_persen['name'] = "NAIK";
+                    } elseif ($year->last()->penerimaan > $result_data_prediction[$j]['y']) {
+                        $temp_persen['name'] = "TURUN";
+                    } else {
+                        $temp_persen['name'] = "Tidak Ada Perubahan";
+                    }
+                    $temp_persen['tahun'] = $result_data_prediction[$j]['x'];
+                    $persentase_kenaikan = ($result_data_prediction[$j]['y'] - $year->last()->penerimaan) / $year->last()->penerimaan * 100;
+                    $temp_persen['persen'] = number_format($persentase_kenaikan, 2);
+                    $persen_arr[] = $temp_persen;
+                }else{
+                    if ($year->last()->pengeluaran < $result_data_prediction[$j]['y']) {
+                        $temp_persen['name'] = "NAIK";
+                    } elseif ($year->last()->pengeluaran > $result_data_prediction[$j]['y']) {
+                        $temp_persen['name'] = "TURUN";
+                    } else {
+                        $temp_persen['name'] = "Tidak Ada Perubahan";
+                    }
+                    $temp_persen['tahun'] = $result_data_prediction[$j]['x'];
+                    $persentase_kenaikan = ($result_data_prediction[$j]['y'] - $year->last()->pengeluaran) / $year->last()->pengeluaran * 100;
+                    $temp_persen['persen'] = number_format($persentase_kenaikan, 2);
+                    $persen_arr[] = $temp_persen;
+
+                }
             }
             $result_data_prediction = collect($result_data_prediction);
             $result_data_prediction = $result_data_prediction->values()->toArray();
@@ -112,6 +133,7 @@ class ForecastingController extends Controller
                     "result_data" => json_encode($result_data),
                     "a" => round($a, 2),
                     "b" => round($b, 2),
+                    "persen_arr" => $persen_arr,
                 ]);
             } else {
                 return view('pages/forecasting_pengeluaran', [
@@ -121,6 +143,7 @@ class ForecastingController extends Controller
                     "result_data" => json_encode($result_data),
                     "a" => round($a, 2),
                     "b" => round($b, 2),
+                    "persen_arr" => $persen_arr,
                 ]);
             }
         }

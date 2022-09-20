@@ -115,6 +115,12 @@
             </div>
             <div class="card-body">
                 <span>Rumus Regresi Linear : Y = {{ $a }} + {{ $b }} * X</span>
+                <ul>
+                    @foreach ($persen_arr as $item)
+                        <li>PREDIKSI PERSENTASE PENERIMAAN PADA TAHUN {{ $item['tahun'] }} ADALAH {{ $item['name'] }}
+                            SEBESAR {{ $item['persen'] }} %</li>
+                    @endforeach
+                </ul>
                 <div class="chart">
                     <canvas id="hasil_prediksi"
                         style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
@@ -156,13 +162,6 @@
                             }
                         }]
                     },
-                    // tooltips: {
-                    //     callbacks: {
-                    //         label: function(tooltipItem, data) {
-                    //             return tooltipItem.yLabel;
-                    //         }
-                    //     }
-                    // }
                 }
             });
         </script>
