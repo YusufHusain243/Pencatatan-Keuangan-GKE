@@ -117,8 +117,12 @@
                 <span>Rumus Regresi Linear : Y = {{ $a }} + {{ $b }} * X</span>
                 <ul>
                     @foreach ($persen_arr as $item)
-                        <li>PREDIKSI PERSENTASE PENERIMAAN PADA TAHUN {{ $item['tahun'] }} ADALAH {{ $item['name'] }}
-                            SEBESAR {{ $item['persen'] }} %</li>
+                        @if ($item['name'] == 'Tidak Ada Perubahan')
+                            <li>PREDIKSI PERSENTASE PENERIMAAN PADA TAHUN {{ $item['tahun'] }} ADALAH {{ strtoupper($item['name']) }}</li>
+                        @else
+                            <li>PREDIKSI PERSENTASE PENERIMAAN PADA TAHUN {{ $item['tahun'] }} ADALAH {{ $item['name'] }}
+                                SEBESAR {{ $item['persen'] }} %</li>
+                        @endif
                     @endforeach
                 </ul>
                 <div class="chart">
@@ -142,12 +146,12 @@
                     datasets: [{
                             label: 'prediction(Y)',
                             data: {!! $result_data_prediction !!},
-                            backgroundColor: '#2196f3',
+                            backgroundColor: '#118ab2',
                         },
                         {
                             label: 'Y',
                             data: {!! $result_data !!},
-                            backgroundColor: '#c23192',
+                            backgroundColor: '#06d6a0',
                         }
                     ]
                 },
@@ -158,10 +162,17 @@
                         xAxes: [{
                             display: true,
                             ticks: {
-                                stepSize: 1
+                                stepSize: 1,
                             }
-                        }]
+                        }],
                     },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                return tooltipItem.yLabel;
+                            }
+                        }
+                    }
                 }
             });
         </script>

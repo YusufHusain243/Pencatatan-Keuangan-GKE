@@ -114,6 +114,7 @@ class ForecastingController extends Controller
                     }
                     $temp_persen['tahun'] = $result_data_prediction[$j]['x'];
                     $persentase_kenaikan = ($result_data_prediction[$j]['y'] - $year->last()->pengeluaran) / $year->last()->pengeluaran * 100;
+                    
                     $temp_persen['persen'] = number_format($persentase_kenaikan, 2);
                     $persen_arr[] = $temp_persen;
 

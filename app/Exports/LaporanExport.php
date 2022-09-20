@@ -200,7 +200,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         $table .= '</tr>';
                     }
                 }
-                $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr>';
+                $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr><tr></tr>';
                 $jumlah = 0;
                 if ($keyKode == $countKode) {
                     $table .= '</tbody></table>';
