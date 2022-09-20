@@ -41,7 +41,7 @@ class ForecastingController extends Controller
 
         $year = decrypt($request->year);
         $collection = collect($year);
-        $year = $collection->take(5)->sortBy('tahun')->values();
+        $year = $collection->sortBy('tahun')->values();
         $jenis = decrypt($request->jenis);
         $x = decrypt($request->x);
         $y = decrypt($request->y);
@@ -60,7 +60,7 @@ class ForecastingController extends Controller
                 echo "<script>window.location.href = '/forecasting-pengeluaran';</script>";
             }
         } else {
-            for ($i = 0; $i <= count($year); $i++) {
+            for ($i = 0; $i <= count($year) + 4; $i++) {
                 $b = ((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x)));
                 $a = ($avg_y - ($b * $avg_x));
                 $result = ($a + ($b * $i));
@@ -74,7 +74,24 @@ class ForecastingController extends Controller
                     } else {
                         $temp_data['y'] = (int) $year[$i]->pengeluaran;
                     }
+                } else {
+                    $temp_data_prediction['x'] = (int) $year->first()->tahun + $i;
+                    $temp_data['x'] = (int) $year->first()->tahun + $i;
+
+                    if ($jenis == 'penerimaan') {
+                        $temp_data['y'] = null;
+                    } else {
+                        $temp_data['y'] = null;
+                    }
                 }
+
+                // if ($i <= count($year) - 1) {
+                //     $temp_data_prediction['x'] = (int) $year[$i]->tahun;
+                //     // $temp_data_prediction['tahun'] = (int) $year[$i]->tahun;
+                // } else {
+                //     $temp_data_prediction['x'] = $year->last()->tahun + $i;
+                //     // $temp_data_prediction['tahun'] = $year->last()->tahun + $i;
+                // }
 
                 $temp_data_prediction['y'] = round($result, 2);
                 $result_data_prediction[] = $temp_data_prediction;
@@ -82,10 +99,10 @@ class ForecastingController extends Controller
                 $result_data[] = $temp_data;
             }
             $result_data_prediction = collect($result_data_prediction);
-            $result_data_prediction = $result_data_prediction->take(5)->values()->toArray();
+            $result_data_prediction = $result_data_prediction->values()->toArray();
 
             $result_data = collect($result_data);
-            $result_data = $result_data->take(5)->values()->toArray();
+            $result_data = $result_data->values()->toArray();
 
             if ($jenis == 'penerimaan') {
                 return view('pages/forecasting_penerimaan', [

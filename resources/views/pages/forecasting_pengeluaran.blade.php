@@ -86,18 +86,25 @@
                 @csrf
                 <input type="hidden" name="jenis"
                     value="{{ \Illuminate\Support\Facades\Crypt::encrypt('pengeluaran') ?? '' }}">
-                <input type="hidden" name="x" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($x) ?? '' }}">
-                <input type="hidden" name="y" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($y) ?? '' }}">
-                <input type="hidden" name="xx" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($xx) ?? '' }}">
-                <input type="hidden" name="xy" value="{{ \Illuminate\Support\Facades\Crypt::encrypt($xy) ?? '' }}">
+                <input type="hidden" name="x"
+                    value="{{ isset($x) ? \Illuminate\Support\Facades\Crypt::encrypt($x) : '' }}">
+                <input type="hidden" name="y"
+                    value="{{ isset($y) ? \Illuminate\Support\Facades\Crypt::encrypt($y) : '' }}">
+                <input type="hidden" name="xx"
+                    value="{{ isset($xx) ? \Illuminate\Support\Facades\Crypt::encrypt($xx) : '' }}">
+                <input type="hidden" name="xy"
+                    value="{{ isset($xy) ? \Illuminate\Support\Facades\Crypt::encrypt($xy) : '' }}">
                 <input type="hidden" name="avg_x"
-                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($avg_x) ?? '' }}">
+                    value="{{ isset($avg_x) ? \Illuminate\Support\Facades\Crypt::encrypt($avg_x) : '' }}">
                 <input type="hidden" name="avg_y"
-                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($avg_y) ?? '' }}">
+                    value="{{ isset($avg_y) ? \Illuminate\Support\Facades\Crypt::encrypt($avg_y) : '' }}">
+                @php
+                    $n = $i - 1;
+                @endphp
                 <input type="hidden" name="n"
-                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($i - 1) ?? '' }}">
+                    value="{{ isset($n) ? \Illuminate\Support\Facades\Crypt::encrypt($n) : '' }}">
                 <input type="hidden" name="year"
-                    value="{{ \Illuminate\Support\Facades\Crypt::encrypt($data_forecastings) ?? '' }}">
+                    value="{{ isset($data_forecastings) ? \Illuminate\Support\Facades\Crypt::encrypt($data_forecastings) : '' }}">
                 <button type="submit" class="btn btn-sm btn-primary text-bold">Prediksi</button>
             </form>
         </div>
