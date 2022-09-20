@@ -123,7 +123,7 @@ class LaporanController extends Controller
                         }
                     } else {
                         $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
-                        $saldo_banks[$i]['nominalDana'] = $saldo_pengeluaran_bank['nominalDana'];
+                        $saldo_banks[$i]['nominalDana'] = 0;
                     }
                 }
             }

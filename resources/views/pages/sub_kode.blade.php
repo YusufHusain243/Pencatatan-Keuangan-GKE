@@ -219,6 +219,20 @@
 
                 $('#no_sub_kode').inputmask(`${nomor}.9{1,}`);
             });
+
+            $('#no_sub_kode').change(function(e) {
+                var sub_kode = $(this).val();
+                sub_kode = sub_kode.split('.');
+                if (sub_kode[2] == 0 || sub_kode[2] == 00 || sub_kode[2] == 000) {
+                    alert('sub_kode tidak boleh 0');
+                    $(this).val('')
+                    if (sub_kode[0] == 4) {
+                        $(this).inputmask('4.9{1,}');
+                    } else if (sub_kode[0] == 5) {
+                        $(this).inputmask('5.9{1,}');
+                    }
+                }
+            })
         });
     </script>
 @endpush

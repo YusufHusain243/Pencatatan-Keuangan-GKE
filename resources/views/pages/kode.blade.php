@@ -152,7 +152,7 @@
             $('#no_kode').change(function(e) {
                 var kode = $(this).val();
                 kode = kode.split('.');
-                if (kode[1] == 0) {
+                if (kode[1] == 0 || kode[1] == 00 || kode[1] == 000) {
                     alert('kode tidak boleh 0');
                     $(this).val('')
                     if (kode[0] == 4) {

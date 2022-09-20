@@ -230,6 +230,21 @@
 
                 $('#no_sub_sub_kode').inputmask(`${nomor}.9{1,}`);
             });
+
+            $('#no_sub_sub_kode').change(function(e) {
+                var sub_sub_kode = $(this).val();
+                sub_sub_kode = sub_sub_kode.split('.');
+                if (sub_sub_kode[3] == 0 || sub_sub_kode[3] == 00 || sub_sub_kode[3] == 000) {
+
+                    alert('sub_sub_kode tidak boleh 0');
+                    $(this).val('')
+                    if (sub_sub_kode[0] == 4) {
+                        $(this).inputmask('4.9{1,}');
+                    } else if (sub_sub_kode[0] == 5) {
+                        $(this).inputmask('5.9{1,}');
+                    }
+                }
+            })
         });
     </script>
 @endpush

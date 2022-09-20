@@ -89,19 +89,33 @@
         $(document).ready(function() {
             var jenis_kode = $('#jenis_kode').val();
             if (jenis_kode == 'Penerimaan') {
-                $('#no_kode').inputmask('4.9');
+                $('#no_kode').inputmask('4.9{1,}');
             } else if (jenis_kode == 'Pengeluaran') {
-                $('#no_kode').inputmask('5.9');
+                $('#no_kode').inputmask('5.9{1,}');
             }
 
             $('#jenis_kode').change(function(e) {
                 $('#no_kode').val('');
                 if (e.target.value == 'Penerimaan') {
-                    $('#no_kode').inputmask('4.9');
+                    $('#no_kode').inputmask('4.9{1,}');
                 } else if (e.target.value == 'Pengeluaran') {
-                    $('#no_kode').inputmask('5.9');
+                    $('#no_kode').inputmask('5.9{1,}');
                 }
             });
+
+            $('#no_kode').change(function(e) {
+                var kode = $(this).val();
+                kode = kode.split('.');
+                if (kode[1] == 0 || kode[1] == 00 || kode[1] == 000) {
+                    alert('kode tidak boleh 0');
+                    $(this).val('')
+                    if (kode[0] == 4) {
+                        $(this).inputmask('4.9{1,}');
+                    } else if (kode[0] == 5) {
+                        $(this).inputmask('5.9{1,}');
+                    }
+                }
+            })
         })
     </script>
 @endpush

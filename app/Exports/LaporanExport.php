@@ -158,7 +158,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         }
                     } else {
                         $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
-                        $saldo_banks[$i]['nominalDana'] = $saldo_pengeluaran_bank['nominalDana'];
+                        $saldo_banks[$i]['nominalDana'] = 0;
                     }
                 }
             }
@@ -177,14 +177,15 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         foreach ($kodes as $keyKode => $kode) {
             if ($kode->jenis_kode == 'Penerimaan') {
                 $no_kode_kode = "4." . $kode->no_kode;
-                $table .= '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th><th></th><th></th></tr>';
+                $kode->nama_kode = htmlentities($kode->nama_kode);
+                $table .= '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th></tr>';
                 foreach ($kode->kodeToSubKode as $sub_kode) {
                     if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
                         $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
                         $table .= '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
                     }
                 }
-                if ($keyKode == $countKode) {
+                if ($kode->id == $kodes->where('jenis_kode', 'Penerimaan')->last()->id) {
                     $table .= '</thead><tbody>';
                 }
                 foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode) {
@@ -199,24 +200,15 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         } else {
                             $table .= '<td></td>';
                         }
-                        $kode_persembahan_syukur = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . '.' . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode;
-                        if ($kode_persembahan_syukur == '1.2') {
-                            if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
-                                $table .= '<td style="background:dodgerblue">- P.S  ' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
-                            } else {
-                                $table .= '<td></td>';
-                            }
-                        } else {
-                            $table .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
-                        }
+                        $table .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
                         $table .= '<td>' . $dana->keterangan . '</td>';
                         $table .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
                         $table .= '</tr>';
                     }
                 }
-                $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr><tr></tr>';
+                $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr>';
                 $jumlah = 0;
-                if ($keyKode == $countKode) {
+                if ($kode->id == $kodes->where('jenis_kode', 'Penerimaan')->last()->id) {
                     $table .= '</tbody></table>';
                 }
             }
@@ -233,6 +225,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         foreach ($kodes as $keyKode => $kode) {
             if ($kode->jenis_kode == 'Pengeluaran') {
                 $no_kode_kode = "5." . $kode->no_kode;
+                $kode->nama_kode = htmlentities($kode->nama_kode);
                 $table2 .= '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th><th></th><th></th></tr>';
                 foreach ($kode->kodeToSubKode as $sub_kode) {
                     if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
@@ -240,7 +233,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         $table2 .= '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
                     }
                 }
-                if ($keyKode == $countKode) {
+                if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
                     $table2 .= '</thead><tbody>';
                 }
                 foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode) {
@@ -272,15 +265,16 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                 }
                 $table2 .= '</tr>';
                 $jumlah = 0;
-                $table2 .= '<tr><td colspan="3"><b>JUMLAH PENGELUARAN</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td></tr><tr></tr><tr></tr>';
-                if ($keyKode == $countKode) {
+                $table2 .= '<tr><td colspan="3"><b>JUMLAH PENGELUARAN</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td></tr>';
+
+                if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
                     $table2 .= '</tbody></table>';
                 }
             }
         }
 
         $table3 = '<table><thead>';
-        $table3 .= '<tr><th colspan="3"><b>Keterangan :</b></th></tr>';
+        $table3 .= '<tr><th colspan="3"><b>Keterangan :</b></th><th></th><th></th><th></th></tr>';
         $table3 .= '</thead><tbody>';
         $table3 .= '<tr><td colspan="3"><b>Saldo terakhir tanggal, ' . date('d F Y', strtotime($tanggalAwal)) . '</b></td><td><b>Rp. ' . number_format($saldo_akhir, 0, ',', '.') . '</b></td></tr>';
         $table3 .= '<tr><td colspan="3"><b>Penerimaan, ' . date('d F Y', strtotime($tanggalAwal)) . ' - ' . date('d F Y', strtotime($tanggalAkhir)) . '</b></td><td><b>Rp. ' . number_format($jumlahPenerimaan, 0, ',', '.') . '</b></td></tr>';
@@ -289,13 +283,19 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $table3 .= '<tr><td colspan="3"></td><td><b>Rp. ' . number_format($jumlahSaldoPenerimaan, 0, ',', '.') . '</b></td></tr>';
         $table3 .= '<tr><td colspan="3"><b>Pengeluaran, ' . date('d F Y', strtotime($tanggalAwal)) . ' - ' . date('d F Y', strtotime($tanggalAkhir)) . '</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td></tr>';
         $table3 .= '<tr><td colspan="3"><b>Saldo terakhir tanggal, ' . date('d F Y', strtotime($tanggalAkhir)) . '</b></td><td><b>Rp. ' . number_format($jumlahSaldoPengeluaran, 0, ',', '.') . '</b></td></tr>';
-        $table3 .= '<tr><td></td></tr>';
-        $table3 .= '<tr><td colspan="3"><b>Tempat Penyimpanan :</b></td></tr>';
+        $table3 .= '<tr><td></td><td></td><td></td><td></td></tr>';
+        $table3 .= '<tr><td><b>Tempat Penyimpanan :</b></td></tr>';
         $table3 .= '<tr><td colspan="3"><b>Kas Tunai</b></td><td><b>Rp. ' . number_format($saldo_tunai, 0, ',', '.') . '</b></td></tr>';
         foreach ($saldo_banks as $saldo_bank) {
             $table3 .= '<tr><td colspan="3"><b>' . $saldo_bank['nama_bank'] . '</b></td><td><b>Rp. ' . number_format($saldo_bank['nominalDana'], 0, ',', '.') . '</b></td></tr>';
         }
         $table3 .= '</tbody></table>';
+
+        $html = $table;
+        $html .= $table2;
+        $html .= $table3;
+
+        // die($html);
 
         return view('exports.cetak_laporan', compact('table', 'table2', 'table3'));
     }

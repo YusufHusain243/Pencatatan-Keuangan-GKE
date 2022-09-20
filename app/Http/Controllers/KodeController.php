@@ -37,7 +37,8 @@ class KodeController extends Controller
         ]);
 
         if ($validated) {
-            $request->no_kode = substr($request->no_kode, -1);
+            $pisah = explode('.', $request->no_kode);
+            $request->no_kode = $pisah[1];
             $cek = DB::table('kodes')
                 ->where('jenis_kode', '=', $request->jenis_kode)
                 ->where(function ($query) use ($request) {
@@ -82,7 +83,8 @@ class KodeController extends Controller
         ]);
 
         if ($validated) {
-            $request->no_kode = substr($request->no_kode, -1);
+            $pisah = explode('.', $request->no_kode);
+            $request->no_kode = $pisah[1];
             $cek = DB::table('kodes')
                 ->where('jenis_kode', '=', $request->jenis_kode)
                 ->where(function ($query) use ($request) {
