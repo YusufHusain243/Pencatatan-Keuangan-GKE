@@ -79,7 +79,7 @@
                                     {{ $dana->keterangan }}
                                 @endif
                             </td>
-                            <td class="py-0 px-2">Rp.<span class="float-right">@currency($dana->nominal)</span></td>
+                            <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($dana->nominal)</span></td>
                         </tr>
                     @endforeach
                 </tbody>

@@ -102,7 +102,7 @@
                                 <td class="py-0 px-2">
                                     {{ $dana->keterangan }}
                                 </td>
-                                <td class="py-0 px-2">Rp.<span class="float-right">@currency($dana->nominal)</span></td>
+                                <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($dana->nominal)</span></td>
                             </tr>
                         @endforeach
                     @endforeach
@@ -110,7 +110,7 @@
                         <td></td>
                         <td></td>
                         <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
-                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">@currency($jumlah)</span></td>
+                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlah)</span></td>
                     </tr>
                 </tbody>
                 @php
@@ -200,7 +200,7 @@
                                 <td class="py-0 px-2">
                                     {{ $dana->keterangan }}
                                 </td>
-                                <td class="py-0 px-2">Rp.<span class="float-right">@currency($dana->nominal)</span></td>
+                                <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($dana->nominal)</span></td>
                             </tr>
                         @endforeach
                     @endforeach
@@ -209,10 +209,10 @@
                         <td></td>
                         <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
                         @if ($key == count($sub_sub_kode->subSubKodeToDana) - 1)
-                            <td class="py-0 px-2">Rp.<span class="float-right">@currency($jumlah)</span>
+                            <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
                             </td>
                         @else
-                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">@currency($jumlah)</span>
+                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
                             </td>
                         @endif
                     </tr>
@@ -224,7 +224,7 @@
                     @endforeach
                     <tr>
                         <td class="py-0 px-2 text-center font-weight-bold" colspan="3">JUMLAH PENGELUARAN</td>
-                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">@currency($jumlahPengeluaran)</span></td>
+                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlahPengeluaran)</span></td>
                     </tr>
                 </tbody>
             </table>

@@ -87,12 +87,19 @@ class LaporanController extends Controller
         $count1 = count($saldo_penerimaan_banks);
         $count2 = count($saldo_pengeluaran_banks);
 
-        if ($count1 > $count2) {
-            foreach ($saldo_penerimaan_banks as $i => $saldo_penerimaan_bank) {
-                foreach ($saldo_pengeluaran_banks as $j => $saldo_pengeluaran_bank) {
-                    if ($saldo_penerimaan_bank['nama_bank'] == $saldo_pengeluaran_bank['nama_bank']) {
-                        $saldo_banks[$i]['nama_bank'] = $saldo_penerimaan_bank['nama_bank'];
-                        $saldo_banks[$i]['nominalDana'] = ($saldo_penerimaan_bank['nominalDana'] - $saldo_pengeluaran_bank['nominalDana']);
+        if ($count1 >= $count2) {
+            if ($count1 > 0) {
+                foreach ($saldo_penerimaan_banks as $i => $saldo_penerimaan_bank) {
+                    if ($count2 > 0) {
+                        foreach ($saldo_pengeluaran_banks as $j => $saldo_pengeluaran_bank) {
+                            if ($saldo_penerimaan_bank['nama_bank'] == $saldo_pengeluaran_bank['nama_bank']) {
+                                $saldo_banks[$i]['nama_bank'] = $saldo_penerimaan_bank['nama_bank'];
+                                $saldo_banks[$i]['nominalDana'] = ($saldo_penerimaan_bank['nominalDana'] - $saldo_pengeluaran_bank['nominalDana']);
+                            } else {
+                                $saldo_banks[$i]['nama_bank'] = $saldo_penerimaan_bank['nama_bank'];
+                                $saldo_banks[$i]['nominalDana'] = $saldo_penerimaan_bank['nominalDana'];
+                            }
+                        }
                     } else {
                         $saldo_banks[$i]['nama_bank'] = $saldo_penerimaan_bank['nama_bank'];
                         $saldo_banks[$i]['nominalDana'] = $saldo_penerimaan_bank['nominalDana'];
@@ -101,21 +108,26 @@ class LaporanController extends Controller
             }
         }
 
-        if ($count2 > $count1) {
-            foreach ($saldo_pengeluaran_banks as $i => $saldo_pengeluaran_bank) {
-                foreach ($saldo_penerimaan_banks as $j => $saldo_penerimaan_bank) {
-                    if ($saldo_penerimaan_bank['nama_bank'] == $saldo_pengeluaran_bank['nama_bank']) {
-                        $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
-                        $saldo_banks[$i]['nominalDana'] = ($saldo_penerimaan_bank['nominalDana'] - $saldo_pengeluaran_bank['nominalDana']);
+        if ($count2 >= $count1) {
+            if ($count2 > 0) {
+                foreach ($saldo_pengeluaran_banks as $i => $saldo_pengeluaran_bank) {
+                    if ($count1 > 0) {
+                        foreach ($saldo_penerimaan_banks as $j => $saldo_penerimaan_bank) {
+                            if ($saldo_penerimaan_bank['nama_bank'] == $saldo_pengeluaran_bank['nama_bank']) {
+                                $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
+                                $saldo_banks[$i]['nominalDana'] = ($saldo_penerimaan_bank['nominalDana'] - $saldo_pengeluaran_bank['nominalDana']);
+                            } else {
+                                $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
+                                $saldo_banks[$i]['nominalDana'] = (0 - $saldo_pengeluaran_bank['nominalDana']);
+                            }
+                        }
                     } else {
                         $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
-                        $saldo_banks[$i]['nominalDana'] = (0 - $saldo_pengeluaran_bank['nominalDana']);
+                        $saldo_banks[$i]['nominalDana'] = $saldo_pengeluaran_bank['nominalDana'];
                     }
                 }
             }
         }
-
-        $saldo_banks = collect($saldo_banks);
 
         return view('pages.cetak_laporan', compact('title', 'kodes', 'tanggalAwal', 'tanggalAkhir', 'saldo_akhir', 'saldo_tunai', 'saldo_banks'));
     }

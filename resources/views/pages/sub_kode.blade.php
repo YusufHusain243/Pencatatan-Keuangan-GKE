@@ -217,7 +217,7 @@
                 var nomor = split[0];
                 nomor = nomor.replace(/\s/g, '');
 
-                $('#no_sub_kode').inputmask(`${nomor}.9`);
+                $('#no_sub_kode').inputmask(`${nomor}.9{1,}`);
             });
         });
     </script>

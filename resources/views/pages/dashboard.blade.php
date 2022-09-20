@@ -8,7 +8,7 @@
             <div class="small-box bg-info">
                 <div class="inner">
                     <h3>Saldo Kas</h3>
-                    <p>{{ $saldo_kas }}</p>
+                    <p>Rp. @currency($saldo_kas)</p>
                 </div>
                 <div class="small-box-footer"></div>
             </div>
@@ -17,7 +17,7 @@
             <div class="small-box bg-success">
                 <div class="inner">
                     <h3>Saldo Bank</h3>
-                    <p>{{ $saldo_bank }}</p>
+                    <p>Rp. @currency($saldo_bank)</p>
                 </div>
                 <div class="small-box-footer"></div>
             </div>
@@ -26,7 +26,7 @@
             <div class="small-box bg-warning">
                 <div class="inner">
                     <h3>Saldo Akhir</h3>
-                    <p>{{ $saldo_akhir }}</p>
+                    <p>Rp. @currency($saldo_akhir)</p>
                 </div>
                 <div class="small-box-footer"></div>
             </div>

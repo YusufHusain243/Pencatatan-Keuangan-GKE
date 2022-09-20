@@ -196,14 +196,14 @@
                 var nomor = split[0];
                 nomor = nomor.replace(/\s/g, '');
 
-                $('#no_sub_sub_kode').inputmask(`${nomor}.9`);
+                $('#no_sub_sub_kode').inputmask(`${nomor}.9{1,}`);
             });
 
             var no_sub_kode = $('#no_sub_kode option:selected').text();
             var split = no_sub_kode.split('(');
             var nomor = split[0];
             nomor = nomor.replace(/\s/g, '');
-            $('#no_sub_sub_kode').inputmask(`${nomor}.9`);
+            $('#no_sub_sub_kode').inputmask(`${nomor}.9{1,}`);
         });
     </script>
 @endpush

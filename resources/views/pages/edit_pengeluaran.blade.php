@@ -101,7 +101,15 @@
                                     <label for="akun_bank">Pilih Akun Bank <code>*</code></label>
                                     <select class="form-control" id="akun_bank" name="akun_bank">
                                         @foreach ($akun_bank as $bank)
-                                            <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                            @php
+                                                $detailBankId = isset($dana->danaToDetailBank) ? $dana->danaToDetailBank->id_bank : '';
+                                            @endphp
+                                            @if ($dana->detailBankId == $bank->id)
+                                                <option value="{{ $bank->id }}" selected>{{ $bank->nama_bank }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -116,7 +124,15 @@
                                     <label for="akun_bank">Pilih Akun Bank</label>
                                     <select class="form-control" id="akun_bank" name="akun_bank">
                                         @foreach ($akun_bank as $bank)
-                                            <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                            @php
+                                                $detailBankId = isset($dana->danaToDetailBank) ? $dana->danaToDetailBank->id_bank : '';
+                                            @endphp
+                                            @if ($dana->detailBankId == $bank->id)
+                                                <option value="{{ $bank->id }}" selected>{{ $bank->nama_bank }}
+                                                </option>
+                                            @else
+                                                <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -161,7 +177,7 @@
         }
         $(document).ready(function() {
             $('#nominal').val(formatRupiah($('#nominal').val(), 'Rp. '));
-            $('#nominal').keyup(function (e) { 
+            $('#nominal').keyup(function(e) {
                 $(this).val(formatRupiah(e.target.value, 'Rp. '));
             });
 

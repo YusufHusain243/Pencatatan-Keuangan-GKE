@@ -49,7 +49,8 @@ class SubSubKodeController extends Controller
         ]);
 
         if ($validated) {
-            $request->no_sub_sub_kode = substr($request->no_sub_sub_kode, -1);
+            $pisah = explode('.', $request->no_sub_sub_kode);
+            $request->no_sub_sub_kode = $pisah[3];
             $cek = DB::table('sub_sub_kodes')
                 ->where('id_sub_kode', '=', $request->no_sub_kode)
                 ->where(function ($query) use ($request) {
@@ -94,7 +95,8 @@ class SubSubKodeController extends Controller
         ]);
 
         if ($validated) {
-            $request->no_sub_sub_kode = substr($request->no_sub_sub_kode, -1);
+            $pisah = explode('.', $request->no_sub_sub_kode);
+            $request->no_sub_sub_kode = $pisah[3];
             $cek = DB::table('sub_sub_kodes')
                 ->where('id_sub_kode', '=', $request->no_sub_kode)
                 ->where(function ($query) use ($request) {

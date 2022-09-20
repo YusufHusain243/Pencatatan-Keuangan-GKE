@@ -199,7 +199,7 @@
                                 <td>
                                     5.{{ $dana->danaToKode->no_kode }}
                                 </td>
-                                <td>@currency($dana->nominal)</td>
+                                <td>Rp. @currency($dana->nominal)</td>
                                 <td>{{ $dana->keterangan }}</td>
                                 <td>
                                     {{ $dana->transaksi }}

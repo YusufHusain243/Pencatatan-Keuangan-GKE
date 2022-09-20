@@ -125,10 +125,9 @@ class PenerimaanController extends Controller
         $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', 'Penerimaan')
-            ->get();
+            ->get(['kodes.id AS idKodes', 'sub_kodes.id AS idSubKodes', 'kodes.*', 'sub_kodes.*', 'sub_sub_kodes.*']);
         $akun_bank = AkunBank::all();
         $dana = Dana::findOrFail($id);
-        // dd($sub_kodes);
         return view('pages/edit_penerimaan', [
             "title" => "penerimaan",
             "akun_bank" => $akun_bank,
@@ -170,7 +169,7 @@ class PenerimaanController extends Controller
             if ($data_penerimaan->transaksi == 'Transfer Bank') {
                 if ($request->jenis_transaksi == 'Tunai/Cash') {
                     $detail_bank = DetailBank::where('id_dana', $id)->where('id_bank', $request->akun_bank)->first();
-                    $result = DetailBank::findOrFail($detail_bank->id)->delete();
+                    $result = $detail_bank->delete();
                 }
             }
             if ($request->jenis_transaksi == 'Transfer Bank') {

@@ -11,10 +11,10 @@ class Dana extends Model
 
     protected $guarded = ['id'];
 
-    // public function danaToDetailBank()
-    // {
-    //     return $this->hasMany(DetailBank::class, 'id_dana', 'id');
-    // }
+    public function danaToDetailBank()
+    {
+        return $this->hasOne(DetailBank::class, 'id_dana', 'id');
+    }
 
     public function danaToKode()
     {

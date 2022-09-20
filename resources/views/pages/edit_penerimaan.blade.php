@@ -44,10 +44,10 @@
                         <div class="form-group">
                             <label for="sub_sub_kode_anggaran">Sub Sub-Kode Anggaran <code>*</code></label>
                             <select class="form-control" id="sub_sub_kode_anggaran" name="sub_sub_kode_anggaran" required>
-                                <option value="">Pilih Kode Anggaran</option>
+                                <option value="">Pilih Sub-Kode Anggaran </option>
                                 @foreach ($sub_sub_kodes as $sub_sub_kode)
                                     <option value="{{ $sub_sub_kode->id }}"
-                                        {{ $dana->id_sub_sub_kode === $sub_sub_kode->id ? 'selected' : '' }}>
+                                        {{ $dana->id_sub_sub_kode == $sub_sub_kode->id ? 'selected' : '' }}>
                                         4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
                                         ({{ $sub_sub_kode->nama_sub_sub_kode }})
                                     </option>
@@ -101,7 +101,14 @@
                                     <label for="akun_bank">Pilih Akun Bank <code>*</code></label>
                                     <select class="form-control" id="akun_bank" name="akun_bank">
                                         @foreach ($akun_bank as $bank)
-                                            <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                        @php
+                                            $detailBankId = isset($dana->danaToDetailBank) ? $dana->danaToDetailBank->id_bank : '';
+                                        @endphp
+                                            @if ($dana->detailBankId == $bank->id)
+                                                <option value="{{ $bank->id }}" selected>{{ $bank->nama_bank }}</option>
+                                            @else
+                                                <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -116,7 +123,14 @@
                                     <label for="akun_bank">Pilih Akun Bank</label>
                                     <select class="form-control" id="akun_bank" name="akun_bank">
                                         @foreach ($akun_bank as $bank)
-                                            <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                        @php
+                                            $detailBankId = isset($dana->danaToDetailBank) ? $dana->danaToDetailBank->id_bank : '';
+                                        @endphp
+                                            @if ($dana->detailBankId == $bank->id)
+                                                <option value="{{ $bank->id }}" selected>{{ $bank->nama_bank }}</option>
+                                            @else
+                                                <option value="{{ $bank->id }}">{{ $bank->nama_bank }}</option>
+                                            @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -161,7 +175,7 @@
         }
         $(document).ready(function() {
             $('#nominal').val(formatRupiah($('#nominal').val(), 'Rp. '));
-            $('#nominal').keyup(function (e) { 
+            $('#nominal').keyup(function(e) {
                 $(this).val(formatRupiah(e.target.value, 'Rp. '));
             });
 

@@ -35,8 +35,9 @@
                     <div class="col-4">
                         <div class="form-group">
                             <label for="tahun">Tahun <code>*</code></label>
-                            <input type="text" minlength="4" maxlength="4" class="form-control @error('tahun') is-invalid @enderror" id="datepicker"
-                                name="tahun" placeholder="Masukkan Tahun" required autocomplete="off">
+                            <input type="text" minlength="4" maxlength="4"
+                                class="form-control @error('tahun') is-invalid @enderror" id="datepicker" name="tahun"
+                                placeholder="Masukkan Tahun" required autocomplete="off">
                             @error('tahun')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -93,8 +94,8 @@
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $forecasting->tahun }}</td>
-                            <td>{{ $forecasting->penerimaan }}</td>
-                            <td>{{ $forecasting->pengeluaran }}</td>
+                            <td>Rp. @currency($forecasting->penerimaan)</td>
+                            <td>Rp. @currency($forecasting->pengeluaran)</td>
                             <td>
                                 <div class="btn-group">
                                     <a class="btn btn-primary" href="edit/data-forecasting/{{ $forecasting->id }}">
@@ -126,6 +127,23 @@
 @push('after-script')
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
     <script>
+        /* Fungsi formatRupiah */
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
         $(function() {
             $("#datepicker").datepicker({
                 format: "yyyy",
@@ -133,6 +151,12 @@
                 minViewMode: "years",
                 orientation: "bottom"
             });
+        });
+        $('#penerimaan').keyup(function(e) {
+            $(this).val(formatRupiah(e.target.value, 'Rp. '));
+        });
+        $('#pengeluaran').keyup(function(e) {
+            $(this).val(formatRupiah(e.target.value, 'Rp. '));
         });
         $(function() {
             $("input[name='penerimaan']").on('input', function(e) {

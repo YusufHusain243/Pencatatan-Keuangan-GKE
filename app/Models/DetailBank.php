@@ -16,8 +16,8 @@ class DetailBank extends Model
         return $this->belongsTo(AkunBank::class, 'id_bank', 'id');
     }
 
-    // public function detailBankToDana()
-    // {
-    //     return $this->belongsTo(Dana::class, 'id_dana', 'id');
-    // }
+    public function detailBankToDana()
+    {
+        return $this->belongsTo(Dana::class, 'id_dana', 'id');
+    }
 }
