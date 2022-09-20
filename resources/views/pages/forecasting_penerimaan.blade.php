@@ -93,26 +93,71 @@
         </div>
     </div>
 
-    <div class="card card-primary">
-        <div class="card-header">
-            <h3 class="card-title">Hasil Prediksi</h3>
-            <div class="card-tools">
-                <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                </button>
-                <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                </button>
+    @if (isset($result_data))
+        <div class="card card-primary">
+            <div class="card-header">
+                <h3 class="card-title">Hasil Prediksi</h3>
+                <div class="card-tools">
+                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="card-body">
-            @if (isset($result_data))
+            <div class="card-body">
                 <span>Rumus Regresi Linear : Y = {{ $a }} + {{ $b }} * X</span>
-            @endif
-            <div class="chart">
-                <canvas id="hasil_prediksi"
-                    style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                <div class="chart">
+                    <canvas id="hasil_prediksi"
+                        style="min-height: 300px; height: 300px; max-height: 300px; max-width: 100%;"></canvas>
+                </div>
             </div>
         </div>
-    </div>
+    @endif
 @endsection
+
+@if (isset($result_data))
+    @push('after-script')
+        <!-- ChartJS -->
+        <script src="{{ asset('/plugins/chart.js/Chart.min.js') }}"></script>
+        <script>
+            var ctx = document.getElementById("hasil_prediksi");
+            var scatterChart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                            label: 'prediction(Y)',
+                            data: {!! $result_data_prediction !!},
+                            backgroundColor: '#2196f3',
+                        },
+                        {
+                            label: 'Y',
+                            data: {!! $result_data !!},
+                            backgroundColor: '#c23192',
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        xAxes: [{
+                            display: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }]
+                    },
+                    tooltips: {
+                        callbacks: {
+                            label: function(tooltipItem, data) {
+                                return tooltipItem.yLabel;
+                            }
+                        }
+                    }
+                }
+            });
+        </script>
+    @endpush
+@endif
