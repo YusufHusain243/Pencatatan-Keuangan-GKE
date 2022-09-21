@@ -9,7 +9,7 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
                 <li class="nav-item">
-                    <a href="/" class="nav-link {{ $title === 'dashboard' ? 'active' : '' }}">
+                    <a href="/" class="nav-link {{ $title == 'dashboard' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Dashboard</p>
                     </a>
@@ -17,7 +17,7 @@
                 @if (auth()->user()->role == 'admin')
                     <li class="nav-header">USERS</li>
                     <li class="nav-item">
-                        <a href="/user" class="nav-link {{ $title === 'user' ? 'active' : '' }}">
+                        <a href="/user" class="nav-link {{ $title == 'user' ? 'active' : '' }}">
                             <i class="fas fa-circle nav-icon"></i>
                             <p>Kelola User</p>
                         </a>
@@ -25,10 +25,10 @@
                 @endif
                 <li class="nav-header">KODE ANGGARAN</li>
                 <li
-                    class="nav-item 
-                    {{ $title === 'kode' ? 'menu-is-opening menu-open active' : '' }} 
-                    {{ $title === 'sub_kode' ? 'menu-is-opening menu-open active' : '' }} 
-                    {{ $title === 'sub_sub_kode' ? 'menu-is-opening menu-open active' : '' }}
+                    class="nav-item
+                    {{ $title == 'kode' ? 'menu-is-opening menu-open active' : '' }} 
+                    {{ $title == 'sub_kode' ? 'menu-is-opening menu-open active' : '' }} 
+                    {{ $title == 'sub_sub_kode' ? 'menu-is-opening menu-open active' : '' }}
                 ">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
@@ -40,20 +40,20 @@
                     <ul class="nav nav-treeview menu-master">
                         <div class="col">
                             <li class="nav-item">
-                                <a href="/kode/all" class="nav-link {{ $title === 'kode' ? 'active' : '' }}">
+                                <a href="/kode/all" class="nav-link {{ $title == 'kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Kode Anggaran</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/sub-kode/all" class="nav-link {{ $title === 'sub_kode' ? 'active' : '' }}">
+                                <a href="/sub-kode/all" class="nav-link {{ $title == 'sub_kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Sub Kode Anggaran</p>
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a href="/sub-sub-kode/all"
-                                    class="nav-link {{ $title === 'sub_sub_kode' ? 'active' : '' }}">
+                                    class="nav-link {{ $title == 'sub_sub_kode' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Sub Sub-Kode Anggaran</p>
                                 </a>
@@ -64,8 +64,8 @@
                 <li class="nav-header">PENCATATAN</li>
                 <li
                     class="nav-item 
-                    {{ $title === 'penerimaan' ? 'menu-is-opening menu-open active' : '' }} 
-                    {{ $title === 'pengeluaran' ? 'menu-is-opening menu-open active' : '' }} 
+                    {{ $title == 'penerimaan' ? 'menu-is-opening menu-open active' : '' }} 
+                    {{ $title == 'pengeluaran' ? 'menu-is-opening menu-open active' : '' }} 
                 ">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-copy"></i>
@@ -77,13 +77,13 @@
                     <ul class="nav nav-treeview menu-pencatatan">
                         <div class="col">
                             <li class="nav-item">
-                                <a href="/penerimaan" class="nav-link {{ $title === 'penerimaan' ? 'active' : '' }}">
+                                <a href="/penerimaan" class="nav-link {{ $title == 'penerimaan' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Penerimaan</p>
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a href="/pengeluaran" class="nav-link {{ $title === 'pengeluaran' ? 'active' : '' }}">
+                                <a href="/pengeluaran" class="nav-link {{ $title == 'pengeluaran' ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Pengeluaran</p>
                                 </a>
@@ -93,35 +93,35 @@
                 </li>
                 <li class="nav-header">AKUN BANK</li>
                 <li class="nav-item">
-                    <a href="/akun-bank" class="nav-link {{ $title === 'akun_bank' ? 'active' : '' }}">
+                    <a href="/akun-bank" class="nav-link {{ $title == 'akun_bank' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Kelola Akun Bank</p>
                     </a>
                 </li>
                 <li class="nav-header">LAPORAN</li>
                 <li class="nav-item">
-                    <a href="/laporan" class="nav-link {{ $title === 'laporan' ? 'active' : '' }}">
+                    <a href="/laporan" class="nav-link {{ $title == 'laporan' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Cetak Laporan</p>
                     </a>
                 </li>
                 <li class="nav-header">PERAMALAN</li>
                 <li class="nav-item">
-                    <a href="/data-forecasting" class="nav-link {{ $title === 'forecasting' ? 'active' : '' }}">
+                    <a href="/data-forecasting" class="nav-link {{ $title == 'forecasting' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Kelola Data</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="/forecasting-penerimaan"
-                        class="nav-link {{ $title === 'forecasting-penerimaan' ? 'active' : '' }}">
+                        class="nav-link {{ $title == 'forecasting-penerimaan' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Prediksi Penerimaan</p>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="/forecasting-pengeluaran"
-                        class="nav-link {{ $title === 'forecasting-pengeluaran' ? 'active' : '' }}">
+                        class="nav-link {{ $title == 'forecasting-pengeluaran' ? 'active' : '' }}">
                         <i class="fas fa-circle nav-icon"></i>
                         <p>Prediksi Pengeluaran</p>
                     </a>
