@@ -82,11 +82,11 @@
                             <td>{{ $user->updated_at }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="edit/user/{{ $user->id }}">
+                                    <a class="btn btn-primary" href="edit/user/{{ Crypt::encrypt($user->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     @if ($user->role == 'bendahara')
-                                        <form action="/user/{{ $user->id }}" method="post">
+                                        <form action="/user/{{ Crypt::encrypt($user->id) }}" method="post">
                                             @method('delete')
                                             @csrf
                                             <button type="submit" class="btn btn-danger"

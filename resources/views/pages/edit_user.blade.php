@@ -28,7 +28,7 @@
         <div class="card-header">
             <h3 class="card-title">Edit User</h3>
         </div>
-        <form method="POST" action="/user/{{ $user->id }}">
+        <form method="POST" action="/user/{{ Crypt::encrypt($user->id) }}">
             @method('PATCH')
             @csrf
             <div class="card-body">

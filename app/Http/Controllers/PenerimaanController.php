@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dana;
-use App\Models\AkunBank;
-use App\Models\DetailBank;
 use App\Models\Kode;
 use App\Models\SubKode;
+use App\Models\AkunBank;
+use App\Models\DetailBank;
 use App\Models\SubSubKode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class PenerimaanController extends Controller
 {
@@ -118,6 +119,7 @@ class PenerimaanController extends Controller
 
     public function edit($id)
     {
+        $id = Crypt::decrypt($id);
         $kodes = Kode::where('jenis_kode', 'Penerimaan')->get();
         $sub_kodes = SubKode::join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', 'Penerimaan')
@@ -140,6 +142,7 @@ class PenerimaanController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         if ($request->jenis_transaksi === 'Tunai/Cash') {
             $validated = $request->validate([
                 'kode_anggaran' => 'required',
@@ -218,13 +221,12 @@ class PenerimaanController extends Controller
 
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $data = Dana::findOrFail($id);
         if ($data) {
-            $result = $data->delete();
+            $result = $data->danaToDetailBank()->delete();
             if ($result) {
-                if ($data->transaksi == 'Transfer Bank') {
-                    $result = DetailBank::where('id_dana', $id)->delete();
-                }
+                $result = $data->delete();
                 if ($result) {
                     return redirect('/penerimaan')->with('DanaSuccess', 'Hapus Penerimaan Berhasil');
                 }

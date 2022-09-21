@@ -166,6 +166,8 @@ class ForecastingController extends Controller
         );
 
         if ($validated) {
+            $request->penerimaan = (int) filter_var($request->penerimaan, FILTER_SANITIZE_NUMBER_INT);
+            $request->pengeluaran = (int) filter_var($request->pengeluaran, FILTER_SANITIZE_NUMBER_INT);
             $cek = Forecasting::where('tahun', $request->tahun)->get();
             if (count($cek) <= 0) {
                 $result = Forecasting::create([
@@ -185,6 +187,7 @@ class ForecastingController extends Controller
 
     public function edit($id)
     {
+        $id = Crypt::decrypt($id);
         $forecasting = Forecasting::findOrFail($id);
         if ($forecasting) {
             return view('pages/edit_forecasting', [
@@ -196,6 +199,7 @@ class ForecastingController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         $validated = $request->validate(
             [
                 'tahun' => 'required',
@@ -210,6 +214,8 @@ class ForecastingController extends Controller
         );
 
         if ($validated) {
+            $request->penerimaan = (int) filter_var($request->penerimaan, FILTER_SANITIZE_NUMBER_INT);
+            $request->pengeluaran = (int) filter_var($request->pengeluaran, FILTER_SANITIZE_NUMBER_INT);
             $cek = Forecasting::where('tahun', $request->tahun)->get();
             if (count($cek) <= 0) {
                 $result = Forecasting::findOrFail($id)->update([
@@ -241,6 +247,7 @@ class ForecastingController extends Controller
 
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $data = Forecasting::findOrFail($id);
         if ($data) {
             $result = $data->delete();

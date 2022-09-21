@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Kode;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class KodeController extends Controller
 {
@@ -65,6 +66,7 @@ class KodeController extends Controller
 
     public function edit($id)
     {
+        $id = Crypt::decrypt($id);
         $kode = Kode::findOrFail($id);
         if ($kode) {
             return view('pages/edit_kode', [
@@ -76,6 +78,7 @@ class KodeController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         $validated = $request->validate([
             'jenis_kode' => 'required',
             'no_kode' =>  'required',
@@ -123,6 +126,7 @@ class KodeController extends Controller
 
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $data = Kode::findOrFail($id);
         if ($data) {
             $result = $data->delete();

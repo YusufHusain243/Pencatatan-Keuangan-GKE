@@ -7,7 +7,7 @@
         <div class="card-header">
             <h3 class="card-title">Edit Akun Bank</h3>
         </div>
-        <form action="/akun-bank/{{ $akun_bank->id }}" method="POST">
+        <form action="/akun-bank/{{ Crypt::encrypt($akun_bank->id) }}" method="POST">
             @method('PATCH')
             @csrf
             <div class="card-body">

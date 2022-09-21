@@ -145,10 +145,10 @@
                             <td>{{ $sub_kode->updated_at }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="/edit/sub-kode/{{ $sub_kode->id }}">
+                                    <a class="btn btn-primary" href="/edit/sub-kode/{{ Crypt::encrypt($sub_kode->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="/sub-kode/{{ $sub_kode->id }}" method="post">
+                                    <form action="/sub-kode/{{ Crypt::encrypt($sub_kode->id) }}" method="post">
                                         @method('delete')
                                         @csrf
                                         <button type="submit" class="btn btn-danger"

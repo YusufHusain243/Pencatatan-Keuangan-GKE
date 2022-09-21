@@ -28,7 +28,7 @@
         <div class="card-header">
             <h3 class="card-title">Edit Daftar Kode</h3>
         </div>
-        <form action="/kode/{{ $kode->id }}" method="POST">
+        <form action="/kode/{{ Crypt::encrypt($kode->id) }}" method="POST">
             @method('PATCH')
             @csrf
             <div class="card-body">

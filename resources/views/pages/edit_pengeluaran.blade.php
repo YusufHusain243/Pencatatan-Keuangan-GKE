@@ -7,7 +7,7 @@
         <div class="card-header">
             <h3 class="card-title">Edit Catat Pengeluaran</h3>
         </div>
-        <form action="/pengeluaran/{{ $dana->id }}" method="POST">
+        <form action="/pengeluaran/{{ Crypt::encrypt($dana->id) }}" method="POST">
             @method('PATCH')
             @csrf
             <div class="card-body">

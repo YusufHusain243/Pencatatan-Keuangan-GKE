@@ -4,8 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Crypt;
 
 class UserController extends Controller
 {
@@ -47,6 +48,7 @@ class UserController extends Controller
 
     public function edit($id)
     {
+        $id = Crypt::decrypt($id);
         $user = User::findOrFail($id);
         if ($user) {
             return view('pages/edit_user', [
@@ -58,6 +60,7 @@ class UserController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         $validated = $request->validate([
             'username' =>  ['required', Rule::unique('users')->ignore($id)],
             'new_password' => 'required|min:8',
@@ -84,6 +87,7 @@ class UserController extends Controller
 
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $data = User::findOrFail($id);
         if ($data) {
             $result = $data->delete();

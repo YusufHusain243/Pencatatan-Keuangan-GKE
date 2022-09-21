@@ -28,7 +28,7 @@
         <div class="card-header">
             <h3 class="card-title">Edit Data</h3>
         </div>
-        <form method="POST" action="/data-forecasting/{{ $forecasting->id }}">
+        <form method="POST" action="/data-forecasting/{{ Crypt::encrypt($forecasting->id) }}">
             @method('PATCH')
             @csrf
             <div class="card-body">

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\AkunBank;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Crypt;
 
 class AkunBankController extends Controller
 {
@@ -49,6 +50,7 @@ class AkunBankController extends Controller
 
     public function edit($id)
     {
+        $id = Crypt::decrypt($id);
         $akun_bank = AkunBank::findOrFail($id);
         return view('pages/edit_akun_bank', [
             "title" => "akun_bank",
@@ -58,6 +60,7 @@ class AkunBankController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         $validated = $request->validate(
             [
                 'nama_bank' => 'required',
@@ -99,6 +102,7 @@ class AkunBankController extends Controller
 
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $data = AkunBank::findOrFail($id);
         if ($data) {
             $result = $data->delete();

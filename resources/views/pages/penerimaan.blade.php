@@ -206,10 +206,10 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a class="btn btn-primary" href="/edit/penerimaan/{{ $dana->id }}">
+                                        <a class="btn btn-primary" href="/edit/penerimaan/{{ Crypt::encrypt($dana->id) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="/penerimaan/{{ $dana->id }}" method="post">
+                                        <form action="/penerimaan/{{ Crypt::encrypt($dana->id) }}" method="post">
                                             @method('delete')
                                             @csrf
                                             <button type="submit" class="btn btn-danger"

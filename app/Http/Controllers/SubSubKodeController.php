@@ -3,11 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kode;
+use App\Models\SubKode;
 use App\Models\SubSubKode;
 use Illuminate\Http\Request;
-use App\Models\SubKode;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Crypt;
 
 class SubSubKodeController extends Controller
 {
@@ -77,6 +78,7 @@ class SubSubKodeController extends Controller
 
     public function edit($id)
     {
+        $id = Crypt::decrypt($id);
         $subSubKode = SubSubKode::findOrFail($id);
         $subKodes = SubKode::all();
         return view('pages/edit_sub_sub_kode', [
@@ -88,6 +90,7 @@ class SubSubKodeController extends Controller
 
     public function update(Request $request, $id)
     {
+        $id = Crypt::decrypt($id);
         $validated = $request->validate([
             'no_sub_kode' => 'required',
             'no_sub_sub_kode' => 'required',
@@ -135,6 +138,7 @@ class SubSubKodeController extends Controller
 
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $data = SubSubKode::findOrFail($id);
         if ($data) {
             $result = $data->delete();

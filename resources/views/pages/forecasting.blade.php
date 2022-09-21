@@ -98,10 +98,10 @@
                             <td>Rp. @currency($forecasting->pengeluaran)</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="edit/data-forecasting/{{ $forecasting->id }}">
+                                    <a class="btn btn-primary" href="edit/data-forecasting/{{ Crypt::encrypt($forecasting->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="/data-forecasting/{{ $forecasting->id }}" method="post">
+                                    <form action="/data-forecasting/{{ Crypt::encrypt($forecasting->id) }}" method="post">
                                         @method('delete')
                                         @csrf
                                         <button type="submit" class="btn btn-danger"

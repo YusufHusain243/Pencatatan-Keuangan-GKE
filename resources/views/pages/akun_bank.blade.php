@@ -87,10 +87,10 @@
                             <td>{{ $akun_bank->updated_at }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="/edit/akun-bank/{{ $akun_bank->id }}">
+                                    <a class="btn btn-primary" href="/edit/akun-bank/{{ Crypt::encrypt($akun_bank->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="/akun-bank/{{ $akun_bank->id }}" method="post">
+                                    <form action="/akun-bank/{{ Crypt::encrypt($akun_bank->id) }}" method="post">
                                         @method('delete')
                                         @csrf
                                         <button type="submit" class="btn btn-danger"
