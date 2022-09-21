@@ -46,6 +46,16 @@
         <div class="content-wrapper">
             <div class="content-header">
                 <div class="container-fluid">
+                    @if (session()->has('LoginSuccess'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('LoginSuccess') }}
+                            <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
+                                <span>
+                                    <i class="mdi mdi-close"></i>
+                                </span>
+                            </button>
+                        </div>
+                    @endif
                     <div class="row mb-2">
                         <div class="col-sm-6">
                             <h1 class="m-0">
@@ -74,8 +84,7 @@
     </script>
     <!-- Bootstrap 4 -->
     <script src="{{ asset('/plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-    <!-- ChartJS -->
-    <script src="{{ asset('/plugins/chart.js/Chart.min.js') }}"></script>
+
     <!-- Sparkline -->
     <script src="{{ asset('/plugins/sparklines/sparkline.js') }}"></script>
     <!-- JQVMap -->
@@ -83,6 +92,8 @@
     <script src="{{ asset('/plugins/jqvmap/maps/jquery.vmap.usa.js') }}"></script>
     <!-- jQuery Knob Chart -->
     <script src="{{ asset('/plugins/jquery-knob/jquery.knob.min.js') }}"></script>
+    <!-- jQuery Inputmask -->
+    <script src="{{ asset('/plugins/inputmask/jquery.inputmask.js') }}"></script>
     <!-- daterangepicker -->
     <script src="{{ asset('/plugins/moment/moment.min.js') }}"></script>
     <script src="{{ asset('/plugins/daterangepicker/daterangepicker.js') }}"></script>
@@ -94,7 +105,6 @@
     <script src="{{ asset('/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('/js/adminlte.js') }}"></script>
-
 
     <!-- DataTables  & Plugins -->
     <script src="{{ asset('/plugins/datatables/jquery.dataTables.min.js') }}"></script>
@@ -123,6 +133,7 @@
                 .appendTo("#example1_wrapper .col-md-6:eq(0)");
         });
     </script>
+    @stack('after-script')
 </body>
 
 </html>

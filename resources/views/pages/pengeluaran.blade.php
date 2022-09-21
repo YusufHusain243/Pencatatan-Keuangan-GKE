@@ -34,7 +34,7 @@
                 <div class="row">
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="kode_anggaran">Kode Anggaran</label>
+                            <label for="kode_anggaran">Kode Anggaran <code>*</code></label>
                             <select class="form-control @error('kode_anggaran') is-invalid @enderror" id="kode_anggaran"
                                 name="kode_anggaran" required>
                                 <option value="">Pilih Kode Anggaran</option>
@@ -53,13 +53,13 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="sub_kode_anggaran">Sub Kode Anggaran</label>
+                            <label for="sub_kode_anggaran">Sub Kode Anggaran <code>*</code></label>
                             <select class="form-control @error('sub_kode_anggaran') is-invalid @enderror"
                                 id="sub_kode_anggaran" name="sub_kode_anggaran" required>
                                 <option value="">Pilih Sub Kode Anggaran</option>
                                 @foreach ($sub_kodes as $sub_kode)
                                     <option value="{{ $sub_kode->id }}">
-                                        5.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
+                                        5.{{ $sub_kode->no_kode }}.{{ $sub_kode->no_sub_kode }}
                                         ({{ $sub_kode->nama_sub_kode }})
                                     </option>
                                 @endforeach
@@ -73,13 +73,13 @@
                     </div>
                     <div class="col-4">
                         <div class="form-group">
-                            <label for="sub_sub_kode_anggaran">Sub Sub-Kode Anggaran</label>
+                            <label for="sub_sub_kode_anggaran">Sub Sub-Kode Anggaran <code>*</code></label>
                             <select class="form-control @error('sub_sub_kode_anggaran') is-invalid @enderror"
                                 id="sub_sub_kode_anggaran" name="sub_sub_kode_anggaran" required>
-                                <option value="">Pilih Kode Anggaran</option>
+                                <option value="">Pilih Sub Sub Kode Anggaran</option>
                                 @foreach ($sub_sub_kodes as $sub_sub_kode)
                                     <option value="{{ $sub_sub_kode->id }}">
-                                        5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                        5.{{ $sub_sub_kode->no_kode }}.{{ $sub_sub_kode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
                                         ({{ $sub_sub_kode->nama_sub_sub_kode }})
                                     </option>
                                 @endforeach
@@ -95,7 +95,7 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="tanggal">Tanggal</label>
+                            <label for="tanggal">Tanggal <code>*</code></label>
                             <input type="date" class="form-control @error('tanggal') is-invalid @enderror" id="tanggal"
                                 name="tanggal" required>
                             @error('tanggal')
@@ -107,7 +107,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="keterangan">Keterangan</label>
+                            <label for="keterangan">Keterangan <code>*</code></label>
                             <input type="text" class="form-control @error('keterangan') is-invalid @enderror"
                                 id="keterangan" name="keterangan" placeholder="Masukkan Keterangan" required>
                             @error('keterangan')
@@ -121,8 +121,8 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="nominal">Nominal</label>
-                            <input type="number" class="form-control @error('nominal') is-invalid @enderror" id="nominal"
+                            <label for="nominal">Nominal <code>*</code></label>
+                            <input type="text" class="form-control @error('nominal') is-invalid @enderror" id="nominal"
                                 name="nominal" placeholder="Masukkan Nominal" required>
                             @error('nominal')
                                 <div class="invalid-feedback">
@@ -133,7 +133,7 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="jenis_transaksi">Jenis Transaksi</label>
+                            <label for="jenis_transaksi">Jenis Transaksi <code>*</code></label>
                             <select class="form-control @error('jenis_transaksi') is-invalid @enderror" id="jenis_transaksi"
                                 name="jenis_transaksi" onchange="val()" required>
                                 <option value="">Pilih Jenis Transaksi</option>
@@ -152,7 +152,7 @@
                     <div class="row">
                         <div class="col-6">
                             <div class="form-group">
-                                <label for="akun_bank">Pilih Akun Bank</label>
+                                <label for="akun_bank">Pilih Akun Bank <code>*</code></label>
                                 <select class="form-control @error('akun_bank') is-invalid @enderror" id="akun_bank"
                                     name="akun_bank">
                                     <option value="">Pilih Akun Bank</option>
@@ -197,19 +197,19 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $dana->tanggal }}</td>
                                 <td>
-                                    5.{{ $dana->danaToKode->no_kode }}.{{ $dana->danaToSubKode->no_sub_kode }}.{{ $dana->danaToSubSubKode->no_sub_sub_kode }}
+                                    5.{{ $dana->danaToKode->no_kode }}
                                 </td>
-                                <td>{{ $dana->nominal }}</td>
+                                <td>Rp. @currency($dana->nominal)</td>
                                 <td>{{ $dana->keterangan }}</td>
                                 <td>
                                     {{ $dana->transaksi }}
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a class="btn btn-primary" href="/edit/pengeluaran/{{ $dana->id }}">
+                                        <a class="btn btn-primary" href="/edit/pengeluaran/{{ Crypt::encrypt($dana->id) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="/pengeluaran/{{ $dana->id }}" method="post">
+                                        <form action="/pengeluaran/{{ Crypt::encrypt($dana->id) }}" method="post">
                                             @method('delete')
                                             @csrf
                                             <button type="submit" class="btn btn-danger"
@@ -227,13 +227,134 @@
         </div>
     </div>
 @endsection
-<script>
-    function val() {
-        x = document.getElementById("jenis_transaksi").value;
-        if (x == "Transfer Bank") {
-            document.getElementById("pilih_bank").style.display = "block";
-        } else {
-            document.getElementById("pilih_bank").style.display = "none";
+@push('after-script')
+    <script>
+        /* Fungsi formatRupiah */
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            // tambahkan titik jika yang di input sudah menjadi angka ribuan
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
-    }
-</script>
+
+        function val() {
+            x = document.getElementById("jenis_transaksi").value;
+            if (x == "Transfer Bank") {
+                document.getElementById("pilih_bank").style.display = "block";
+            } else {
+                document.getElementById("pilih_bank").style.display = "none";
+            }
+        }
+        $(document).ready(function() {
+            $('#nominal').keyup(function (e) { 
+                $(this).val(formatRupiah(e.target.value, 'Rp. '));
+            });
+
+            function makeOption(selector, val) {
+                $(selector)
+                    .append('<option value="" selected>Pilih Sub Kode Anggaran</option>');
+                $.each(val, function(i, value) {
+                    $(selector)
+                        .append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                });
+            }
+
+            function makeOptionSub(selector, val) {
+                $(selector)
+                    .append('<option value="" selected>Pilih Sub Sub Kode Anggaran</option>');
+                $.each(val, function(i, value) {
+                    $(selector)
+                        .append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                });
+            }
+
+            var opts = $('#sub_kode_anggaran option');
+
+            var myArray = [];
+
+            var vals = [...opts]
+                .map((val, index) => {
+                    var text = val.textContent;
+                    var value = val.value;
+                    if (value) {
+                        myArray[index] = [value, text];
+                    }
+                    return text;
+                });
+
+            var optsSub = $('#sub_sub_kode_anggaran option');
+
+            var myArraySub = [];
+
+            var valsSub = [...optsSub]
+                .map((val, index) => {
+                    var text = val.textContent;
+                    var value = val.value;
+                    if (value) {
+                        myArraySub[index] = [value, text];
+                    }
+                    return text;
+                });
+
+            $('#kode_anggaran').change(function(e) {
+                $('#sub_kode_anggaran').val('');
+                $('#sub_sub_kode_anggaran').val('');
+                var kodeSelected = $('#kode_anggaran option:selected').text();
+                kodeSelected = kodeSelected.replace(/\s/g, '');
+                let kodeAwal = kodeSelected.slice(0, 3);
+                let newStr = kodeAwal.replace(/\./gi, '\\.');
+                if (kodeSelected.charAt(0) == 4) {
+                    $("#sub_kode_anggaran option").remove();
+                    var PATTERN = new RegExp(newStr + '.*\\(*[^<]*'),
+                        filtered = myArray.filter(function(str) {
+                            return PATTERN.test(str);
+                        });
+                    makeOption('#sub_kode_anggaran', filtered)
+                } else if (kodeAwal == 5) {
+                    $("#kode_anggaran option").remove();
+                    var PATTERN = new RegExp(newStr + '.*\\(*[^<]*'),
+                        filtered = myArray.filter(function(str) {
+                            return PATTERN.test(str);
+                        });
+                    makeOption('#sub_kode_anggaran', filtered)
+                }
+            });
+
+            $('#sub_kode_anggaran').change(function(e) {
+                $('#sub_sub_kode_anggaran').val('');
+                var subKodeSelected = $('#sub_kode_anggaran option:selected').text();
+                subKodeSelected = subKodeSelected.replace(/\s/g, '');
+                let subKodeAwal = subKodeSelected.slice(0, 5);
+                let newStr = subKodeAwal.replace(/\./gi, '\\.');
+                var subKodeAnggaranSelected = $('#sub_kode_anggaran option:selected').text();
+                subKodeAnggaranSelected = subKodeAnggaranSelected.replace(/\s/g, '');
+                subKodeAnggaranSelected = subKodeAnggaranSelected.slice(0, 5);
+                if (subKodeAwal == subKodeAnggaranSelected) {
+                    $("#sub_sub_kode_anggaran option").remove();
+                    var PATTERN = new RegExp(newStr + '.*\\(*[^<]*'),
+                        filtered = myArraySub.filter(function(str) {
+                            return PATTERN.test(str);
+                        });
+                    makeOptionSub('#sub_sub_kode_anggaran', filtered)
+                } else if (subKodeAwal == subKodeAnggaranSelected) {
+                    $("#sub_sub_kode_anggaran option").remove();
+                    var PATTERN = new RegExp(newStr + '.*\\(*[^<]*'),
+                        filtered = myArraySub.filter(function(str) {
+                            return PATTERN.test(str);
+                        });
+                    makeOptionSub('#sub_sub_kode_anggaran', filtered)
+                }
+            });
+        });
+    </script>
+@endpush

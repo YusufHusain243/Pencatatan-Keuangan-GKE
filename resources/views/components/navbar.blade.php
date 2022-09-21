@@ -6,7 +6,7 @@
     </ul>
     <ul class="navbar-nav ml-auto">
         <li class="nav-item">
-            <a class="nav-link" data-widget="navbar-search" href="#" role="button">
+            <a class="nav-link" onclick="if (!confirm('Yakin untuk keluar?')) return false;" href="/logout">
                 Logout
             </a>
         </li>

@@ -2,29 +2,140 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Exports\LaporanExport;
 use App\Models\Dana;
 use App\Models\Kode;
 use App\Models\SubKode;
+use App\Models\DetailBank;
 use App\Models\SubSubKode;
+use Illuminate\Http\Request;
+use App\Exports\LaporanExport;
+use App\Models\AkunBank;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
 {
     public function index()
     {
-        $danas = Dana::all();
-        $kodes = Kode::all();
-        $sub_kodes = SubKode::all();
-        $sub_sub_kodes = SubSubKode::all();
         $title = "laporan";
 
-        return view('pages.laporan', compact('title', 'danas', 'kodes', 'sub_kodes', 'sub_sub_kodes'));
+        return view('pages.laporan', compact('title'));
     }
 
-    public function export()
+    public function show(Request $request)
     {
-        return Excel::download(new LaporanExport, 'laporan-' . date('d-m-Y') . '.xlsx');
+        $title = "lihat_laporan";
+
+        $explode = explode('-', $request->daterangepicker);
+        $explode[0] = str_replace(' ', '', $explode[0]);
+        $explode[1] = str_replace(' ', '', $explode[1]);
+        $tanggalAwal = date('Y-m-d', strtotime($explode[0]));
+        $tanggalAkhir = date('Y-m-d', strtotime($explode[1]));
+
+        $kodes = Kode::with(['kodeToSubKode.subKodeToSubSubKode.subSubKodeToDana' => function ($q) use ($tanggalAwal, $tanggalAkhir) {
+            $q->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
+        }])
+            ->get();
+
+        // get saldo akhir
+        $saldo_akhir = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', '=', 'Penerimaan')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
+            ->sum('danas.nominal');
+
+        $saldo_penerimaan_tunai = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->where('kodes.jenis_kode', '=', 'Penerimaan')
+            ->sum('danas.nominal');
+
+        $saldo_pengeluaran_tunai = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->where('kodes.jenis_kode', '=', 'Pengeluaran')
+            ->sum('danas.nominal');
+
+        $saldo_tunai = ($saldo_penerimaan_tunai - $saldo_pengeluaran_tunai);
+
+        $saldo_penerimaan_bank = DetailBank::join('danas', 'detail_banks.id_dana', '=', 'danas.id')
+            ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
+            ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('danas.transaksi', '=', 'Transfer Bank')
+            ->where('kodes.jenis_kode', '=', 'Penerimaan')
+            ->groupBy('detail_banks.id_bank')
+            ->selectRaw('akun_banks.nama_bank, sum(danas.nominal) as nominalDana')
+            ->get();
+
+        $saldo_penerimaan_banks = DetailBank::join('danas', 'detail_banks.id_dana', '=', 'danas.id')
+            ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
+            ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('kodes.jenis_kode', '=', 'Penerimaan')
+            ->groupBy('detail_banks.id_bank')
+            ->selectRaw('akun_banks.nama_bank, sum(danas.nominal) as nominalDana')
+            ->get()
+            ->toArray();
+
+        $saldo_pengeluaran_banks = DetailBank::join('danas', 'detail_banks.id_dana', '=', 'danas.id')
+            ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
+            ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('danas.transaksi', '=', 'Transfer Bank')
+            ->where('kodes.jenis_kode', '=', 'Pengeluaran')
+            ->groupBy('detail_banks.id_bank')
+            ->selectRaw('akun_banks.nama_bank, sum(danas.nominal) as nominalDana')
+            ->get()
+            ->toArray();
+
+        $saldo_banks = [];
+        $count1 = count($saldo_penerimaan_banks);
+        $count2 = count($saldo_pengeluaran_banks);
+
+        if ($count1 >= $count2) {
+            if ($count1 > 0) {
+                foreach ($saldo_penerimaan_banks as $i => $saldo_penerimaan_bank) {
+                    if ($count2 > 0) {
+                        foreach ($saldo_pengeluaran_banks as $j => $saldo_pengeluaran_bank) {
+                            if ($saldo_penerimaan_bank['nama_bank'] == $saldo_pengeluaran_bank['nama_bank']) {
+                                $saldo_banks[$i]['nama_bank'] = $saldo_penerimaan_bank['nama_bank'];
+                                $saldo_banks[$i]['nominalDana'] = ($saldo_penerimaan_bank['nominalDana'] - $saldo_pengeluaran_bank['nominalDana']);
+                            } else {
+                                $saldo_banks[$i]['nama_bank'] = $saldo_penerimaan_bank['nama_bank'];
+                                $saldo_banks[$i]['nominalDana'] = $saldo_penerimaan_bank['nominalDana'];
+                            }
+                        }
+                    } else {
+                        $saldo_banks[$i]['nama_bank'] = $saldo_penerimaan_bank['nama_bank'];
+                        $saldo_banks[$i]['nominalDana'] = $saldo_penerimaan_bank['nominalDana'];
+                    }
+                }
+            }
+        }
+
+        if ($count2 >= $count1) {
+            if ($count2 > 0) {
+                foreach ($saldo_pengeluaran_banks as $i => $saldo_pengeluaran_bank) {
+                    if ($count1 > 0) {
+                        foreach ($saldo_penerimaan_banks as $j => $saldo_penerimaan_bank) {
+                            if ($saldo_penerimaan_bank['nama_bank'] == $saldo_pengeluaran_bank['nama_bank']) {
+                                $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
+                                $saldo_banks[$i]['nominalDana'] = ($saldo_penerimaan_bank['nominalDana'] - $saldo_pengeluaran_bank['nominalDana']);
+                            } else {
+                                $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
+                                $saldo_banks[$i]['nominalDana'] = (0 - $saldo_pengeluaran_bank['nominalDana']);
+                            }
+                        }
+                    } else {
+                        $saldo_banks[$i]['nama_bank'] = $saldo_pengeluaran_bank['nama_bank'];
+                        $saldo_banks[$i]['nominalDana'] = 0;
+                    }
+                }
+            }
+        }
+
+        return view('pages.cetak_laporan', compact('title', 'kodes', 'tanggalAwal', 'tanggalAkhir', 'saldo_akhir', 'saldo_tunai', 'saldo_banks'));
+    }
+
+    public function export(Request $request)
+    {
+        $tanggalAwal = $request->tanggalAwal;
+        $tanggalAkhir = $request->tanggalAkhir;
+        return Excel::download(new LaporanExport($tanggalAwal, $tanggalAkhir), 'laporan-' . date('d-m-Y') . '.xlsx');
     }
 }

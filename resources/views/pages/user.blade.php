@@ -32,9 +32,10 @@
             @csrf
             <div class="card-body">
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Username <code>*</code></label>
                     <input type="text" class="form-control @error('username') is-invalid @enderror" id="username"
                         name="username" placeholder="Enter Username" required>
+                    <small class="form-text text-muted">Minimal 8 karakter</small>
                     @error('username')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -42,7 +43,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Password <code>*</code></label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
                         name="password" placeholder="Enter Password">
                     @error('password')
@@ -66,6 +67,7 @@
                         <th>No</th>
                         <th>User ID</th>
                         <th>Username</th>
+                        <th>Role</th>
                         <th>Last Update</th>
                         <th>Action</th>
                     </tr>
@@ -76,20 +78,23 @@
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $user->id }}</td>
                             <td>{{ $user->username }}</td>
+                            <td>{{ $user->role }}</td>
                             <td>{{ $user->updated_at }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="edit/user/{{ $user->id }}">
+                                    <a class="btn btn-primary" href="edit/user/{{ Crypt::encrypt($user->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="/user/{{ $user->id }}" method="post">
-                                        @method('delete')
-                                        @csrf
-                                        <button type="submit" class="btn btn-danger"
-                                            onclick="return confirm('Yakin ingin menghapus user ini?');">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    @if ($user->role == 'bendahara')
+                                        <form action="/user/{{ Crypt::encrypt($user->id) }}" method="post">
+                                            @method('delete')
+                                            @csrf
+                                            <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Yakin ingin menghapus user ini?');">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    @endif
                                 </div>
                             </td>
                         </tr>

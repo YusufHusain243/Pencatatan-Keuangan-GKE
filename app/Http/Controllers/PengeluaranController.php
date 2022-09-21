@@ -3,24 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Dana;
-use App\Models\AkunBank;
-use App\Models\DetailBank;
 use App\Models\Kode;
 use App\Models\SubKode;
+use App\Models\AkunBank;
+use App\Models\DetailBank;
 use App\Models\SubSubKode;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 
 class PengeluaranController extends Controller
 {
     public function index()
     {
         $kodes = Kode::where('jenis_kode', 'Pengeluaran')->get();
-        $sub_kodes = SubKode::join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', 'Pengeluaran')
+        $sub_kodes = Kode::where('jenis_kode', 'Pengeluaran')
+            ->join('sub_kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->get();
-        $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
-            ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', 'Pengeluaran')
+        $sub_sub_kodes = Kode::where('jenis_kode', 'Pengeluaran')
+            ->join('sub_kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
+            ->join('sub_sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->get();
         $akun_bank = AkunBank::all();
         $danas = Dana::all();
@@ -60,6 +61,7 @@ class PengeluaranController extends Controller
         }
 
         if ($validated) {
+            $request->nominal = (int) filter_var($request->nominal, FILTER_SANITIZE_NUMBER_INT);
             if ($request->jenis_transaksi == 'Transfer Bank') {
                 $result = Dana::create([
                     'id_kode' => $request->kode_anggaran,
@@ -95,10 +97,11 @@ class PengeluaranController extends Controller
 
     public function edit($id)
     {
+        $id = Crypt::decrypt($id);
         $kodes = Kode::where('jenis_kode', 'Pengeluaran')->get();
         $sub_kodes = SubKode::join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', 'Pengeluaran')
-            ->get();
+            ->get(['kodes.id AS idKodes', 'kodes.*', 'sub_kodes.*']);
         $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', 'Pengeluaran')
@@ -117,7 +120,8 @@ class PengeluaranController extends Controller
 
     public function update(Request $request, $id)
     {
-        if (isset($request->akun_bank)) {
+        $id = Crypt::decrypt($id);
+        if ($request->jenis_transaksi === 'Tunai/Cash') {
             $validated = $request->validate([
                 'kode_anggaran' => 'required',
                 'sub_kode_anggaran' => 'required',
@@ -126,7 +130,6 @@ class PengeluaranController extends Controller
                 'keterangan' => 'required',
                 'nominal' => 'required',
                 'jenis_transaksi' => 'required',
-                'akun_bank' => 'required',
             ]);
         } else {
             $validated = $request->validate([
@@ -137,11 +140,20 @@ class PengeluaranController extends Controller
                 'keterangan' => 'required',
                 'nominal' => 'required',
                 'jenis_transaksi' => 'required',
+                'akun_bank' => 'required',
             ]);
         }
 
         if ($validated) {
-            if (isset($request->akun_bank)) {
+            $request->nominal = (int) filter_var($request->nominal, FILTER_SANITIZE_NUMBER_INT);
+            $data_penerimaan = Dana::findOrFail($id);
+            if ($data_penerimaan->transaksi == 'Transfer Bank') {
+                if ($request->jenis_transaksi == 'Tunai/Cash') {
+                    $detail_bank = DetailBank::where('id_dana', $id)->where('id_bank', $request->akun_bank)->first();
+                    $result = DetailBank::findOrFail($detail_bank->id)->delete();
+                }
+            }
+            if ($request->jenis_transaksi == 'Transfer Bank') {
                 $result_dana = Dana::findOrFail($id)->update([
                     'id_kode' => $request->kode_anggaran,
                     'id_sub_kode' => $request->sub_kode_anggaran,
@@ -152,10 +164,21 @@ class PengeluaranController extends Controller
                     'transaksi' => $request->jenis_transaksi,
                 ]);
 
-                $result = DetailBank::findOrFail($id)->update([
-                    'id_dana' => $result_dana->id,
-                    'id_bank' => $request->akun_bank,
-                ]);
+                if ($result_dana) {
+                    $check_detail_bank = DetailBank::where('id_dana', $id)->where('id_bank', $request->akun_bank)->first();
+
+                    if ($check_detail_bank) {
+                        $result = DetailBank::findOrFail($check_detail_bank->id)->update([
+                            'id_dana' => $id,
+                            'id_bank' => $request->akun_bank,
+                        ]);
+                    } else {
+                        $result = DetailBank::create([
+                            'id_dana' => $id,
+                            'id_bank' => $request->akun_bank,
+                        ]);
+                    }
+                }
             } else {
                 $result = Dana::findOrFail($id)->update([
                     'id_kode' => $request->kode_anggaran,
@@ -176,16 +199,12 @@ class PengeluaranController extends Controller
 
     public function destroy($id)
     {
+        $id = Crypt::decrypt($id);
         $data = Dana::findOrFail($id);
         if ($data) {
-            $result = $data->delete();
+            $result = $data->danaToDetailBank()->delete();
             if ($result) {
-                if ($data->transaksi == 'Transfer Bank') {
-                    $data = DetailBank::where('id_dana', $id)->get();
-                    if (isset($data)) {
-                        $result = $data->delete();
-                    }
-                }
+                $result = $data->delete();
                 if ($result) {
                     return redirect('/pengeluaran')->with('DanaSuccess', 'Hapus Pengeluaran Berhasil');
                 }

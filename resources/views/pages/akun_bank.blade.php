@@ -14,7 +14,7 @@
         </div>
     @endif
     @if (session()->has('AkunBankError'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
             {{ session('AkunBankError') }}
             <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close">
                 <span>
@@ -28,13 +28,13 @@
         <div class="card-header">
             <h3 class="card-title">Tambah Akun Bank</h3>
         </div>
-        <form action="/akun-bank" method="POST">
+        <form action="/akun-bank" method="POST" id="form">
             @csrf
             <div class="card-body">
                 <div class="row">
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="nama_bank">Nama Bank</label>
+                            <label for="nama_bank">Nama Bank <code>*</code></label>
                             <input type="text" class="form-control @error('nama_bank') is-invalid @enderror"
                                 id="nama_bank" name="nama_bank" placeholder="Masukkan Nama Bank" required>
                             @error('nama_bank')
@@ -46,10 +46,12 @@
                     </div>
                     <div class="col-6">
                         <div class="form-group">
-                            <label for="no_rek">No Rekening</label>
-                            <input type="number" class="form-control @error('no_rek') is-invalid @enderror" id="no_rek"
-                                name="no_rek" placeholder="Masukkan No Rekening" required>
-                            @error('no_rek')
+                            <label for="no_rekening">No Rekening <code>*</code></label>
+                            <input type="text" class="form-control @error('no_rekening') is-invalid @enderror"
+                                id="no_rekening" name="no_rekening" placeholder="Masukkan No Rekening" minlength="10"
+                                required>
+                            <small class="form-text text-danger" id="tooltip">No. Rekening setidaknya memiliki 10 karakter</small>
+                            @error('no_rekening')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
@@ -85,10 +87,10 @@
                             <td>{{ $akun_bank->updated_at }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="/edit/akun-bank/{{ $akun_bank->id }}">
+                                    <a class="btn btn-primary" href="/edit/akun-bank/{{ Crypt::encrypt($akun_bank->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="/akun-bank/{{ $akun_bank->id }}" method="post">
+                                    <form action="/akun-bank/{{ Crypt::encrypt($akun_bank->id) }}" method="post">
                                         @method('delete')
                                         @csrf
                                         <button type="submit" class="btn btn-danger"
@@ -105,3 +107,39 @@
         </div>
     </div>
 @endsection
+
+@push('after-script')
+    <script>
+        $(document).ready(function() {
+            let isvalid = false;
+            $("#tooltip").hide();
+            $('#no_rekening').inputmask({
+                    mask: "*{10,16}",
+                    definitions: {
+                        '*': {
+                            validator: "[0-9]"
+                        }
+                    },
+                    removeMaskOnSubmit: true,
+                    onincomplete: function() {
+                        isvalid = false
+                    },
+                    oncomplete: function() {
+                        isvalid = true
+                    }
+                }),
+                $("#form").submit(function(e) {
+                    if (!isvalid) {
+                        $("#tooltip").show();
+                        let tooltip = setInterval(function() {
+                            clearInterval(tooltip);
+                            $("#tooltip").hide();
+                        }, 3000);
+                        e.preventDefault();
+                        return
+                    }
+                    $("form").submit();
+                });
+        });
+    </script>
+@endpush
