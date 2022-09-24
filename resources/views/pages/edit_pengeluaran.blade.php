@@ -137,6 +137,19 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="bukti_transfer">Bukti Transfer </label>
+                                    <input type="file" class="form-control @error('bukti_transfer') is-invalid @enderror"
+                                        id="bukti_transfer" name="bukti_transfer" value="{{ $dana->bukti_transfer }}"
+                                        placeholder="Masukkan Bukti Transfer">
+                                    @error('bukti_transfer')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @endif

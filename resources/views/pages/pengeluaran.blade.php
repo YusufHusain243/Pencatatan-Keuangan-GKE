@@ -28,7 +28,7 @@
         <div class="card-header">
             <h3 class="card-title">Tambah Catat Pengeluaran</h3>
         </div>
-        <form action="/pengeluaran" method="POST">
+        <form action="/pengeluaran" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="card-body">
                 <div class="row">
@@ -167,6 +167,18 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="bukti_transfer">Bukti Transfer </label>
+                                <input type="file" class="form-control @error('bukti_transfer') is-invalid @enderror"
+                                    id="bukti_transfer" name="bukti_transfer" placeholder="Masukkan Bukti Transfer">
+                                @error('bukti_transfer')
+                                    <div class="invalid-feedback">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -187,6 +199,7 @@
                         <th>Nominal</th>
                         <th>Keterangan</th>
                         <th>Jenis Transaksi</th>
+                        <th>Bukti Transfer</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -205,8 +218,20 @@
                                     {{ $dana->transaksi }}
                                 </td>
                                 <td>
+                                    @if ($dana->transaksi == 'Transfer Bank')
+                                        @if (strlen($dana->bukti_transfer) > 0)
+                                            <img src="storage/images/{{ $dana->bukti_transfer }}" width="150">
+                                        @else
+                                            ---
+                                        @endif
+                                    @else
+                                        ---
+                                    @endif
+                                </td>
+                                <td>
                                     <div class="btn-group">
-                                        <a class="btn btn-primary" href="/edit/pengeluaran/{{ Crypt::encrypt($dana->id) }}">
+                                        <a class="btn btn-primary"
+                                            href="/edit/pengeluaran/{{ Crypt::encrypt($dana->id) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="/pengeluaran/{{ Crypt::encrypt($dana->id) }}" method="post">
@@ -256,7 +281,7 @@
             }
         }
         $(document).ready(function() {
-            $('#nominal').keyup(function (e) { 
+            $('#nominal').keyup(function(e) {
                 $(this).val(formatRupiah(e.target.value, 'Rp. '));
             });
 

@@ -154,7 +154,7 @@
                         {
                             label: 'Y',
                             data: {!! $result_data !!},
-                            backgroundColor: '#06d6a0',
+                            backgroundColor: '#8B0000',
                         }
                     ]
                 },

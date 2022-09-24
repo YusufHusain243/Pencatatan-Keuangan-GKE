@@ -22,6 +22,7 @@ class CreateDanasTable extends Migration
             $table->string('keterangan');
             $table->string('transaksi');
             $table->string('nominal');
+            $table->string('bukti_transfer')->nullable();
             $table->timestamps();
         });
     }

@@ -47,6 +47,7 @@ class PengeluaranController extends Controller
                 'nominal' => 'required',
                 'jenis_transaksi' => 'required',
                 'akun_bank' => 'required',
+                'bukti_transfer' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000',
             ]);
         } else {
             $validated = $request->validate([
@@ -63,6 +64,14 @@ class PengeluaranController extends Controller
         if ($validated) {
             $request->nominal = (int) filter_var($request->nominal, FILTER_SANITIZE_NUMBER_INT);
             if ($request->jenis_transaksi == 'Transfer Bank') {
+
+                $name = '';
+
+                if (isset($request->bukti_transfer)) {
+                    $name = uniqid() . $request->bukti_transfer->getClientOriginalName();
+                    $result = $request->bukti_transfer->move(public_path('storage/images'), $name);
+                }
+
                 $result = Dana::create([
                     'id_kode' => $request->kode_anggaran,
                     'id_sub_kode' => $request->sub_kode_anggaran,
@@ -71,6 +80,7 @@ class PengeluaranController extends Controller
                     'keterangan' => $request->keterangan,
                     'nominal' => $request->nominal,
                     'transaksi' => $request->jenis_transaksi,
+                    'bukti_transfer' => $name,
                 ]);
 
                 $result = DetailBank::create([
