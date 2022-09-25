@@ -78,6 +78,50 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Grafik Penerimaan Per Kode Anggaran</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <canvas id="grafik_penerimaan_per_kategori"
+                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Grafik Pengeluaran Per Kode Anggaran</h3>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                <i class="fas fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-tool" data-card-widget="remove">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="chart">
+                            <canvas id="grafik_pengeluaran_per_kategori"
+                                style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </section>
 
     <!-- jQuery -->
@@ -87,7 +131,12 @@
 
     <script>
         $(function() {
-            var grafik = ['#grafikBulanan', '#grafikTahunan', '#grafikPrediksi']
+            var grafik = [
+                '#grafikBulanan',
+                '#grafikTahunan',
+                '#grafik_penerimaan_per_kategori',
+                '#grafik_pengeluaran_per_kategori',
+            ]
 
             for (let i = 0; i < grafik.length; i++) {
                 if (grafik[i] == '#grafikBulanan') {
@@ -134,6 +183,46 @@
                             },
                         ],
                     }
+                }
+                if (grafik[i] == '#grafik_penerimaan_per_kategori') {
+                    var bar_data = {
+                        data: [
+                            [1, 10],
+                            [2, 8],
+                            [3, 4],
+                            [4, 13],
+                            [5, 17],
+                            [6, 9]
+                        ],
+                        bars: {
+                            show: true
+                        }
+                    }
+                    $.plot('#bar-chart', [bar_data], {
+                        grid: {
+                            borderWidth: 1,
+                            borderColor: '#f3f3f3',
+                            tickColor: '#f3f3f3'
+                        },
+                        series: {
+                            bars: {
+                                show: true,
+                                barWidth: 0.5,
+                                align: 'center',
+                            },
+                        },
+                        colors: ['#3c8dbc'],
+                        xaxis: {
+                            ticks: [
+                                [1, 'January'],
+                                [2, 'February'],
+                                [3, 'March'],
+                                [4, 'April'],
+                                [5, 'May'],
+                                [6, 'June']
+                            ]
+                        }
+                    })
                 }
                 var barChartCanvas = $(grafik[i]).get(0).getContext('2d')
                 var barChartData = $.extend(true, {}, areaChartData)

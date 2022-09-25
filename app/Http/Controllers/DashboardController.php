@@ -85,6 +85,27 @@ class DashboardController extends Controller
         }
         // ----end get grafik tahunan----
 
+        // ---start get kode per kategori---
+        $get_penerimaan_per_kode =  Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->groupBy('danas.id_kode')
+            ->selectRaw('kodes.nama_kode, sum(danas.nominal) as nominalDana, kodes.jenis_kode')
+            ->get();
+
+        $data_penerimaan_per_kode = [];
+        $value_penerimaan_per_kode = [];
+        $data_pengeluaran_per_kode = [];
+        $value_pengeluaran_per_kode = [];
+        foreach ($get_penerimaan_per_kode as $data) {
+            if ($data->jenis_kode == 'penerimaan') {
+                $data_penerimaan_per_kode[] = $data->nama_kode;
+                $value_penerimaan_per_kode[] = $data->nominalDana;
+            } else {
+                $data_pengeluaran_per_kode[] = $data->nama_kode;
+                $value_pengeluaran_per_kode[] = $data->nominalDana;
+            }
+        }
+        // ---end get kode per kategori---
+
         return view('pages/dashboard', [
             "title" => "dashboard",
             "saldo_kas" => $saldo_kas,
@@ -95,6 +116,12 @@ class DashboardController extends Controller
             "data_tahun" => json_encode($data_tahun, JSON_NUMERIC_CHECK),
             "data_tahun_penerimaan" => json_encode($data_tahun_penerimaan, JSON_NUMERIC_CHECK),
             "data_tahun_pengeluaran" => json_encode($data_tahun_pengeluaran, JSON_NUMERIC_CHECK),
+
+            //ini yang kutambah
+            "data_penerimaan_per_kode" => json_encode($data_penerimaan_per_kode),
+            "data_pengeluaran_per_kode" => json_encode($data_pengeluaran_per_kode),
+            "value_penerimaan_per_kode" => json_encode($value_penerimaan_per_kode),
+            "value_pengeluaran_per_kode" => json_encode($value_pengeluaran_per_kode),
         ]);
     }
 }

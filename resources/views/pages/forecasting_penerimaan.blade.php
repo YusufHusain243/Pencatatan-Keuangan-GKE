@@ -149,12 +149,12 @@
                     datasets: [{
                             label: 'prediction(Y)',
                             data: {!! $result_data_prediction !!},
-                            backgroundColor: '#118ab2',
+                            backgroundColor: '#0000FF',
                         },
                         {
                             label: 'Y',
                             data: {!! $result_data !!},
-                            backgroundColor: '#8B0000',
+                            backgroundColor: '#FF0000',
                         }
                     ]
                 },

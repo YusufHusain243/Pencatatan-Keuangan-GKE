@@ -17,6 +17,9 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th colspan="4" class="text-center">Pencatatan Kas GKE Sinar Kasih</th>
+                    </tr>
+                    <tr>
                         <th style="width: 80px" class="text-center py-0 px-2">A.</th>
                         <th class="py-0 px-2">PENERIMAAN</th>
                         <th class="py-0 px-2"></th>
