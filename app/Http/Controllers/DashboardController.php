@@ -96,7 +96,7 @@ class DashboardController extends Controller
         $data_pengeluaran_per_kode = [];
         $value_pengeluaran_per_kode = [];
         foreach ($get_penerimaan_per_kode as $data) {
-            if ($data->jenis_kode == 'penerimaan') {
+            if ($data->jenis_kode == 'Penerimaan') {
                 $data_penerimaan_per_kode[] = $data->nama_kode;
                 $value_penerimaan_per_kode[] = $data->nominalDana;
             } else {
@@ -117,7 +117,6 @@ class DashboardController extends Controller
             "data_tahun_penerimaan" => json_encode($data_tahun_penerimaan, JSON_NUMERIC_CHECK),
             "data_tahun_pengeluaran" => json_encode($data_tahun_pengeluaran, JSON_NUMERIC_CHECK),
 
-            //ini yang kutambah
             "data_penerimaan_per_kode" => json_encode($data_penerimaan_per_kode),
             "data_pengeluaran_per_kode" => json_encode($data_pengeluaran_per_kode),
             "value_penerimaan_per_kode" => json_encode($value_penerimaan_per_kode),

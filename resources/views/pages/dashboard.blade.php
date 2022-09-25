@@ -134,8 +134,6 @@
             var grafik = [
                 '#grafikBulanan',
                 '#grafikTahunan',
-                '#grafik_penerimaan_per_kategori',
-                '#grafik_pengeluaran_per_kategori',
             ]
 
             for (let i = 0; i < grafik.length; i++) {
@@ -184,46 +182,6 @@
                         ],
                     }
                 }
-                if (grafik[i] == '#grafik_penerimaan_per_kategori') {
-                    var bar_data = {
-                        data: [
-                            [1, 10],
-                            [2, 8],
-                            [3, 4],
-                            [4, 13],
-                            [5, 17],
-                            [6, 9]
-                        ],
-                        bars: {
-                            show: true
-                        }
-                    }
-                    $.plot('#bar-chart', [bar_data], {
-                        grid: {
-                            borderWidth: 1,
-                            borderColor: '#f3f3f3',
-                            tickColor: '#f3f3f3'
-                        },
-                        series: {
-                            bars: {
-                                show: true,
-                                barWidth: 0.5,
-                                align: 'center',
-                            },
-                        },
-                        colors: ['#3c8dbc'],
-                        xaxis: {
-                            ticks: [
-                                [1, 'January'],
-                                [2, 'February'],
-                                [3, 'March'],
-                                [4, 'April'],
-                                [5, 'May'],
-                                [6, 'June']
-                            ]
-                        }
-                    })
-                }
                 var barChartCanvas = $(grafik[i]).get(0).getContext('2d')
                 var barChartData = $.extend(true, {}, areaChartData)
                 var temp0 = areaChartData.datasets[0]
@@ -243,6 +201,38 @@
                     options: barChartOptions
                 })
             }
+
+            var ctx = document.getElementById('grafik_penerimaan_per_kategori').getContext('2d');
+            var myBarChart = new Chart(ctx, {
+                type: 'bar',
+                // The data for our dataset
+                data: {
+                    labels: {!! $data_penerimaan_per_kode !!},
+                    datasets: [{
+                            label: 'Penerimaan',
+                            backgroundColor: 'rgb(60, 179, 113)',
+                            data: {!! $value_penerimaan_per_kode !!}
+                        }
+                    ],
+                },
+                options: {}
+            });
+
+            var ctx = document.getElementById('grafik_pengeluaran_per_kategori').getContext('2d');
+            var myBarChart = new Chart(ctx, {
+                type: 'bar',
+                // The data for our dataset
+                data: {
+                    labels: {!! $data_pengeluaran_per_kode !!},
+                    datasets: [{
+                            label: 'Pengeluaran',
+                            backgroundColor: 'rgb(255, 75, 67)',
+                            data: {!! $value_pengeluaran_per_kode !!}
+                        }
+                    ],
+                },
+                options: {}
+            });
         })
     </script>
 @endsection

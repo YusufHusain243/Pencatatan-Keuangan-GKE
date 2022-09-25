@@ -17,7 +17,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th colspan="4" class="text-center">Pencatatan Kas GKE Sinar Kasih</th>
+                        <th colspan="4" class="text-center" style="font-size: 14pt">PENCATATAN KAS GKE SINAR KASIH</th>
                     </tr>
                     <tr>
                         <th style="width: 80px" class="text-center py-0 px-2">A.</th>
@@ -113,7 +113,8 @@
                         <td></td>
                         <td></td>
                         <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
-                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlah)</span></td>
+                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
+                        </td>
                     </tr>
                 </tbody>
                 @php
@@ -211,12 +212,15 @@
                         <td></td>
                         <td></td>
                         <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
-                        @if ($key == count($sub_sub_kode->subSubKodeToDana) - 1)
-                            <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
-                            </td>
-                        @else
-                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
-                            </td>
+                        @if (isset($key))
+                            @if ($key == count($sub_sub_kode->subSubKodeToDana) - 1)
+                                <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
+                                </td>
+                            @else
+                                <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
+                                        @currency($jumlah)</span>
+                                </td>
+                            @endif
                         @endif
                     </tr>
                     @php
@@ -227,7 +231,8 @@
                     @endforeach
                     <tr>
                         <td class="py-0 px-2 text-center font-weight-bold" colspan="3">JUMLAH PENGELUARAN</td>
-                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlahPengeluaran)</span></td>
+                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlahPengeluaran)</span>
+                        </td>
                     </tr>
                 </tbody>
             </table>

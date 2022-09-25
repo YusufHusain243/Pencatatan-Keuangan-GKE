@@ -44,6 +44,13 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                     'size'      =>  12
                 ]
             ],
+            'A1'    => [
+                'font' =>
+                [
+                    'name' => 'Times New Roman',
+                    'size'      =>  14
+                ]
+            ],
         ];
     }
 
@@ -51,11 +58,13 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
     {
         return [
             AfterSheet::class    => function (AfterSheet $event) {
-
                 $event->sheet->getDelegate()->getStyle('A1')
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-                $event->sheet->getDelegate()->getStyle('A2:D2')
+                $event->sheet->getDelegate()->getStyle('A3')
+                    ->getAlignment()
+                    ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $event->sheet->getDelegate()->getStyle('A4:D4')
                     ->getAlignment()
                     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             },
@@ -166,52 +175,64 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
 
         $saldo_banks = collect($saldo_banks);
 
-        $table = '<table><thead><tr><th><b>A.</b></th><th><b>PENERIMAAN</b></th><th></th><th></th></tr>';
+        $table = '<tr><td colspan="4"><b>PENCATATAN KAS GKE SINAR KASIH</b></td></tr>';
+        $table .= '<tr></tr>';
+        $table .= '<table><thead><tr><th><b>A.</b></th><th><b>PENERIMAAN</b></th><th></th><th></th></tr>';
         $table .= '<tr><th><b>Kode Anggaran</b></th><th><b>URAIAN</b></th><th><b>KETERANGAN</b></th><th><b>JUMLAH</b></th></tr>';
         $table .= '<tr><th><b>4</b></th><th><b>PENDAPATAN</b></th><th></th><th></th></tr>';
 
         $jumlah = 0;
         $jumlahPenerimaan = 0;
 
-        $countKode = (count($kodes) - 1);
-        foreach ($kodes as $keyKode => $kode) {
-            if ($kode->jenis_kode == 'Penerimaan') {
-                $no_kode_kode = "4." . $kode->no_kode;
-                $kode->nama_kode = htmlentities($kode->nama_kode);
-                $table .= '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th></tr>';
-                foreach ($kode->kodeToSubKode as $sub_kode) {
-                    if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
-                        $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
-                        $table .= '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
-                    }
-                }
-                if ($kode->id == $kodes->where('jenis_kode', 'Penerimaan')->last()->id) {
-                    $table .= '</thead><tbody>';
-                }
-                foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode) {
-                    foreach ($sub_sub_kode->subSubKodeToDana as $key => $dana) {
-                        $jumlah += $dana->nominal;
-                        $jumlahPenerimaan += $dana->nominal;
-
-                        $table .= '<tr>';
-                        if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
-                            $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
-                            $table .= '<td>' . $no_kode_sub_sub_kode . '</td>';
-                        } else {
-                            $table .= '<td></td>';
+        if (count($kodes) > 0) {
+            foreach ($kodes as $keyKode => $kode) {
+                if ($kode->jenis_kode == 'Penerimaan') {
+                    $no_kode_kode = "4." . $kode->no_kode;
+                    $kode->nama_kode = htmlentities($kode->nama_kode);
+                    $table .= '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th></tr>';
+                    if (count($kode->kodeToSubKode) > 0) {
+                        foreach ($kode->kodeToSubKode as $sub_kode) {
+                            if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
+                                $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
+                                $table .= '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
+                            }
                         }
-                        $table .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
-                        $table .= '<td>' . $dana->keterangan . '</td>';
-                        $table .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
-                        $table .= '</tr>';
+                        if ($kode->id == $kodes->where('jenis_kode', 'Penerimaan')->last()->id) {
+                            $table .= '</thead><tbody>';
+                        }
+                        foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode) {
+                            foreach ($sub_sub_kode->subSubKodeToDana as $key => $dana) {
+                                $jumlah += $dana->nominal;
+                                $jumlahPenerimaan += $dana->nominal;
+        
+                                $table .= '<tr>';
+                                if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
+                                    $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
+                                    $table .= '<td>' . $no_kode_sub_sub_kode . '</td>';
+                                } else {
+                                    $table .= '<td></td>';
+                                }
+                                $table .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
+                                $table .= '<td>' . $dana->keterangan . '</td>';
+                                $table .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
+                                $table .= '</tr>';
+                            }
+                        }
+                        $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr>';
+                        $table .= '<tr></tr>';
+                        $jumlah = 0;
+                        if ($kode->id == $kodes->where('jenis_kode', 'Penerimaan')->last()->id) {
+                            $table .= '</thead></tbody></table>';
+                        }
+                    } else {
+                        $table .= '</thead></table>';
                     }
-                }
-                $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr>';
-                $jumlah = 0;
-                if ($kode->id == $kodes->where('jenis_kode', 'Penerimaan')->last()->id) {
-                    $table .= '</tbody></table>';
+                } else {
+                    $table .= '</thead></table>';
                 }
             }
+        } else {
+            $table .= '</thead></table>';
         }
 
         $table2 = '<table><thead><tr><th><b>B.</b></th><th><b>BELANJA</b></th><th></th><th></th></tr>';
@@ -221,56 +242,64 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $jumlah = 0;
         $jumlahPengeluaran = 0;
 
-        $countKode = (count($kodes) - 1);
-        foreach ($kodes as $keyKode => $kode) {
-            if ($kode->jenis_kode == 'Pengeluaran') {
-                $no_kode_kode = "5." . $kode->no_kode;
-                $kode->nama_kode = htmlentities($kode->nama_kode);
-                $table2 .= '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th><th></th><th></th></tr>';
-                foreach ($kode->kodeToSubKode as $sub_kode) {
-                    if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
-                        $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
-                        $table2 .= '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
+        if (count($kodes) > 0) {
+            foreach ($kodes as $keyKode => $kode) {
+                if ($kode->jenis_kode == 'Pengeluaran') {
+                    $no_kode_kode = "5." . $kode->no_kode;
+                    $kode->nama_kode = htmlentities($kode->nama_kode);
+                    $table2 .= '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th><th></th><th></th></tr>';
+                    foreach ($kode->kodeToSubKode as $sub_kode) {
+                        if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
+                            $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
+                            $table2 .= '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
+                        }
                     }
-                }
-                if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
-                    $table2 .= '</thead><tbody>';
-                }
-                foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode) {
-                    foreach ($sub_sub_kode->subSubKodeToDana as $key => $dana) {
-                        $jumlah += $dana->nominal;
-                        $jumlahPengeluaran += $dana->nominal;
-
-                        $table2 .= '<tr>';
-                        if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
-                            $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
-                            $table2 .= '<td>' . $no_kode_sub_sub_kode . '</td>';
+                    if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
+                        $table2 .= '</thead><tbody>';
+                    }
+                    foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode) {
+                        foreach ($sub_sub_kode->subSubKodeToDana as $key => $dana) {
+                            $jumlah += $dana->nominal;
+                            $jumlahPengeluaran += $dana->nominal;
+    
+                            $table2 .= '<tr>';
+                            if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
+                                $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
+                                $table2 .= '<td>' . $no_kode_sub_sub_kode . '</td>';
+                            } else {
+                                $table2 .= '<td></td>';
+                            }
+                            if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
+                                $table2 .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
+                            }
+                            $table2 .= '<td>' . $dana->keterangan . '</td>';
+                            $table2 .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
+                            $table2 .= '</tr>';
+                        }
+                    }
+                    $table2 .= '<tr>';
+                    $table2 .= '<td></td><td></td><td><b>JUMLAH</b></td>';
+                    if (isset($key)) {
+                        if ($key == count($sub_sub_kode->subSubKodeToDana) - 1) {
+                            $table2 .= '<td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
                         } else {
-                            $table2 .= '<td></td>';
+                            $table2 .= '<tr><td><b>Rp. ' . number_format($jumlah, 0, ',', '.') . '</b></td></tr>';
                         }
-                        if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
-                            $table2 .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
-                        }
-                        $table2 .= '<td>' . $dana->keterangan . '</td>';
-                        $table2 .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
-                        $table2 .= '</tr>';
                     }
-                }
-                $table2 .= '<tr>';
-                $table2 .= '<td></td><td></td><td><b>JUMLAH</b></td>';
-                if ($key == count($sub_sub_kode->subSubKodeToDana) - 1) {
-                    $table2 .= '<td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
+                    $table2 .= '</tr>';
+                    $jumlah = 0;
+                    $table2 .= '<tr><td colspan="3"><b>JUMLAH PENGELUARAN</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td></tr>';
+                    $table2 .= '<tr></tr>';
+    
+                    if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
+                        $table2 .= '</tbody></table>';
+                    }
                 } else {
-                    $table2 .= '<tr><td><b>Rp. ' . number_format($jumlah, 0, ',', '.') . '</b></td></tr>';
-                }
-                $table2 .= '</tr>';
-                $jumlah = 0;
-                $table2 .= '<tr><td colspan="3"><b>JUMLAH PENGELUARAN</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td></tr>';
-
-                if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
-                    $table2 .= '</tbody></table>';
+                    $table2 .= '</thead></table>';
                 }
             }
+        } else {
+            $table2 .= '</thead></table>';
         }
 
         $table3 = '<table><thead>';
@@ -291,9 +320,12 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         }
         $table3 .= '</tbody></table>';
 
-        $html = $table;
-        $html .= $table2;
-        $html .= $table3;
+        $table = str_replace('</thead></table></thead></table>', '</thead></table>', $table);
+        $table2 = str_replace('</thead></table></thead></table>', '</thead></table>', $table2);
+
+        // $html = $table;
+        // $html = $table2;
+        // $html .= $table3;
 
         // die($html);
 
