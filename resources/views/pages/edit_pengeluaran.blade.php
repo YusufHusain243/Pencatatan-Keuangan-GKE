@@ -7,7 +7,7 @@
         <div class="card-header">
             <h3 class="card-title">Edit Catat Pengeluaran</h3>
         </div>
-        <form action="/pengeluaran/{{ Crypt::encrypt($dana->id) }}" method="POST">
+        <form action="/pengeluaran/{{ Crypt::encrypt($dana->id) }}" method="POST" enctype="multipart/form-data">
             @method('PATCH')
             @csrf
             <div class="card-body">
@@ -114,6 +114,29 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label for="bukti_transfer">Bukti Transfer </label>
+                                    <input type="file" class="form-control @error('bukti_transfer') is-invalid @enderror"
+                                        id="bukti_transfer" name="bukti_transfer" placeholder="Masukkan Bukti Transfer">
+                                    @error('bukti_transfer')
+                                        <div class="invalid-feedback">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-6">
+                                <div class="form-group" id="containerPreview">
+                                    <label for="bukti_transfer">Preview </label>
+                                    <div>
+                                        <img src="/storage/images/{{ $dana->bukti_transfer }}" style="display: none"
+                                            id="preview" width="200" height="200" alt="">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 @else
@@ -140,7 +163,8 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     <label for="bukti_transfer">Bukti Transfer </label>
-                                    <input type="file" class="form-control @error('bukti_transfer') is-invalid @enderror"
+                                    <input type="file"
+                                        class="form-control @error('bukti_transfer') is-invalid @enderror"
                                         id="bukti_transfer" name="bukti_transfer" value="{{ $dana->bukti_transfer }}"
                                         placeholder="Masukkan Bukti Transfer">
                                     @error('bukti_transfer')
@@ -287,6 +311,33 @@
                             return PATTERN.test(str);
                         });
                     makeOptionSub('#sub_sub_kode_anggaran', filtered)
+                }
+            });
+
+            let preview = "{{ $dana->bukti_transfer }}";
+                if (preview != '') {
+                    $('#containerPreview').removeAttr('style');
+                    $('#containerPreview').attr('style', 'display:block');
+                    $('#preview').removeAttr('style');
+                    $('#preview').attr('style', 'display:block');
+                }
+
+            $('#bukti_transfer').change(function() {
+                let bukti_transfer = $('#bukti_transfer');
+                if (!bukti_transfer.files) {
+                    $('#containerPreview').attr('style', 'display:none');
+                    $('#preview').attr('style', 'display:none');
+                }
+
+                const file = this.files[0];
+                if (file) {
+                    $('#containerPreview').attr('style', 'display:block');
+                    $('#preview').attr('style', 'display:block');
+                    let reader = new FileReader();
+                    reader.onload = function(event) {
+                        $('#preview').attr('src', event.target.result);
+                    }
+                    reader.readAsDataURL(file);
                 }
             });
         });

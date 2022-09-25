@@ -8,8 +8,10 @@ use App\Models\SubKode;
 use App\Models\AkunBank;
 use App\Models\DetailBank;
 use App\Models\SubSubKode;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Storage;
 
 class PengeluaranController extends Controller
 {
@@ -68,7 +70,9 @@ class PengeluaranController extends Controller
                 $name = '';
 
                 if (isset($request->bukti_transfer)) {
-                    $name = uniqid() . $request->bukti_transfer->getClientOriginalName();
+                    $file_gambar = $request->bukti_transfer->getClientOriginalName();
+                    $file_name_asli = Str::slug(pathinfo($file_gambar, PATHINFO_FILENAME));
+                    $name = uniqid() . $file_name_asli . '.' . $request->bukti_transfer->getClientOriginalExtension();
                     $result = $request->bukti_transfer->move(public_path('storage/images'), $name);
                 }
 
@@ -151,6 +155,7 @@ class PengeluaranController extends Controller
                 'nominal' => 'required',
                 'jenis_transaksi' => 'required',
                 'akun_bank' => 'required',
+                'bukti_transfer' => 'image|mimes:jpeg,png,jpg,gif,svg|max:10000',
             ]);
         }
 
@@ -164,6 +169,20 @@ class PengeluaranController extends Controller
                 }
             }
             if ($request->jenis_transaksi == 'Transfer Bank') {
+                $nama_file = $data_penerimaan->bukti_transfer;
+                if (file_exists(public_path('storage/images/'.$nama_file))) {
+                    unlink(public_path('storage/images/'.$nama_file));
+                }
+
+                $name = '';
+
+                if (isset($request->bukti_transfer)) {
+                    $file_gambar = $request->bukti_transfer->getClientOriginalName();
+                    $file_name_asli = Str::slug(pathinfo($file_gambar, PATHINFO_FILENAME));
+                    $name = uniqid() . $file_name_asli . '.' . $request->bukti_transfer->getClientOriginalExtension();
+                    $result = $request->bukti_transfer->move(public_path('storage/images'), $name);
+                }
+
                 $result_dana = Dana::findOrFail($id)->update([
                     'id_kode' => $request->kode_anggaran,
                     'id_sub_kode' => $request->sub_kode_anggaran,
@@ -172,6 +191,7 @@ class PengeluaranController extends Controller
                     'keterangan' => $request->keterangan,
                     'nominal' => $request->nominal,
                     'transaksi' => $request->jenis_transaksi,
+                    'bukti_transfer' => $name,
                 ]);
 
                 if ($result_dana) {
@@ -214,6 +234,11 @@ class PengeluaranController extends Controller
         if ($data) {
             $result = $data->danaToDetailBank()->delete();
             if ($result) {
+                $nama_file = $data->bukti_transfer;
+                if (file_exists(public_path('storage/images/'.$nama_file))) {
+                    unlink(public_path('storage/images/'.$nama_file));
+                }
+
                 $result = $data->delete();
                 if ($result) {
                     return redirect('/pengeluaran')->with('DanaSuccess', 'Hapus Pengeluaran Berhasil');

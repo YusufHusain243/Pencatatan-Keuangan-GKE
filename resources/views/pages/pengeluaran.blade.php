@@ -178,6 +178,15 @@
                                     </div>
                                 @enderror
                             </div>
+                            <div class="col-6">
+                                <div class="form-group" id="containerPreview" style="display: none">
+                                    <label for="bukti_transfer">Preview </label>
+                                    <div>
+                                        <img src="" id="preview" width="200" height="200"
+                                            alt="">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -280,6 +289,7 @@
                 document.getElementById("pilih_bank").style.display = "none";
             }
         }
+
         $(document).ready(function() {
             $('#nominal').keyup(function(e) {
                 $(this).val(formatRupiah(e.target.value, 'Rp. '));
@@ -378,6 +388,24 @@
                             return PATTERN.test(str);
                         });
                     makeOptionSub('#sub_sub_kode_anggaran', filtered)
+                }
+            });
+
+            $('#bukti_transfer').change(function() {
+                let bukti_transfer = $('#bukti_transfer');
+                if (!bukti_transfer.files) {
+                    $('#containerPreview').attr('style', 'display:none');
+                }
+                
+                const file = this.files[0];
+                if (file) {
+                    $('#containerPreview').removeAttr("style").hide();
+                    $("#containerPreview").show();
+                    let reader = new FileReader();
+                    reader.onload = function(event) {
+                        $('#preview').attr('src', event.target.result);
+                    }
+                    reader.readAsDataURL(file);
                 }
             });
         });
