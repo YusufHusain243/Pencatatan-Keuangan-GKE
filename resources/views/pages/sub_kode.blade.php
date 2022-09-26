@@ -195,14 +195,14 @@
                 $('#no_sub_kode').val('');
                 if (e.target.value == 'Penerimaan') {
                     $("#no_kode option").remove();
-                    var PATTERN = /[4]..*\(/,
+                    var PATTERN = /4{1}\./,
                         filtered = myArray.filter(function(str) {
                             return PATTERN.test(str);
                         });
                     makeOption('#no_kode', filtered)
                 } else if (e.target.value == 'Pengeluaran') {
                     $("#no_kode option").remove();
-                    var PATTERN = /[5]..*\(/,
+                    var PATTERN = /5{1}\./,
                         filtered = myArray.filter(function(str) {
                             return PATTERN.test(str);
                         });
