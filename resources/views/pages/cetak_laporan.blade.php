@@ -129,7 +129,7 @@
                 <thead>
                     <tr>
                         <th style="width: 80px" class="text-center py-0 px-2">B.</th>
-                        <th class="py-0 px-2">BELANJA</th>
+                        <th class="py-0 px-2">PENGELUARAN</th>
                         <th class="py-0 px-2"></th>
                         <th class="py-0 px-2"></th>
                     </tr>
