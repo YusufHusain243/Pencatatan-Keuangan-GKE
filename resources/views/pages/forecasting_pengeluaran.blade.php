@@ -85,25 +85,17 @@
             @if (count($data_forecastings) > 0)
                 <form action="/forecasting-pengeluaran/prediksi" method="post">
                     @csrf
-                    <input type="hidden" name="jenis"
-                        value="{{ Crypt::encrypt('pengeluaran') ?? '' }}">
-                    <input type="hidden" name="x"
-                        value="{{ isset($x) ? Crypt::encrypt($x) : '' }}">
-                    <input type="hidden" name="y"
-                        value="{{ isset($y) ? Crypt::encrypt($y) : '' }}">
-                    <input type="hidden" name="xx"
-                        value="{{ isset($xx) ? Crypt::encrypt($xx) : '' }}">
-                    <input type="hidden" name="xy"
-                        value="{{ isset($xy) ? Crypt::encrypt($xy) : '' }}">
-                    <input type="hidden" name="avg_x"
-                        value="{{ isset($avg_x) ? Crypt::encrypt($avg_x) : '' }}">
-                    <input type="hidden" name="avg_y"
-                        value="{{ isset($avg_y) ? Crypt::encrypt($avg_y) : '' }}">
+                    <input type="hidden" name="jenis" value="{{ Crypt::encrypt('pengeluaran') ?? '' }}">
+                    <input type="hidden" name="x" value="{{ isset($x) ? Crypt::encrypt($x) : '' }}">
+                    <input type="hidden" name="y" value="{{ isset($y) ? Crypt::encrypt($y) : '' }}">
+                    <input type="hidden" name="xx" value="{{ isset($xx) ? Crypt::encrypt($xx) : '' }}">
+                    <input type="hidden" name="xy" value="{{ isset($xy) ? Crypt::encrypt($xy) : '' }}">
+                    <input type="hidden" name="avg_x" value="{{ isset($avg_x) ? Crypt::encrypt($avg_x) : '' }}">
+                    <input type="hidden" name="avg_y" value="{{ isset($avg_y) ? Crypt::encrypt($avg_y) : '' }}">
                     @php
                         $n = $i - 1;
                     @endphp
-                    <input type="hidden" name="n"
-                        value="{{ isset($n) ? Crypt::encrypt($n) : '' }}">
+                    <input type="hidden" name="n" value="{{ isset($n) ? Crypt::encrypt($n) : '' }}">
                     <input type="hidden" name="year"
                         value="{{ isset($data_forecastings) ? Crypt::encrypt($data_forecastings) : '' }}">
                     <button type="submit" class="btn btn-sm btn-primary text-bold">Prediksi</button>
@@ -130,10 +122,10 @@
                 <ul>
                     @foreach ($persen_arr as $item)
                         @if ($item['name'] == 'Tidak Ada Perubahan')
-                            <li>PREDIKSI PERSENTASE PENERIMAAN PADA TAHUN {{ $item['tahun'] }} ADALAH
+                            <li>PREDIKSI PERSENTASE PENGELUARAN PADA TAHUN {{ $item['tahun'] }} ADALAH
                                 {{ strtoupper($item['name']) }}</li>
                         @else
-                            <li>PREDIKSI PERSENTASE PENERIMAAN PADA TAHUN {{ $item['tahun'] }} ADALAH {{ $item['name'] }}
+                            <li>PREDIKSI PERSENTASE PENGELUARAN PADA TAHUN {{ $item['tahun'] }} ADALAH {{ $item['name'] }}
                                 SEBESAR {{ $item['persen'] }} %</li>
                         @endif
                     @endforeach
@@ -159,12 +151,12 @@
                     datasets: [{
                             label: 'prediction(Y)',
                             data: {!! $result_data_prediction !!},
-                            backgroundColor: '#118ab2',
+                            backgroundColor: '#0000FF',
                         },
                         {
                             label: 'Y',
                             data: {!! $result_data !!},
-                            backgroundColor: '#06d6a0',
+                            backgroundColor: '#FF0000',
                         }
                     ]
                 },
