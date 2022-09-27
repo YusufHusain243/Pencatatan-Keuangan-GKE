@@ -169,11 +169,13 @@ class PengeluaranController extends Controller
                 }
             }
             if ($request->jenis_transaksi == 'Transfer Bank') {
-                $nama_file = $data_penerimaan->bukti_transfer;
-                if (file_exists(public_path('storage/images/'.$nama_file))) {
-                    unlink(public_path('storage/images/'.$nama_file));
+                if ($data_penerimaan->bukti_transfer != "") {
+                    $nama_file = $data_penerimaan->bukti_transfer;
+                    if (file_exists(public_path('storage/images/' . $nama_file))) {
+                        unlink(public_path('storage/images/' . $nama_file));
+                    }
                 }
-
+                
                 $name = '';
 
                 if (isset($request->bukti_transfer)) {
@@ -231,14 +233,26 @@ class PengeluaranController extends Controller
     {
         $id = Crypt::decrypt($id);
         $data = Dana::findOrFail($id);
-        if ($data) {
-            $result = $data->danaToDetailBank()->delete();
-            if ($result) {
-                $nama_file = $data->bukti_transfer;
-                if (file_exists(public_path('storage/images/'.$nama_file))) {
-                    unlink(public_path('storage/images/'.$nama_file));
-                }
 
+        if ($data) {
+            if ($data->transaksi == 'Transfer Bank') {
+                $result = $data->danaToDetailBank()->delete();
+                if ($result) {
+                    $data = Dana::findOrFail($id);
+                    if ($data->bukti_transfer != "") {
+                        $nama_file = $data->bukti_transfer;
+                        if (file_exists(public_path('storage/images/' . $nama_file))) {
+                            unlink(public_path('storage/images/' . $nama_file));
+                        }
+                    }
+
+                    $result = $data->delete();
+                    if ($result) {
+                        return redirect('/pengeluaran')->with('DanaSuccess', 'Hapus Pengeluaran Berhasil');
+                    }
+                    return redirect('/pengeluaran')->with('DanaError', 'Hapus Pengeluaran Gagal');
+                }
+            } else {
                 $result = $data->delete();
                 if ($result) {
                     return redirect('/pengeluaran')->with('DanaSuccess', 'Hapus Pengeluaran Berhasil');
