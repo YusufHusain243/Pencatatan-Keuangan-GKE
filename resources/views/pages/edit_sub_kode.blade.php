@@ -64,7 +64,7 @@
                                 @endphp
                                 @foreach ($kodes as $kode)
                                     @php
-                                        if ($sub_kode->id_kode === $kode->id) {
+                                        if ($sub_kode->id_kode == $kode->id) {
                                             $kodeSelected = $kode->id;
                                         }
                                     @endphp
@@ -123,12 +123,17 @@
 @push('after-script')
     <script>
         $(document).ready(function() {
-            function makeOption(selector, val) {
+            function makeOption(selector, val, selected) {
                 $(selector)
                     .append('<option value="" selected>Pilih No Kode</option>');
                 $.each(val, function(i, value) {
-                    $(selector)
+                    if (value[0] == selected) {
+                        $(selector)
+                        .append('<option value="' + value[0] + '" selected>' + value[1] + '</option>');
+                    } else {
+                        $(selector)
                         .append('<option value="' + value[0] + '">' + value[1] + '</option>');
+                    }
                 });
             }
             var opts = $('#no_kode option');
@@ -150,34 +155,32 @@
 
             if (jenis_kode_awal == 'Penerimaan') {
                 $("#no_kode option").remove();
-                var PATTERN = /4..*\(/,
+                var PATTERN = /4{1}\./,
                     filtered = myArray.filter(function(str) {
                         return PATTERN.test(str);
                     });
-                makeOption('#no_kode', filtered)
-                $('#no_kode option').val(kodeSelected).attr('selected', true);
+                makeOption('#no_kode', filtered, kodeSelected)
             } else if (jenis_kode_awal == 'Pengeluaran') {
                 $("#no_kode option").remove();
-                var PATTERN = /5..*\(/,
+                var PATTERN = /5{1}\./,
                     filtered = myArray.filter(function(str) {
                         return PATTERN.test(str);
                     });
-                makeOption('#no_kode', filtered)
-                $('#no_kode option').val(kodeSelected).attr('selected', true);
+                makeOption('#no_kode', filtered, kodeSelected)
             }
 
             $('#jenis_kode').change(function(e) {
                 $('#no_sub_kode').val('');
                 if (e.target.value == 'Penerimaan') {
                     $("#no_kode option").remove();
-                    var PATTERN = /4..*\(/,
+                    var PATTERN = /4{1}\./,
                         filtered = myArray.filter(function(str) {
                             return PATTERN.test(str);
                         });
                     makeOption('#no_kode', filtered)
                 } else if (e.target.value == 'Pengeluaran') {
                     $("#no_kode option").remove();
-                    var PATTERN = /5..*\(/,
+                    var PATTERN = /4{1}\./,
                         filtered = myArray.filter(function(str) {
                             return PATTERN.test(str);
                         });
