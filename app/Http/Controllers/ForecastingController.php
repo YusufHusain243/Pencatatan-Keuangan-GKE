@@ -37,7 +37,7 @@ class ForecastingController extends Controller
 
     public function hitungForecasting(Request $request)
     {
-        $data_forecastings = Forecasting::all();
+        $data_forecastings = Forecasting::orderBy('tahun', 'ASC')->get();
 
         $year = decrypt($request->year);
         $collection = collect($year);
@@ -61,9 +61,9 @@ class ForecastingController extends Controller
             }
         } else {
             for ($i = 0; $i <= count($year) + 4; $i++) {
-                $b = ((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x)));
-                $a = ($avg_y - ($b * $avg_x));
-                $result = ($a + ($b * $i));
+                $b = round(((($n * $xy) - ($x * $y)) / (($n * ($x * $x)) - ($x * $x))),2);
+                $a = round(($avg_y - ($b * $avg_x)),2);
+                $result = round(($a + ($b * $i)),2);
 
                 if ($i <= count($year) - 1) {
                     $temp_data_prediction['x'] = (int) $year[$i]->tahun;
