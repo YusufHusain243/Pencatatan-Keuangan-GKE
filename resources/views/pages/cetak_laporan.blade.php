@@ -43,6 +43,9 @@
                     @endphp
                     @foreach ($kodes as $kode)
                         @if ($kode->jenis_kode == 'Penerimaan')
+                            @php
+                                ob_start();
+                            @endphp
                             <tr>
                                 <th class="py-0 px-2 text-center" style="vertical-align: middle">
                                     @if ($kode->jenis_kode == 'Penerimaan')
@@ -55,7 +58,13 @@
                                 <th class="py-0 px-2" style="vertical-align: middle"></th>
                                 </th>
                             </tr>
+                            @php
+                                $tableKode = ob_get_clean();
+                            @endphp
                             @foreach ($kode->kodeToSubKode as $sub_kode)
+                                @php
+                                    ob_start();
+                                @endphp
                                 <tr>
                                     @if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode)
                                         <th class="py-0 px-2 text-center" style="vertical-align: middle">
@@ -71,6 +80,9 @@
                                         <th class="py-0 px-2" style="vertical-align: middle"></th>
                                     @endif
                                 </tr>
+                                @php
+                                    $tableSubKode = ob_get_clean();
+                                @endphp
                 </thead>
                 <tbody>
                     @foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode)
@@ -79,43 +91,48 @@
                                 $jumlah += $dana->nominal;
                                 $jumlahPenerimaan += $dana->nominal;
                             @endphp
-                            <tr>
-                                <td class="text-center py-0 px-2">
-                                    @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
-                                        @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan')
-                                            4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
-                                        @else
-                                            5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
-                                        @endif
-                                    @endif
-                                </td>
-                                <td class="py-0 px-2">
-                                    @php
-                                        $kode_persembahan_syukur = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . '.' . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode;
-                                    @endphp
-                                    @if ($kode_persembahan_syukur == '1.2')
+                            @if ($jumlah != 0)
+                                <?= $tableKode ?>
+                                <?= $tableSubKode ?>
+                                <tr>
+                                    <td class="text-center py-0 px-2">
                                         @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
-                                            <span class="mr-3">-</span><span
-                                                class="mr-3">P.S</span>{{ $sub_sub_kode->nama_sub_sub_kode }}
+                                            @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan')
+                                                4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                            @else
+                                                5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                            @endif
                                         @endif
-                                    @else
-                                        {{ $sub_sub_kode->nama_sub_sub_kode }}
-                                    @endif
-                                </td>
-                                <td class="py-0 px-2">
-                                    {{ $dana->keterangan }}
-                                </td>
-                                <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($dana->nominal)</span></td>
-                            </tr>
+                                    </td>
+                                    <td class="py-0 px-2">
+                                        @php
+                                            $kode_persembahan_syukur = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . '.' . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode;
+                                        @endphp
+                                        @if ($kode_persembahan_syukur == '1.2')
+                                            @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
+                                                <span class="mr-3">-</span><span
+                                                    class="mr-3">P.S</span>{{ $sub_sub_kode->nama_sub_sub_kode }}
+                                            @endif
+                                        @else
+                                            {{ $sub_sub_kode->nama_sub_sub_kode }}
+                                        @endif
+                                    </td>
+                                    <td class="py-0 px-2">
+                                        {{ $dana->keterangan }}
+                                    </td>
+                                    <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($dana->nominal)</span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
+                                    <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
+                                            @currency($jumlah)</span>
+                                    </td>
+                                </tr>
+                            @endif
                         @endforeach
                     @endforeach
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
-                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
-                        </td>
-                    </tr>
                 </tbody>
                 @php
                     $jumlah = 0;
@@ -150,6 +167,9 @@
                     @endphp
                     @foreach ($kodes as $kode)
                         @if ($kode->jenis_kode == 'Pengeluaran')
+                            @php
+                                ob_start();
+                            @endphp
                             <tr>
                                 <th class="py-0 px-2 text-center" style="vertical-align: middle">
                                     @if ($kode->jenis_kode == 'Pengeluaran')
@@ -162,7 +182,13 @@
                                 <th class="py-0 px-2" style="vertical-align: middle"></th>
                                 </th>
                             </tr>
+                            @php
+                                $tableKode2 = ob_get_clean();
+                            @endphp
                             @foreach ($kode->kodeToSubKode as $sub_kode)
+                                @php
+                                    ob_start();
+                                @endphp
                                 <tr>
                                     @if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode)
                                         <th class="py-0 px-2 text-center" style="vertical-align: middle">
@@ -178,6 +204,9 @@
                                         <th class="py-0 px-2" style="vertical-align: middle"></th>
                                     @endif
                                 </tr>
+                                @php
+                                    $tableSubKode2 = ob_get_clean();
+                                @endphp
                 </thead>
                 <tbody>
                     @foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode)
@@ -186,43 +215,47 @@
                                 $jumlah += $dana->nominal;
                                 $jumlahPengeluaran += $dana->nominal;
                             @endphp
-                            <tr>
-                                <td class="text-center py-0 px-2">
-                                    @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
-                                        @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Pengeluaran')
-                                            5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                            @if ($jumlah != 0)
+                            <?= $tableKode2 ?>
+                            <?= $tableSubKode2 ?>
+                                <tr>
+                                    <td class="text-center py-0 px-2">
+                                        @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
+                                            @if ($sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Pengeluaran')
+                                                5.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                            @else
+                                                4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                            @endif
+                                        @endif
+                                    </td>
+                                    <td class="py-0 px-2">
+                                        @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
+                                            {{ $sub_sub_kode->nama_sub_sub_kode }}
+                                        @endif
+                                    </td>
+                                    <td class="py-0 px-2">
+                                        {{ $dana->keterangan }}
+                                    </td>
+                                    <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($dana->nominal)</span></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
+                                    @if (isset($key))
+                                        @if ($key == count($sub_sub_kode->subSubKodeToDana) - 1)
+                                            <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
+                                            </td>
                                         @else
-                                            4.{{ $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode }}.{{ $sub_sub_kode->subSubKodeToSubKode->no_sub_kode }}.{{ $sub_sub_kode->no_sub_sub_kode }}
+                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
+                                                    @currency($jumlah)</span>
+                                            </td>
                                         @endif
                                     @endif
-                                </td>
-                                <td class="py-0 px-2">
-                                    @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
-                                        {{ $sub_sub_kode->nama_sub_sub_kode }}
-                                    @endif
-                                </td>
-                                <td class="py-0 px-2">
-                                    {{ $dana->keterangan }}
-                                </td>
-                                <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($dana->nominal)</span></td>
-                            </tr>
+                                </tr>
+                            @endif
                         @endforeach
                     @endforeach
-                    <tr>
-                        <td></td>
-                        <td></td>
-                        <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
-                        @if (isset($key))
-                            @if ($key == count($sub_sub_kode->subSubKodeToDana) - 1)
-                                <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
-                                </td>
-                            @else
-                                <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
-                                        @currency($jumlah)</span>
-                                </td>
-                            @endif
-                        @endif
-                    </tr>
                     @php
                         $jumlah = 0;
                     @endphp
