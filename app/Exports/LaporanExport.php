@@ -295,9 +295,9 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         }
                         $jumlah = 0;
 
-                        if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
-                            $table2 .= '</tbody></table>';
-                        }
+                        // if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
+                        //     $table2 .= '</tbody></table>';
+                        // }
                     }
                 }
             }
