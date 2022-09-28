@@ -350,14 +350,14 @@
                 let newStr = kodeAwal.replace(/\./gi, '\\.');
                 if (kodeSelected.charAt(0) == 4) {
                     $("#sub_kode_anggaran option").remove();
-                    var PATTERN = new RegExp(newStr + '.*\\(*[^<]*'),
+                    var PATTERN = new RegExp(newStr + '{1}'),
                         filtered = myArray.filter(function(str) {
                             return PATTERN.test(str);
                         });
                     makeOption('#sub_kode_anggaran', filtered)
                 } else if (kodeAwal == 5) {
                     $("#kode_anggaran option").remove();
-                    var PATTERN = new RegExp(newStr + '.*\\(*[^<]*'),
+                    var PATTERN = new RegExp(newStr + '{1}'),
                         filtered = myArray.filter(function(str) {
                             return PATTERN.test(str);
                         });
@@ -369,21 +369,22 @@
                 $('#sub_sub_kode_anggaran').val('');
                 var subKodeSelected = $('#sub_kode_anggaran option:selected').text();
                 subKodeSelected = subKodeSelected.replace(/\s/g, '');
-                let subKodeAwal = subKodeSelected.slice(0, 5);
+                let subKodeAwal = subKodeSelected.substr(0, subKodeSelected.indexOf('('));;
                 let newStr = subKodeAwal.replace(/\./gi, '\\.');
                 var subKodeAnggaranSelected = $('#sub_kode_anggaran option:selected').text();
                 subKodeAnggaranSelected = subKodeAnggaranSelected.replace(/\s/g, '');
-                subKodeAnggaranSelected = subKodeAnggaranSelected.slice(0, 5);
+                subKodeAnggaranSelected = subKodeAnggaranSelected.substr(0, subKodeAnggaranSelected.indexOf(
+                    '('));
                 if (subKodeAwal == subKodeAnggaranSelected) {
                     $("#sub_sub_kode_anggaran option").remove();
-                    var PATTERN = new RegExp(newStr + '.*\\(*[^<]*'),
+                    var PATTERN = new RegExp(newStr + '{1}'),
                         filtered = myArraySub.filter(function(str) {
                             return PATTERN.test(str);
                         });
                     makeOptionSub('#sub_sub_kode_anggaran', filtered)
                 } else if (subKodeAwal == subKodeAnggaranSelected) {
                     $("#sub_sub_kode_anggaran option").remove();
-                    var PATTERN = new RegExp(newStr + '.*\\(*[^<]*'),
+                    var PATTERN = new RegExp(newStr + '{1}'),
                         filtered = myArraySub.filter(function(str) {
                             return PATTERN.test(str);
                         });
@@ -396,7 +397,7 @@
                 if (!bukti_transfer.files) {
                     $('#containerPreview').attr('style', 'display:none');
                 }
-                
+
                 const file = this.files[0];
                 if (file) {
                     $('#containerPreview').removeAttr("style").hide();
