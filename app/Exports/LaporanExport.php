@@ -127,6 +127,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $saldo_banks = [];
         $count1 = count($saldo_penerimaan_banks);
         $count2 = count($saldo_pengeluaran_banks);
+        $closeTable = null;
 
         if ($count1 >= $count2) {
             if ($count1 > 0) {
@@ -186,16 +187,16 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                 if ($kode->jenis_kode == 'Penerimaan') {
                     $no_kode_kode = "4." . $kode->no_kode;
                     $kode->nama_kode = htmlentities($kode->nama_kode);
-                    $table .= '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th></tr>';
+                    $tableKode = '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th></tr>';
                     if (count($kode->kodeToSubKode) > 0) {
                         foreach ($kode->kodeToSubKode as $sub_kode) {
                             if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
                                 $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
-                                $table .= '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
+                                $tableSubKode = '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
                             }
                         }
                         if ($kode->id == $kodes->where('jenis_kode', 'Penerimaan')->last()->id) {
-                            $table .= '</thead><tbody>';
+                            $tableSubKode .= '</thead><tbody>';
                         }
                         foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode) {
                             if (count($sub_sub_kode->subSubKodeToDana) > 0)
@@ -204,23 +205,25 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                                 $jumlah += $dana->nominal;
                                 $jumlahPenerimaan += $dana->nominal;
 
-                                $table .= '<tr>';
-                                if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
-                                    $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
-                                    $table .= '<td>' . $no_kode_sub_sub_kode . '</td>';
+                                if ($jumlah != 0) {
+                                    $table .= $tableKode;
+                                    $table .= $tableSubKode;
+                                    $table .= '<tr>';
+                                    if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
+                                        $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
+                                        $table .= '<td>' . $no_kode_sub_sub_kode . '</td>';
+                                    } else {
+                                        $table .= '<td></td>';
+                                    }
+                                    $table .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
+                                    $table .= '<td>' . $dana->keterangan . '</td>';
+                                    $table .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
+                                    $table .= '</tr>';
+                                    $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr>';
                                 } else {
-                                    $table .= '<td></td>';
+                                    $table .= '<tr><td></td><td></td><td></td><td></td></tr>';
                                 }
-                                $table .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
-                                $table .= '<td>' . $dana->keterangan . '</td>';
-                                $table .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
-                                $table .= '</tr>';
                             }
-                        }
-                        if ($jumlah != 0) {
-                            $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr>';
-                        } else {
-                            $table .= '<tr><td></td><td></td><td></td><td></td></tr>';
                         }
                         $jumlah = 0;
                     }
@@ -242,20 +245,16 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                 if ($kode->jenis_kode == 'Pengeluaran') {
                     $no_kode_kode = "5." . $kode->no_kode;
                     $kode->nama_kode = htmlentities($kode->nama_kode);
-                    $table2 .= '<tr>';
-                    $table2 .= '<th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th><th></th><th></th>';
-                    $table2 .= '</tr>';
+                    $tableKode2 = '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th></tr>';
                     foreach ($kode->kodeToSubKode as $key_sub_kode => $sub_kode) {
                         if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
                             $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Pengeluaran' ? "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
-                            $table2 .= '<tr>';
-                            $table2 .= '<th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th>';
-                            $table2 .= '</tr>';
+                            $tableSubKode2 = '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
                         } else {
-                            $table2 .= '<tr><th></th></tr>';
+                            $tableSubKode2 = '<tr><th></th></tr>';
                         }
                         if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
-                            $table2 .= '</thead><tbody>';
+                            $tableSubKode2 .= '</thead><tbody>';
                         }
                         foreach ($sub_kode->subKodeToSubSubKode as $key_sub_sub_kode => $sub_sub_kode) {
                             if (count($sub_sub_kode->subSubKodeToDana) > 0) {
@@ -264,6 +263,8 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                                     $jumlah += $dana->nominal;
                                     $jumlahPengeluaran += $dana->nominal;
 
+                                    $table2 .= $tableKode2;
+                                    $table2 .= $tableSubKode2;
                                     $table2 .= '<tr>';
                                     if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
                                         $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
