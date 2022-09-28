@@ -50,7 +50,7 @@ class ForecastingController extends Controller
         $avg_x = decrypt($request->avg_x);
         $avg_y = decrypt($request->avg_y);
         $n = decrypt($request->n);
-        
+
 
         if ($n <= 1) {
             if ($jenis == 'penerimaan') {
@@ -62,9 +62,9 @@ class ForecastingController extends Controller
             }
         } else {
             for ($i = 0; $i <= count($year) + 4; $i++) {
-                $b = round(((($n * $xy) - ($x * $y)) / (($n * ($x * $x)) - ($x * $x))),2);
-                $a = round(($avg_y - ($b * $avg_x)),2);
-                $result = round(($a + ($b * $i)),2);
+                $b = round(((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x))), 2);
+                $a = round(($avg_y - ($b * $avg_x)), 2);
+                $result = round(($a + ($b * $i)), 2);
 
                 if ($i <= count($year) - 1) {
                     $temp_data_prediction['x'] = (int) $year[$i]->tahun;
@@ -105,7 +105,7 @@ class ForecastingController extends Controller
                     $persentase_kenaikan = ($result_data_prediction[$j]['y'] - $year->last()->penerimaan) / $year->last()->penerimaan * 100;
                     $temp_persen['persen'] = number_format($persentase_kenaikan, 2);
                     $persen_arr[] = $temp_persen;
-                }else{
+                } else {
                     if ($year->last()->pengeluaran < $result_data_prediction[$j]['y']) {
                         $temp_persen['name'] = "NAIK";
                     } elseif ($year->last()->pengeluaran > $result_data_prediction[$j]['y']) {
@@ -115,10 +115,9 @@ class ForecastingController extends Controller
                     }
                     $temp_persen['tahun'] = $result_data_prediction[$j]['x'];
                     $persentase_kenaikan = ($result_data_prediction[$j]['y'] - $year->last()->pengeluaran) / $year->last()->pengeluaran * 100;
-                    
+
                     $temp_persen['persen'] = number_format($persentase_kenaikan, 2);
                     $persen_arr[] = $temp_persen;
-
                 }
             }
             $result_data_prediction = collect($result_data_prediction);
