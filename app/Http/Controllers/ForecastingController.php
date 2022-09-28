@@ -50,6 +50,7 @@ class ForecastingController extends Controller
         $avg_x = decrypt($request->avg_x);
         $avg_y = decrypt($request->avg_y);
         $n = decrypt($request->n);
+        
 
         if ($n <= 1) {
             if ($jenis == 'penerimaan') {
