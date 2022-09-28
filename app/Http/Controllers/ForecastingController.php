@@ -93,7 +93,7 @@ class ForecastingController extends Controller
                 $result_data[] = $temp_data;
             }
 
-            for ($j = count($year); $j <= count($year) + 3; $j++) {
+            for ($j = count($year)-1; $j <= count($year) + 3; $j++) {
                 if ($jenis == 'penerimaan') {
                     if ($year->last()->penerimaan < $result_data_prediction[$j]['y']) {
                         $temp_persen['name'] = "NAIK";
