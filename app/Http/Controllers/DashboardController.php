@@ -116,7 +116,6 @@ class DashboardController extends Controller
             "data_tahun" => json_encode($data_tahun, JSON_NUMERIC_CHECK),
             "data_tahun_penerimaan" => json_encode($data_tahun_penerimaan, JSON_NUMERIC_CHECK),
             "data_tahun_pengeluaran" => json_encode($data_tahun_pengeluaran, JSON_NUMERIC_CHECK),
-
             "data_penerimaan_per_kode" => json_encode($data_penerimaan_per_kode),
             "data_pengeluaran_per_kode" => json_encode($data_pengeluaran_per_kode),
             "value_penerimaan_per_kode" => json_encode($value_penerimaan_per_kode),

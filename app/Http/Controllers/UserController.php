@@ -19,7 +19,7 @@ class UserController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request) //menambah data baru
     {
         $validated = $request->validate([
             'username' => 'required|min:8|unique:users,username',
@@ -46,7 +46,7 @@ class UserController extends Controller
         }
     }
 
-    public function edit($id)
+    public function edit($id) //menampilkan data berdasarkan ID
     {
         $id = Crypt::decrypt($id);
         $user = User::findOrFail($id);
@@ -58,7 +58,7 @@ class UserController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id) //mengubah data berdasarkan ID
     {
         $id = Crypt::decrypt($id);
         $validated = $request->validate([
@@ -85,7 +85,7 @@ class UserController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy($id) //menghapus data berdasarkan ID
     {
         $id = Crypt::decrypt($id);
         $data = User::findOrFail($id);

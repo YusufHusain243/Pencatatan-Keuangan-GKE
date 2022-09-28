@@ -229,7 +229,9 @@
                                 <td>
                                     @if ($dana->transaksi == 'Transfer Bank')
                                         @if (strlen($dana->bukti_transfer) > 0)
-                                            <img src="storage/images/{{ $dana->bukti_transfer }}" width="150">
+                                            {{-- <img src="storage/images/{{ $dana->bukti_transfer }}" width="150"> --}}
+                                            <a href="http://127.0.0.1:8000/storage/images/{{ $dana->bukti_transfer }}" target="_blank">Lihat
+                                                Bukti</a>
                                         @else
                                             ---
                                         @endif

@@ -20,10 +20,12 @@ class Dana extends Model
     {
         return $this->belongsTo(Kode::class, 'id_kode', 'id');
     }
+
     public function danaToSubKode()
     {
         return $this->belongsTo(SubKode::class, 'id_sub_kode', 'id');
     }
+    
     public function danaToSubSubKode()
     {
         return $this->belongsTo(SubSubKode::class, 'id_sub_sub_kode', 'id');

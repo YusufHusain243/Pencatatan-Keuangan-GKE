@@ -61,7 +61,8 @@ class ForecastingController extends Controller
                 echo "<script>window.location.href = '/forecasting-pengeluaran';</script>";
             }
         } else {
-            for ($i = 0; $i <= count($year) + 4; $i++) {
+            for ($i = 1; $i <= count($year) + 4; $i++) {
+                //rumus hitung regresi linear
                 $b = round(((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x))), 2);
                 $a = round(($avg_y - ($b * $avg_x)), 2);
                 $result = round(($a + ($b * $i)), 2);
@@ -92,7 +93,7 @@ class ForecastingController extends Controller
                 $result_data[] = $temp_data;
             }
 
-            for ($j = count($year); $j <= count($year) + 4; $j++) {
+            for ($j = count($year); $j <= count($year) + 3; $j++) {
                 if ($jenis == 'penerimaan') {
                     if ($year->last()->penerimaan < $result_data_prediction[$j]['y']) {
                         $temp_persen['name'] = "NAIK";
@@ -102,6 +103,7 @@ class ForecastingController extends Controller
                         $temp_persen['name'] = "Tidak Ada Perubahan";
                     }
                     $temp_persen['tahun'] = $result_data_prediction[$j]['x'];
+                    //hitung persen prediksi penerimaan
                     $persentase_kenaikan = ($result_data_prediction[$j]['y'] - $year->last()->penerimaan) / $year->last()->penerimaan * 100;
                     $temp_persen['persen'] = number_format($persentase_kenaikan, 2);
                     $persen_arr[] = $temp_persen;
@@ -114,6 +116,7 @@ class ForecastingController extends Controller
                         $temp_persen['name'] = "Tidak Ada Perubahan";
                     }
                     $temp_persen['tahun'] = $result_data_prediction[$j]['x'];
+                    //hitung persen prediksi pengeluaran
                     $persentase_kenaikan = ($result_data_prediction[$j]['y'] - $year->last()->pengeluaran) / $year->last()->pengeluaran * 100;
 
                     $temp_persen['persen'] = number_format($persentase_kenaikan, 2);
