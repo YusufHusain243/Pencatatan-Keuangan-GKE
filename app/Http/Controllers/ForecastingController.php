@@ -61,11 +61,11 @@ class ForecastingController extends Controller
                 echo "<script>window.location.href = '/forecasting-pengeluaran';</script>";
             }
         } else {
-            for ($i = 1; $i <= count($year) + 4; $i++) {
+            for ($i = 0; $i <= count($year) + 4; $i++) {
                 //rumus hitung regresi linear
                 $b = round(((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x))), 2);
                 $a = round(($avg_y - ($b * $avg_x)), 2);
-                $result = round(($a + ($b * $i)), 2);
+                $result = round(($a + ($b * ($i + 1))), 2);
 
                 if ($i <= count($year) - 1) {
                     $temp_data_prediction['x'] = (int) $year[$i]->tahun;
@@ -93,7 +93,7 @@ class ForecastingController extends Controller
                 $result_data[] = $temp_data;
             }
 
-            for ($j = count($year)-1; $j <= count($year) + 3; $j++) {
+            for ($j = count($year); $j <= count($year) + 4; $j++) {
                 if ($jenis == 'penerimaan') {
                     if ($year->last()->penerimaan < $result_data_prediction[$j]['y']) {
                         $temp_persen['name'] = "NAIK";
