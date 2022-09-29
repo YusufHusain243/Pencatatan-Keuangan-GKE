@@ -73,6 +73,14 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $tanggalAwal = $this->tanggalAwal;
         $tanggalAkhir = $this->tanggalAkhir;
 
+        function getIndonesianDate($dates)
+        {
+            return \Carbon\Carbon::createFromDate($dates)
+                ->locale('id')
+                ->settings(['formatFunction' => 'translatedFormat'])
+                ->format('d F Y');
+        }
+
         $kodes = Kode::with(['kodeToSubKode.subKodeToSubSubKode.subSubKodeToDana' => function ($q) use ($tanggalAwal, $tanggalAkhir) {
             $q->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
         }])
@@ -311,13 +319,13 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $table3 .= '<table><thead>';
         $table3 .= '<tr><th colspan="3"><b>Keterangan :</b></th><th></th><th></th><th></th></tr>';
         $table3 .= '</thead><tbody>';
-        $table3 .= '<tr><td colspan="3"><b>Saldo terakhir tanggal, ' . date('d F Y', strtotime($tanggalAwal)) . '</b></td><td><b>Rp. ' . number_format($saldo_akhir, 0, ',', '.') . '</b></td></tr>';
-        $table3 .= '<tr><td colspan="3"><b>Penerimaan, ' . date('d F Y', strtotime($tanggalAwal)) . ' - ' . date('d F Y', strtotime($tanggalAkhir)) . '</b></td><td><b>Rp. ' . number_format($jumlahPenerimaan, 0, ',', '.') . '</b></td></tr>';
+        $table3 .= '<tr><td colspan="3"><b>Saldo terakhir tanggal, ' . getIndonesianDate($tanggalAwal) . '</b></td><td><b>Rp. ' . number_format($saldo_akhir, 0, ',', '.') . '</b></td></tr>';
+        $table3 .= '<tr><td colspan="3"><b>Penerimaan, ' . getIndonesianDate($tanggalAwal) . ' - ' . getIndonesianDate($tanggalAkhir) . '</b></td><td><b>Rp. ' . number_format($jumlahPenerimaan, 0, ',', '.') . '</b></td></tr>';
         $jumlahSaldoPenerimaan = $jumlahPenerimaan + $saldo_akhir;
         $jumlahSaldoPengeluaran = $jumlahSaldoPenerimaan - $jumlahPengeluaran;
         $table3 .= '<tr><td colspan="3"></td><td><b>Rp. ' . number_format($jumlahSaldoPenerimaan, 0, ',', '.') . '</b></td></tr>';
-        $table3 .= '<tr><td colspan="3"><b>Pengeluaran, ' . date('d F Y', strtotime($tanggalAwal)) . ' - ' . date('d F Y', strtotime($tanggalAkhir)) . '</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td></tr>';
-        $table3 .= '<tr><td colspan="3"><b>Saldo terakhir tanggal, ' . date('d F Y', strtotime($tanggalAkhir)) . '</b></td><td><b>Rp. ' . number_format($jumlahSaldoPengeluaran, 0, ',', '.') . '</b></td></tr>';
+        $table3 .= '<tr><td colspan="3"><b>Pengeluaran, ' . getIndonesianDate($tanggalAwal) . ' - ' . getIndonesianDate($tanggalAkhir) . '</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td></tr>';
+        $table3 .= '<tr><td colspan="3"><b>Saldo terakhir tanggal, ' . getIndonesianDate($tanggalAkhir) . '</b></td><td><b>Rp. ' . number_format($jumlahSaldoPengeluaran, 0, ',', '.') . '</b></td></tr>';
         $table3 .= '<tr><td></td><td></td><td></td><td></td></tr>';
         $table3 .= '<tr><td><b>Tempat Penyimpanan :</b></td></tr>';
         $table3 .= '<tr><td colspan="3"><b>Kas Tunai</b></td><td><b>Rp. ' . number_format($saldo_tunai, 0, ',', '.') . '</b></td></tr>';

@@ -216,8 +216,8 @@
                                 $jumlahPengeluaran += $dana->nominal;
                             @endphp
                             @if ($jumlah != 0)
-                            <?= $tableKode2 ?>
-                            <?= $tableSubKode2 ?>
+                                <?= $tableKode2 ?>
+                                <?= $tableSubKode2 ?>
                                 <tr>
                                     <td class="text-center py-0 px-2">
                                         @if ($dana == $sub_sub_kode->subSubKodeToDana[0])
@@ -244,7 +244,8 @@
                                     <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
                                     @if (isset($key))
                                         @if ($key == count($sub_sub_kode->subSubKodeToDana) - 1)
-                                            <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($jumlah)</span>
+                                            <td class="py-0 px-2">Rp.<span class="float-right">Rp.
+                                                    @currency($jumlah)</span>
                                             </td>
                                         @else
                                             <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
@@ -269,7 +270,15 @@
                     </tr>
                 </tbody>
             </table>
-
+            @php
+                function getIndonesianDate($dates)
+                {
+                    return \Carbon\Carbon::createFromDate($dates)
+                        ->locale('id')
+                        ->settings(['formatFunction' => 'translatedFormat'])
+                        ->format('d F Y');
+                }
+            @endphp
             <table class="table table-bordered mt-4">
                 <tbody>
                     <tr>
@@ -277,13 +286,13 @@
                     </tr>
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-bottom-0">Saldo terakhir tanggal,
-                            {{ date('d F Y', strtotime($tanggalAwal)) }}
+                            {{ getIndonesianDate($tanggalAwal) }}
                             <span class="float-right">Rp. @currency($saldo_akhir)</span>
                         </td>
                     </tr>
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0">Penerimaan,
-                            {{ date('d F Y', strtotime($tanggalAwal)) }} - {{ date('d F Y', strtotime($tanggalAkhir)) }}
+                            {{ getIndonesianDate($tanggalAwal) }} - {{ getIndonesianDate($tanggalAkhir) }}
                             <span class="float-right"><u>Rp. @currency($jumlahPenerimaan)</u></span>
                         </td>
                     </tr>
@@ -297,13 +306,13 @@
                     </tr>
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0">Pengeluaran,
-                            {{ date('d F Y', strtotime($tanggalAwal)) }} - {{ date('d F Y', strtotime($tanggalAkhir)) }}
+                            {{ getIndonesianDate($tanggalAwal) }} - {{ getIndonesianDate($tanggalAkhir) }}
                             <span class="float-right"><u>Rp. @currency($jumlahPengeluaran)</u></span>
                         </td>
                     </tr>
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-top-0">Saldo terakhir tanggal,
-                            {{ date('d F Y', strtotime($tanggalAkhir)) }}<span class="float-right">Rp.
+                            {{ getIndonesianDate($tanggalAkhir) }}<span class="float-right">Rp.
                                 @currency($jumlahSaldoPengeluaran)</span></td>
                     </tr>
                     <tr>
