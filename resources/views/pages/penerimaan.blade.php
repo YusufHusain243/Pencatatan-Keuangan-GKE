@@ -257,8 +257,16 @@
             }
         }
         $(document).ready(function() {
-            $('#nominal').keyup(function (e) { 
+            $('#nominal').on('input', function(e) {
+                $(this).val($(this).val().replace(/[^0-9]/g, ''));
+            });
+            $('#nominal').focusout(function(e) {
                 $(this).val(formatRupiah(e.target.value, 'Rp. '));
+            });
+            $('#nominal').focus(function(e) {
+                let text = e.target.value;
+                text = text.replace(/\D/g, "");
+                $(this).val(text);
             });
 
             function makeOption(selector, val) {

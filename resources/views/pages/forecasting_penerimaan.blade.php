@@ -30,11 +30,11 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data_forecasting->tahun }}</td>
-                                <td>{{ $data_forecasting->penerimaan }}</td>
+                                <td>Rp. @currency($data_forecasting->penerimaan)</td>
                                 <td>{{ $i }}</td>
-                                <td>{{ $data_forecasting->penerimaan }}</td>
+                                <td>Rp. @currency($data_forecasting->penerimaan)</td>
                                 <td>{{ $i * $i }}</td>
-                                <td>{{ $i * $data_forecasting->penerimaan }}</td>
+                                <td>Rp. @currency($i * $data_forecasting->penerimaan)</td>
                             </tr>
                             <?php
                             $x += $i;
@@ -47,9 +47,9 @@
                         <tr>
                             <td class="text-center font-weight-bold" colspan="3">Jumlah</td>
                             <td class="font-weight-bold">{{ $x }}</td>
-                            <td class="font-weight-bold">{{ $y }}</td>
+                            <td class="font-weight-bold">Rp. @currency($y)</td>
                             <td class="font-weight-bold">{{ $xx }}</td>
-                            <td class="font-weight-bold">{{ $xy }}</td>
+                            <td class="font-weight-bold">Rp. @currency($xy)</td>
                         </tr>
                         <tr>
                             <?php
@@ -60,9 +60,9 @@
                             ?>
                             <td class="text-center font-weight-bold" colspan="3">Rata Rata</td>
                             <td class="font-weight-bold">{{ $avg_x }}</td>
-                            <td class="font-weight-bold">{{ $avg_y }}</td>
+                            <td class="font-weight-bold">Rp. @currency($avg_y)</td>
                             <td class="font-weight-bold">{{ $avg_xx }}</td>
-                            <td class="font-weight-bold">{{ $avg_xy }}</td>
+                            <td class="font-weight-bold">Rp. @currency($avg_xy)</td>
                         </tr>
                     @else
                         <tr>
@@ -75,25 +75,17 @@
             @if (count($data_forecastings) > 0)
                 <form action="/forecasting-penerimaan/prediksi" method="post">
                     @csrf
-                    <input type="hidden" name="jenis"
-                        value="{{ Crypt::encrypt('penerimaan') ?? '' }}">
-                    <input type="hidden" name="x"
-                        value="{{ isset($x) ? Crypt::encrypt($x) : '' }}">
-                    <input type="hidden" name="y"
-                        value="{{ isset($y) ? Crypt::encrypt($y) : '' }}">
-                    <input type="hidden" name="xx"
-                        value="{{ isset($xx) ? Crypt::encrypt($xx) : '' }}">
-                    <input type="hidden" name="xy"
-                        value="{{ isset($xy) ? Crypt::encrypt($xy) : '' }}">
-                    <input type="hidden" name="avg_x"
-                        value="{{ isset($avg_x) ? Crypt::encrypt($avg_x) : '' }}">
-                    <input type="hidden" name="avg_y"
-                        value="{{ isset($avg_y) ? Crypt::encrypt($avg_y) : '' }}">
+                    <input type="hidden" name="jenis" value="{{ Crypt::encrypt('penerimaan') ?? '' }}">
+                    <input type="hidden" name="x" value="{{ isset($x) ? Crypt::encrypt($x) : '' }}">
+                    <input type="hidden" name="y" value="{{ isset($y) ? Crypt::encrypt($y) : '' }}">
+                    <input type="hidden" name="xx" value="{{ isset($xx) ? Crypt::encrypt($xx) : '' }}">
+                    <input type="hidden" name="xy" value="{{ isset($xy) ? Crypt::encrypt($xy) : '' }}">
+                    <input type="hidden" name="avg_x" value="{{ isset($avg_x) ? Crypt::encrypt($avg_x) : '' }}">
+                    <input type="hidden" name="avg_y" value="{{ isset($avg_y) ? Crypt::encrypt($avg_y) : '' }}">
                     @php
                         $n = $i - 1;
                     @endphp
-                    <input type="hidden" name="n"
-                        value="{{ isset($n) ? Crypt::encrypt($n) : '' }}">
+                    <input type="hidden" name="n" value="{{ isset($n) ? Crypt::encrypt($n) : '' }}">
                     <input type="hidden" name="year"
                         value="{{ isset($data_forecastings) ? Crypt::encrypt($data_forecastings) : '' }}">
                     <button type="submit" class="btn btn-sm btn-primary text-bold">Prediksi</button>
@@ -142,6 +134,17 @@
         <!-- ChartJS -->
         <script src="{{ asset('/plugins/chart.js/Chart.min.js') }}"></script>
         <script>
+            function addCommas(nStr) {
+                nStr += '';
+                x = nStr.split('.');
+                x1 = x[0];
+                x2 = x.length > 1 ? '.' + x[1] : '';
+                let rgx = /(\d+)(\d{3})/;
+                while (rgx.test(x1)) {
+                    x1 = x1.replace(rgx, '$1' + ',' + '$2');
+                }
+                return x1 + x2;
+            }
             var ctx = document.getElementById("hasil_prediksi");
             var scatterChart = new Chart(ctx, {
                 type: 'scatter',
@@ -172,7 +175,12 @@
                     tooltips: {
                         callbacks: {
                             label: function(tooltipItem, data) {
-                                return tooltipItem.yLabel;
+                                var rupiah = new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR',
+                                    minimumFractionDigits: 2
+                                }).format(tooltipItem.yLabel)
+                                return rupiah;
                             }
                         }
                     }

@@ -107,6 +107,29 @@
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
         $(function() {
+            $('#penerimaan').on('input', function(e) {
+                $(this).val($(this).val().replace(/[^0-9]/g, ''));
+            });
+            $('#penerimaan').focusout(function(e) {
+                $(this).val(formatRupiah(e.target.value, 'Rp. '));
+            });
+            $('#penerimaan').focus(function(e) {
+                let text = e.target.value;
+                text = text.replace(/\D/g, "");
+                $(this).val(text);
+            });
+
+            $('#pengeluaran').on('input', function(e) {
+                $(this).val($(this).val().replace(/[^0-9]/g, ''));
+            });
+            $('#pengeluaran').focusout(function(e) {
+                $(this).val(formatRupiah(e.target.value, 'Rp. '));
+            });
+            $('#pengeluaran').focus(function(e) {
+                let text = e.target.value;
+                text = text.replace(/\D/g, "");
+                $(this).val(text);
+            });
             $("#datepicker").datepicker({
                 format: "yyyy",
                 viewMode: "years",
@@ -120,21 +143,5 @@
         if ($('#pengeluaran').val() != '') {
             $('#pengeluaran').val(formatRupiah($('#pengeluaran').val(), 'Rp. '))
         }
-        $('#penerimaan').keyup(function(e) {
-            $(this).val(formatRupiah(e.target.value, 'Rp. '));
-        });
-        $('#pengeluaran').keyup(function(e) {
-            $(this).val(formatRupiah(e.target.value, 'Rp. '));
-        });
-        $(function() {
-            $("input[name='penerimaan']").on('input', function(e) {
-                $(this).val($(this).val().replace(/[^0-9]/g, ''));
-            });
-        });
-        $(function() {
-            $("input[name='pengeluaran']").on('input', function(e) {
-                $(this).val($(this).val().replace(/[^0-9]/g, ''));
-            });
-        });
     </script>
 @endpush

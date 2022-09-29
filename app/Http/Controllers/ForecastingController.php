@@ -72,9 +72,9 @@ class ForecastingController extends Controller
                     $temp_data['x'] = (int) $year[$i]->tahun;
 
                     if ($jenis == 'penerimaan') {
-                        $temp_data['y'] = (int) $year[$i]->penerimaan;
+                        $temp_data['y'] = number_format((int) $year[$i]->penerimaan, 2, ',', '.');
                     } else {
-                        $temp_data['y'] = (int) $year[$i]->pengeluaran;
+                        $temp_data['y'] = number_format((int) $year[$i]->pengeluaran, 2, ',', '.');
                     }
                 } else {
                     $temp_data_prediction['x'] = (int) $year->first()->tahun + $i;

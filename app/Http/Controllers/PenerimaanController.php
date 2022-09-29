@@ -127,7 +127,7 @@ class PenerimaanController extends Controller
         $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', 'Penerimaan')
-            ->get(['kodes.id AS idKodes', 'sub_kodes.id AS idSubKodes', 'kodes.*', 'sub_kodes.*', 'sub_sub_kodes.*']);
+            ->get(['kodes.id AS idKodes', 'sub_kodes.id AS idSubKodes', 'sub_sub_kodes.id AS idSubSubKodes', 'kodes.*', 'sub_kodes.*', 'sub_sub_kodes.*']);
         $akun_bank = AkunBank::all();
         $dana = Dana::findOrFail($id);
         return view('pages/edit_penerimaan', [
@@ -223,9 +223,26 @@ class PenerimaanController extends Controller
     {
         $id = Crypt::decrypt($id);
         $data = Dana::findOrFail($id);
+
         if ($data) {
-            $result = $data->danaToDetailBank()->delete();
-            if ($result) {
+            if ($data->transaksi == 'Transfer Bank') {
+                $result = $data->danaToDetailBank()->delete();
+                if ($result) {
+                    $data = Dana::findOrFail($id);
+                    if ($data->bukti_transfer != "") {
+                        $nama_file = $data->bukti_transfer;
+                        if (file_exists(public_path('storage/images/' . $nama_file))) {
+                            unlink(public_path('storage/images/' . $nama_file));
+                        }
+                    }
+
+                    $result = $data->delete();
+                    if ($result) {
+                        return redirect('/penerimaan')->with('DanaSuccess', 'Hapus Penerimaan Berhasil');
+                    }
+                    return redirect('/penerimaan')->with('DanaError', 'Hapus Penerimaan Gagal');
+                }
+            } else {
                 $result = $data->delete();
                 if ($result) {
                     return redirect('/penerimaan')->with('DanaSuccess', 'Hapus Penerimaan Berhasil');

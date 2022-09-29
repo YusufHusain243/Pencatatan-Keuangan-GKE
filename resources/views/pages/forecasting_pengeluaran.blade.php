@@ -40,11 +40,11 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data_forecasting->tahun }}</td>
-                                <td>{{ $data_forecasting->pengeluaran }}</td>
+                                <td>Rp. @currency($data_forecasting->penerimaan)</td>
                                 <td>{{ $i }}</td>
-                                <td>{{ $data_forecasting->pengeluaran }}</td>
+                                <td>Rp. @currency($data_forecasting->penerimaan)</td>
                                 <td>{{ $i * $i }}</td>
-                                <td>{{ $i * $data_forecasting->pengeluaran }}</td>
+                                <td>Rp. @currency($i * $data_forecasting->penerimaan)</td>
                             </tr>
                             <?php
                             $x += $i;
@@ -57,9 +57,9 @@
                         <tr>
                             <td class="text-center font-weight-bold" colspan="3">Jumlah</td>
                             <td class="font-weight-bold">{{ $x }}</td>
-                            <td class="font-weight-bold">{{ $y }}</td>
+                            <td class="font-weight-bold">Rp. @currency($y)</td>
                             <td class="font-weight-bold">{{ $xx }}</td>
-                            <td class="font-weight-bold">{{ $xy }}</td>
+                            <td class="font-weight-bold">Rp. @currency($xy)</td>
                         </tr>
                         <tr>
                             <?php
@@ -70,9 +70,9 @@
                             ?>
                             <td class="text-center font-weight-bold" colspan="3">Rata Rata</td>
                             <td class="font-weight-bold">{{ $avg_x }}</td>
-                            <td class="font-weight-bold">{{ $avg_y }}</td>
+                            <td class="font-weight-bold">Rp. @currency($avg_y)</td>
                             <td class="font-weight-bold">{{ $avg_xx }}</td>
-                            <td class="font-weight-bold">{{ $avg_xy }}</td>
+                            <td class="font-weight-bold">Rp. @currency($avg_xy)</td>
                         </tr>
                     @else
                         <tr>
@@ -174,7 +174,12 @@
                     tooltips: {
                         callbacks: {
                             label: function(tooltipItem, data) {
-                                return tooltipItem.yLabel;
+                                var rupiah = new Intl.NumberFormat('id-ID', {
+                                    style: 'currency',
+                                    currency: 'IDR',
+                                    minimumFractionDigits: 2
+                                }).format(tooltipItem.yLabel)
+                                return rupiah;
                             }
                         }
                     }
