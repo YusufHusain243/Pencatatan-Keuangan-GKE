@@ -321,8 +321,8 @@
                             return PATTERN.test(str);
                         });
                     makeOption('#sub_kode_anggaran', filtered)
-                } else if (kodeAwal == 5) {
-                    $("#kode_anggaran option").remove();
+                } else if (kodeSelected.charAt(0) == 5) {
+                    $("#sub_kode_anggaran option").remove();
                     var PATTERN = new RegExp(newStr + '{1}'),
                         filtered = myArray.filter(function(str) {
                             return PATTERN.test(str);

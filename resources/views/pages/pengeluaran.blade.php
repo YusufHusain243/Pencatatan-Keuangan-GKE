@@ -293,8 +293,13 @@
         }
 
         $(document).ready(function() {
-            $('#nominal').keyup(function(e) {
+            $('#nominal').focusout(function(e) {
                 $(this).val(formatRupiah(e.target.value, 'Rp. '));
+            });
+            $('#nominal').focus(function(e) {
+                let text = e.target.value;
+                text = text.replace(/\D/g, "");
+                $(this).val(text);
             });
 
             function makeOption(selector, val) {
@@ -357,8 +362,8 @@
                             return PATTERN.test(str);
                         });
                     makeOption('#sub_kode_anggaran', filtered)
-                } else if (kodeAwal == 5) {
-                    $("#kode_anggaran option").remove();
+                } else if (kodeSelected.charAt(0) == 5) {
+                    $("#sub_kode_anggaran option").remove();
                     var PATTERN = new RegExp(newStr + '{1}'),
                         filtered = myArray.filter(function(str) {
                             return PATTERN.test(str);
@@ -383,6 +388,7 @@
                         filtered = myArraySub.filter(function(str) {
                             return PATTERN.test(str);
                         });
+                        console.log(newStr);
                     makeOptionSub('#sub_sub_kode_anggaran', filtered)
                 } else if (subKodeAwal == subKodeAnggaranSelected) {
                     $("#sub_sub_kode_anggaran option").remove();
