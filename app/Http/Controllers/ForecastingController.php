@@ -35,6 +35,7 @@ class ForecastingController extends Controller
         ]);
     }
 
+    //digunakan untuk mencari forecasting penerimaan dan pengeluaran
     public function hitungForecasting(Request $request)
     {
         $data_forecastings = Forecasting::orderBy('tahun', 'ASC')->get();
@@ -61,25 +62,35 @@ class ForecastingController extends Controller
                 echo "<script>window.location.href = '/forecasting-pengeluaran';</script>";
             }
         } else {
+
+            // ------ini mulai looping untuk prediksi & grafik ------
             for ($i = 0; $i <= count($year) + 4; $i++) {
                 //rumus hitung regresi linear
                 $b = round(((($n * $xy) - ($x * $y)) / (($n * $xx) - ($x * $x))), 2);
                 $a = round(($avg_y - ($b * $avg_x)), 2);
                 $result = round(($a + ($b * ($i + 1))), 2);
 
+                // jika tahun ini masih dirange tahun data real dari database
                 if ($i <= count($year) - 1) {
+                    // masukin nilai x (tahun) untuk prediksi
                     $temp_data_prediction['x'] = (int) $year[$i]->tahun;
+                    // masukin nilai x (tahun) untuk data real
                     $temp_data['x'] = (int) $year[$i]->tahun;
 
+                    //jika forecasting penerimaan
                     if ($jenis == 'penerimaan') {
+                        //maka nilai nomimal == nomimal penerimaan dari db
                         $temp_data['y'] = (int) $year[$i]->penerimaan;
                     } else {
+                        //maka nilai nomimal == nomimal pengeluaran dari db
                         $temp_data['y'] = (int) $year[$i]->pengeluaran;
                     }
                 } else {
+                    // jika sudah lewat dari range data real, maka tahun ditambah 1 setiap perulangan
                     $temp_data_prediction['x'] = (int) $year->first()->tahun + $i;
                     $temp_data['x'] = (int) $year->first()->tahun + $i;
 
+                    //karena sudah tidak ada nilai real, maka data real di grafik jadi kan null
                     if ($jenis == 'penerimaan') {
                         $temp_data['y'] = null;
                     } else {
@@ -87,14 +98,23 @@ class ForecastingController extends Controller
                     }
                 }
 
+                //nilai prediction dimasukkan ke variabel temp_data prediction
                 $temp_data_prediction['y'] = round($result, 2);
                 $result_data_prediction[] = $temp_data_prediction;
 
                 $result_data[] = $temp_data;
             }
+            // ------ini akhir looping untuk prediksi & grafik ------
 
+
+
+            // ------ini mulai looping untuk persentase ------
             for ($j = count($year); $j <= count($year) + 4; $j++) {
                 if ($jenis == 'penerimaan') {
+                    
+                    //ini kondisi untuk mengecek persentase, naik, turun atau tidak ada perubahan
+
+                    //jika nilai terakhir data real lebih kecil dari data prediksi, maka label naik
                     if ($year->last()->penerimaan < $result_data_prediction[$j]['y']) {
                         $temp_persen['name'] = "NAIK";
                     } elseif ($year->last()->penerimaan > $result_data_prediction[$j]['y']) {
@@ -102,7 +122,9 @@ class ForecastingController extends Controller
                     } else {
                         $temp_persen['name'] = "Tidak Ada Perubahan";
                     }
+
                     $temp_persen['tahun'] = $result_data_prediction[$j]['x'];
+                    
                     //hitung persen prediksi penerimaan
                     $persentase_kenaikan = ($result_data_prediction[$j]['y'] - $year->last()->penerimaan) / $year->last()->penerimaan * 100;
                     $temp_persen['persen'] = number_format($persentase_kenaikan, 2);
@@ -123,6 +145,8 @@ class ForecastingController extends Controller
                     $persen_arr[] = $temp_persen;
                 }
             }
+            // ------ini akhir looping untuk persentase ------
+
             $result_data_prediction = collect($result_data_prediction);
             $result_data_prediction = $result_data_prediction->values()->toArray();
 
