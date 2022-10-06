@@ -119,7 +119,7 @@ class PengeluaranController extends Controller
         $sub_sub_kodes = SubSubKode::join('sub_kodes', 'sub_sub_kodes.id_sub_kode', '=', 'sub_kodes.id')
             ->join('kodes', 'sub_kodes.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', 'Pengeluaran')
-            ->get();
+            ->get(['kodes.id AS idKodes', 'kodes.*', 'sub_kodes.id AS idSubKodes', 'sub_kodes.*', 'sub_sub_kodes.*']);
         $akun_bank = AkunBank::all();
         $dana = Dana::findOrFail($id);
         return view('pages/edit_pengeluaran', [
@@ -175,7 +175,7 @@ class PengeluaranController extends Controller
                         unlink(public_path('storage/images/' . $nama_file));
                     }
                 }
-                
+
                 $name = '';
 
                 if (isset($request->bukti_transfer)) {

@@ -32,9 +32,24 @@ class LaporanController extends Controller
         $tanggalAwal = date('Y-m-d', strtotime($explode[0]));
         $tanggalAkhir = date('Y-m-d', strtotime($explode[1]));
 
-        $kodes = Kode::with(['kodeToSubKode.subKodeToSubSubKode.subSubKodeToDana' => function ($q) use ($tanggalAwal, $tanggalAkhir) {
-            $q->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
-        }])
+        $danas_penerimaan = Dana::query()
+            ->with('danaToKode')
+            ->where('tanggal', '>=', $tanggalAwal)
+            ->where('tanggal', '<=', $tanggalAkhir)
+            ->whereHas('danaToKode', function ($q) {
+                $q->where('jenis_kode', 'Penerimaan');
+            })
+            ->orderBy('id_kode')
+            ->get();
+
+        $danas_pengeluaran = Dana::query()
+            ->with('danaToKode')
+            ->where('tanggal', '>=', $tanggalAwal)
+            ->where('tanggal', '<=', $tanggalAkhir)
+            ->whereHas('danaToKode', function ($q) {
+                $q->where('jenis_kode', 'Pengeluaran');
+            })
+            ->orderBy('id_kode')
             ->get();
 
         // get saldo akhir
@@ -129,7 +144,76 @@ class LaporanController extends Controller
             }
         }
 
-        return view('pages.cetak_laporan', compact('title', 'kodes', 'tanggalAwal', 'tanggalAkhir', 'saldo_akhir', 'saldo_tunai', 'saldo_banks'));
+        $kodes_penerimaan = Kode::query()
+            ->where('jenis_kode', '=', 'Penerimaan')
+            ->whereHas('kodeToSubKode.subKodeToSubSubKode')
+            ->whereHas('kodeToSubKode.subKodeToSubSubKode.subSubKodeToDana')
+            ->with('kodeToSubKode.subKodeToSubSubKode.subSubKodeToDana', function ($q) use ($tanggalAwal, $tanggalAkhir) {
+                $q->where('tanggal', '>=', $tanggalAwal)
+                    ->where('tanggal', '<=', $tanggalAkhir);
+            })
+            ->get();
+
+        $kode_penerimaans = [];
+        foreach ($kodes_penerimaan as $keyKode => $kode_penerimaan) {
+            $kode_penerimaans['kode'][$keyKode]['no_kode'] = $kode_penerimaan->no_kode;
+            $kode_penerimaans['kode'][$keyKode]['nama_kode'] = $kode_penerimaan->nama_kode;
+            foreach ($kode_penerimaan->kodeToSubKode as $keySubKode => $sub_kode) {
+                $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['id'] = $sub_kode->id;
+                $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['no_sub_kode'] = $sub_kode->no_sub_kode;
+                $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['nama_sub_kode'] = $sub_kode->nama_sub_kode;
+                foreach ($sub_kode->subKodeToSubSubKode as $keySubSubKode => $sub_sub_kode) {
+                    $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['no_sub_sub_kode'] = $sub_sub_kode->no_sub_sub_kode;
+                    $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['nama_sub_sub_kode'] = $sub_sub_kode->nama_sub_sub_kode;
+                    foreach ($sub_sub_kode->subSubKodeToDana as $keyDana => $dana) {
+                        $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['tanggal'] = $dana->tanggal;
+                        $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['keterangan'] = $dana->keterangan;
+                        $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['transaksi'] = $dana->transaksi;
+                        $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['nominal'] = $dana->nominal;
+                        $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'] = $dana->id_sub_kode;
+                        $listAllowIdSubKode[] = $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'];
+                    }
+                }
+            }
+        }
+
+        $kodes_pengeluaran = Kode::query()
+            ->where('jenis_kode', '=', 'Pengeluaran')
+            ->whereHas('kodeToSubKode.subKodeToSubSubKode')
+            ->whereHas('kodeToSubKode.subKodeToSubSubKode.subSubKodeToDana')
+            ->with('kodeToSubKode.subKodeToSubSubKode.subSubKodeToDana', function ($q) use ($tanggalAwal, $tanggalAkhir) {
+                $q->where('tanggal', '>=', $tanggalAwal)
+                    ->where('tanggal', '<=', $tanggalAkhir);
+            })
+            ->get();
+
+        $kode_pengeluarans = [];
+        foreach ($kodes_pengeluaran as $keyKode => $kode_pengeluaran) {
+            $kode_pengeluarans['kode'][$keyKode]['no_kode'] = $kode_pengeluaran->no_kode;
+            $kode_pengeluarans['kode'][$keyKode]['nama_kode'] = $kode_pengeluaran->nama_kode;
+
+            foreach ($kode_pengeluaran->kodeToSubKode as $keySubKode => $sub_kode) {
+                $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['id'] = $sub_kode->id;
+                $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['no_sub_kode'] = $sub_kode->no_sub_kode;
+                $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['nama_sub_kode'] = $sub_kode->nama_sub_kode;
+                foreach ($sub_kode->subKodeToSubSubKode as $keySubSubKode => $sub_sub_kode) {
+                    $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['no_sub_sub_kode'] = $sub_sub_kode->no_sub_sub_kode;
+                    $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['nama_sub_sub_kode'] = $sub_sub_kode->nama_sub_sub_kode;
+                    foreach ($sub_sub_kode->subSubKodeToDana as $keyDana => $dana) {
+                        if ($dana->danaToKode->jenis_kode == 'Pengeluaran') {
+                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['tanggal'] = $dana->tanggal;
+                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['keterangan'] = $dana->keterangan;
+                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['transaksi'] = $dana->transaksi;
+                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['nominal'] = $dana->nominal;
+                        } else {
+                            unset($kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]);
+                        }
+                    }
+                }
+            }
+        }
+
+        return view('pages.cetak_laporan', compact('title', 'kode_penerimaans', 'listAllowIdSubKode', 'kode_pengeluarans', 'tanggalAwal', 'tanggalAkhir', 'saldo_akhir', 'saldo_tunai', 'saldo_banks'));
     }
 
     public function export(Request $request)
