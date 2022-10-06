@@ -57,7 +57,7 @@
                             @endphp
                         @endif
                         @foreach ($kode_penerimaan['sub_kode'] as $sub_kode)
-                            @if (in_array($sub_kode['id'], $listAllowIdSubKode))
+                            @if (in_array($sub_kode['id'], $listAllowIdSubKodePenerimaan))
                                 <tr>
                                     <th class="py-0 px-2 text-center" style="vertical-align: middle">
                                         4.{{ $kode_penerimaan['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}
@@ -151,60 +151,62 @@
                             @endphp
                         @endif
                         @foreach ($kode['sub_kode'] as $sub_kode)
-                            <tr>
-                                <th class="py-0 px-2 text-center" style="vertical-align: middle">
-                                    5.{{ $kode['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}
-                                </th>
-                                <th class="py-0 px-2" style="vertical-align: middle">{{ $sub_kode['nama_sub_kode'] }}
-                                </th>
-                                <th class="py-0 px-2" style="vertical-align: middle"></th>
-                                <th class="py-0 px-2" style="vertical-align: middle"></th>
-                            </tr>
-                            @if (!array_key_exists('sub_sub_kode', $sub_kode))
-                                @php
-                                    continue;
-                                @endphp
-                            @endif
-                            @foreach ($sub_kode['sub_sub_kode'] as $sub_sub_kode)
-                                @if (!array_key_exists('dana', $sub_sub_kode))
+                            @if (in_array($sub_kode['id'], $listAllowIdSubKodePengeluaran))
+                                <tr>
+                                    <th class="py-0 px-2 text-center" style="vertical-align: middle">
+                                        5.{{ $kode['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}
+                                    </th>
+                                    <th class="py-0 px-2" style="vertical-align: middle">{{ $sub_kode['nama_sub_kode'] }}
+                                    </th>
+                                    <th class="py-0 px-2" style="vertical-align: middle"></th>
+                                    <th class="py-0 px-2" style="vertical-align: middle"></th>
+                                </tr>
+                                @if (!array_key_exists('sub_sub_kode', $sub_kode))
                                     @php
                                         continue;
                                     @endphp
                                 @endif
-                                @foreach ($sub_sub_kode['dana'] as $key => $dana)
-                                    @php
-                                        $jumlah += $dana['nominal'];
-                                        $jumlahPengeluaran += $dana['nominal'];
-                                    @endphp
-                                    <tr>
-                                        <td class="text-center py-0 px-2">
-                                            5.{{ $kode['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}.{{ $sub_sub_kode['no_sub_sub_kode'] }}
-                                        </td>
-                                        <td class="py-0 px-2">
-                                            {{ $sub_sub_kode['nama_sub_sub_kode'] }}
-                                        </td>
-                                        <td class="py-0 px-2">
-                                            {{ $dana['keterangan'] }}
-                                        </td>
-                                        <td class="py-0 px-2">Rp.<span class="float-right">Rp.
-                                                @currency($dana['nominal'])</span></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
-                                        @if ($key == count($sub_sub_kode['dana']))
+                                @foreach ($sub_kode['sub_sub_kode'] as $sub_sub_kode)
+                                    @if (!array_key_exists('dana', $sub_sub_kode))
+                                        @php
+                                            continue;
+                                        @endphp
+                                    @endif
+                                    @foreach ($sub_sub_kode['dana'] as $key => $dana)
+                                        @php
+                                            $jumlah += $dana['nominal'];
+                                            $jumlahPengeluaran += $dana['nominal'];
+                                        @endphp
+                                        <tr>
+                                            <td class="text-center py-0 px-2">
+                                                5.{{ $kode['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}.{{ $sub_sub_kode['no_sub_sub_kode'] }}
+                                            </td>
+                                            <td class="py-0 px-2">
+                                                {{ $sub_sub_kode['nama_sub_sub_kode'] }}
+                                            </td>
+                                            <td class="py-0 px-2">
+                                                {{ $dana['keterangan'] }}
+                                            </td>
                                             <td class="py-0 px-2">Rp.<span class="float-right">Rp.
-                                                    @currency($jumlah)</span>
-                                            </td>
-                                        @else
-                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
-                                                    @currency($jumlah)</span>
-                                            </td>
-                                        @endif
-                                    </tr>
+                                                    @currency($dana['nominal'])</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td></td>
+                                            <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
+                                            @if ($key == count($sub_sub_kode['dana']))
+                                                <td class="py-0 px-2">Rp.<span class="float-right">Rp.
+                                                        @currency($jumlah)</span>
+                                                </td>
+                                            @else
+                                                <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
+                                                        @currency($jumlah)</span>
+                                                </td>
+                                            @endif
+                                        </tr>
+                                    @endforeach
                                 @endforeach
-                            @endforeach
+                            @endif
                         @endforeach
                     @endforeach
                     <tr>

@@ -171,7 +171,7 @@ class LaporanController extends Controller
                         $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['transaksi'] = $dana->transaksi;
                         $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['nominal'] = $dana->nominal;
                         $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'] = $dana->id_sub_kode;
-                        $listAllowIdSubKode[] = $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'];
+                        $listAllowIdSubKodePenerimaan[] = $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'];
                     }
                 }
             }
@@ -200,20 +200,18 @@ class LaporanController extends Controller
                     $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['no_sub_sub_kode'] = $sub_sub_kode->no_sub_sub_kode;
                     $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['nama_sub_sub_kode'] = $sub_sub_kode->nama_sub_sub_kode;
                     foreach ($sub_sub_kode->subSubKodeToDana as $keyDana => $dana) {
-                        if ($dana->danaToKode->jenis_kode == 'Pengeluaran') {
-                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['tanggal'] = $dana->tanggal;
-                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['keterangan'] = $dana->keterangan;
-                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['transaksi'] = $dana->transaksi;
-                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['nominal'] = $dana->nominal;
-                        } else {
-                            unset($kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]);
-                        }
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['tanggal'] = $dana->tanggal;
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['keterangan'] = $dana->keterangan;
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['transaksi'] = $dana->transaksi;
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['nominal'] = $dana->nominal;
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'] = $dana->id_sub_kode;
+                        $listAllowIdSubKodePengeluaran[] = $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'];
                     }
                 }
             }
         }
 
-        return view('pages.cetak_laporan', compact('title', 'kode_penerimaans', 'listAllowIdSubKode', 'kode_pengeluarans', 'tanggalAwal', 'tanggalAkhir', 'saldo_akhir', 'saldo_tunai', 'saldo_banks'));
+        return view('pages.cetak_laporan', compact('title', 'kode_penerimaans', 'listAllowIdSubKodePenerimaan', 'listAllowIdSubKodePengeluaran', 'kode_pengeluarans', 'tanggalAwal', 'tanggalAkhir', 'saldo_akhir', 'saldo_tunai', 'saldo_banks'));
     }
 
     public function export(Request $request)
