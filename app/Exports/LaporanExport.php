@@ -81,11 +81,6 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                 ->format('d F Y');
         }
 
-        // $kodes = Kode::with(['kodeToSubKode.subKodeToSubSubKode.subSubKodeToDana' => function ($q) use ($tanggalAwal, $tanggalAkhir) {
-        //     $q->whereBetween('tanggal', [$tanggalAwal, $tanggalAkhir]);
-        // }])
-        //     ->get();
-
         $kodes_penerimaan = Kode::query()
             ->where('jenis_kode', '=', 'Penerimaan')
             ->whereHas('kodeToSubKode.subKodeToSubSubKode')
@@ -101,6 +96,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
             $kode_penerimaans['kode'][$keyKode]['no_kode'] = $kode_penerimaan->no_kode;
             $kode_penerimaans['kode'][$keyKode]['nama_kode'] = $kode_penerimaan->nama_kode;
             foreach ($kode_penerimaan->kodeToSubKode as $keySubKode => $sub_kode) {
+                $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['id'] = $sub_kode->id;
                 $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['no_sub_kode'] = $sub_kode->no_sub_kode;
                 $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['nama_sub_kode'] = $sub_kode->nama_sub_kode;
                 foreach ($sub_kode->subKodeToSubSubKode as $keySubSubKode => $sub_sub_kode) {
@@ -111,6 +107,8 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['keterangan'] = $dana->keterangan;
                         $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['transaksi'] = $dana->transaksi;
                         $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['nominal'] = $dana->nominal;
+                        $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'] = $dana->id_sub_kode;
+                        $listAllowIdSubKodePenerimaan[] = $kode_penerimaans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'];
                     }
                 }
             }
@@ -132,20 +130,19 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
             $kode_pengeluarans['kode'][$keyKode]['nama_kode'] = $kode_pengeluaran->nama_kode;
 
             foreach ($kode_pengeluaran->kodeToSubKode as $keySubKode => $sub_kode) {
+                $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['id'] = $sub_kode->id;
                 $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['no_sub_kode'] = $sub_kode->no_sub_kode;
                 $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['nama_sub_kode'] = $sub_kode->nama_sub_kode;
                 foreach ($sub_kode->subKodeToSubSubKode as $keySubSubKode => $sub_sub_kode) {
                     $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['no_sub_sub_kode'] = $sub_sub_kode->no_sub_sub_kode;
                     $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['nama_sub_sub_kode'] = $sub_sub_kode->nama_sub_sub_kode;
                     foreach ($sub_sub_kode->subSubKodeToDana as $keyDana => $dana) {
-                        if ($dana->danaToKode->jenis_kode == 'Pengeluaran') {
-                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['tanggal'] = $dana->tanggal;
-                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['keterangan'] = $dana->keterangan;
-                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['transaksi'] = $dana->transaksi;
-                            $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['nominal'] = $dana->nominal;
-                        } else {
-                            unset($kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]);
-                        }
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['tanggal'] = $dana->tanggal;
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['keterangan'] = $dana->keterangan;
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['transaksi'] = $dana->transaksi;
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['nominal'] = $dana->nominal;
+                        $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'] = $dana->id_sub_kode;
+                        $listAllowIdSubKodePengeluaran[] = $kode_pengeluarans['kode'][$keyKode]['sub_kode'][$keySubKode]['sub_sub_kode'][$keySubSubKode]['dana'][$keyDana]['id_sub_kode'];
                     }
                 }
             }
@@ -249,134 +246,102 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $table = '<tr><td colspan="4"><b>PENCATATAN KAS GKE SINAR KASIH</b></td></tr>';
         $table .= '<tr></tr>';
 
-        $jumlah = 0;
-        $jumlahPenerimaan = 0;
-
-        if (count($kodes) > 0) {
+        if (count($kode_penerimaans) > 0) {
             $table .= '<table><thead><tr><th><b>A.</b></th><th><b>PENERIMAAN</b></th><th></th><th></th></tr>';
             $table .= '<tr><th><b>Kode Anggaran</b></th><th><b>URAIAN</b></th><th><b>KETERANGAN</b></th><th><b>JUMLAH</b></th></tr>';
             $table .= '<tr><th><b>4</b></th><th><b>PENDAPATAN</b></th><th></th><th></th></tr>';
-            foreach ($kodes as $keyKode => $kode) {
-                if ($kode->jenis_kode == 'Penerimaan') {
-                    $no_kode_kode = "4." . $kode->no_kode;
-                    $kode->nama_kode = htmlentities($kode->nama_kode);
-                    $tableKode = '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th></tr>';
-                    if (count($kode->kodeToSubKode) > 0) {
-                        foreach ($kode->kodeToSubKode as $sub_kode) {
-                            if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
-                                $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
-                                $tableSubKode = '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
-                            }
-                        }
-                        if ($kode->id == $kodes->where('jenis_kode', 'Penerimaan')->last()->id) {
-                            $tableSubKode .= '</thead><tbody>';
-                        }
-                        foreach ($sub_kode->subKodeToSubSubKode as $sub_sub_kode) {
-                            if (count($sub_sub_kode->subSubKodeToDana) > 0)
-                                $closeTable = 1;
-                            foreach ($sub_sub_kode->subSubKodeToDana as $key => $dana) {
-                                $jumlah += $dana->nominal;
-                                $jumlahPenerimaan += $dana->nominal;
-
-                                if ($jumlah != 0) {
-                                    $table .= $tableKode;
-                                    $table .= $tableSubKode;
-                                    $table .= '<tr>';
-                                    if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
-                                        $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
-                                        $table .= '<td>' . $no_kode_sub_sub_kode . '</td>';
-                                    } else {
-                                        $table .= '<td></td>';
-                                    }
-                                    $table .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
-                                    $table .= '<td>' . $dana->keterangan . '</td>';
-                                    $table .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
-                                    $table .= '</tr>';
-                                    $table .= '<tr><td></td><td></td><td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td></tr>';
-                                } else {
-                                    $table .= '<tr><td></td><td></td><td></td><td></td></tr>';
-                                }
-                            }
-                        }
-                        $jumlah = 0;
+            $jumlah = 0;
+            $jumlahPenerimaan = 0;
+            foreach ($kode_penerimaans['kode'] as $kode_penerimaan) {
+                $no_kode_penerimaan = "4." . $kode_penerimaan['no_kode'];
+                $kode_penerimaan['nama_kode'] = htmlentities($kode_penerimaan['nama_kode']);
+                $table .= '<tr>';
+                $table .= '<th><b>' . $no_kode_penerimaan . '</b></th>';
+                $table .= '<th><b>' . $kode_penerimaan['nama_kode'] . '</b></th>';
+                $table .= '</tr>';
+                if (!array_key_exists('sub_kode', $kode_penerimaan)) continue;
+                foreach ($kode_penerimaan['sub_kode'] as $sub_kode) {
+                    if (in_array($sub_kode['id'], $listAllowIdSubKodePenerimaan)) {
+                        $table .= '<tr>';
+                        $table .= '<th class="py-0 px-2 text-center" style="vertical-align: middle"><b>' . "4." . $kode_penerimaan['no_kode'] . "." . $sub_kode['no_sub_kode'] . '</b></th>';
+                        $table .= '<th class="py-0 px-2" style="vertical-align: middle"><b>' . $sub_kode['nama_sub_kode'] . '</b></th>';
+                        $table .= '<th class="py-0 px-2" style="vertical-align: middle"></th>';
+                        $table .= '<th class="py-0 px-2" style="vertical-align: middle"></th>';
+                        $table .= '</tr>';
                     }
+                    if (!array_key_exists('sub_sub_kode', $sub_kode)) continue;
+                    foreach ($sub_kode['sub_sub_kode'] as $sub_sub_kode) {
+                        if (!array_key_exists('dana', $sub_sub_kode)) continue;
+                        foreach ($sub_sub_kode['dana'] as $dana) {
+                            $jumlah += $dana['nominal'];
+                            $jumlahPenerimaan += $dana['nominal'];
+                            $table .= '<tr>';
+                            $table .= '<td class="text-center py-0 px-2">' . "4." . $kode_penerimaan['no_kode'] . "." . $sub_kode['no_sub_kode'] . "." . $sub_sub_kode['no_sub_sub_kode'] . '</td>';
+                            $table .= '<td class="text-center py-0 px-2">' . $sub_sub_kode['nama_sub_sub_kode'] . '</td>';
+                            $table .= '<td class="text-center py-0 px-2">' . $dana['keterangan'] . '</td>';
+                            $table .= '<td class="py-0 px-2"><span class="float-right">Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</span></td>';
+                            $table .= '</tr>';
+                            $table .= '<tr>';
+                            $table .= '<td></td><td></td>';
+                            $table .= '<td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
+                            $table .= '</tr>';
+                        }
+                    }
+                    $jumlah = 0;
                 }
             }
-            $closeTable == 1 ? '</thead></body></table' : '</thead></table>';
         }
 
-        $jumlah = 0;
-        $jumlahPengeluaran = 0;
-
-        if (count($kodes) > 0) {
+        if (count($kode_pengeluarans) > 0) {
             $table2 = '<tr></tr>';
             $table2 .= '<tr></tr>';
             $table2 .= '<table><thead><tr><th><b>B.</b></th><th><b>BELANJA</b></th><th></th><th></th></tr>';
             $table2 .= '<tr><th><b>Kode Anggaran</b></th><th colspan="2"><b>URAIAN</b></th><th><b>JUMLAH</b></th></tr>';
             $table2 .= '<tr><th><b>5</b></th><th><b>BELANJA</b></th><th></th><th></th></tr>';
-            foreach ($kodes as $keyKode => $kode) {
-                if ($kode->jenis_kode == 'Pengeluaran') {
-                    $no_kode_kode = "5." . $kode->no_kode;
-                    $kode->nama_kode = htmlentities($kode->nama_kode);
-                    $tableKode2 = '<tr><th><b>' . $no_kode_kode . '</b></th><th><b>' . $kode->nama_kode . '</b></th></tr>';
-                    foreach ($kode->kodeToSubKode as $key_sub_kode => $sub_kode) {
-                        if ($sub_kode->subKodeToKode->no_kode == $kode->no_kode) {
-                            $no_kode_sub_kode = $sub_kode->subKodeToKode->jenis_kode == 'Pengeluaran' ? "5." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode : "4." . $sub_kode->subKodeToKode->no_kode . "." . $sub_kode->no_sub_kode;
-                            $tableSubKode2 = '<tr><th><b>' . $no_kode_sub_kode . '</b></th><th><b>' . $sub_kode->nama_sub_kode . '</b></th><th></th><th></th></tr>';
-                        } else {
-                            $tableSubKode2 = '<tr><th></th></tr>';
-                        }
-                        if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
-                            $tableSubKode2 .= '</thead><tbody>';
-                        }
-                        foreach ($sub_kode->subKodeToSubSubKode as $key_sub_sub_kode => $sub_sub_kode) {
-                            if (count($sub_sub_kode->subSubKodeToDana) > 0) {
-                                $closeTable = 1;
-                                foreach ($sub_sub_kode->subSubKodeToDana as $key => $dana) {
-                                    $jumlah += $dana->nominal;
-                                    $jumlahPengeluaran += $dana->nominal;
-
-                                    if ($jumlah != 0) {
-                                        $table2 .= $tableKode2;
-                                        $table2 .= $tableSubKode2;
-                                        $table2 .= '<tr>';
-                                        if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
-                                            $no_kode_sub_sub_kode = $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->jenis_kode == 'Penerimaan' ? "4." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode : "5." . $sub_sub_kode->subSubKodeToSubKode->subKodeToKode->no_kode . "." . $sub_sub_kode->subSubKodeToSubKode->no_sub_kode . "." . $sub_sub_kode->no_sub_sub_kode;
-                                            $table2 .= '<td>' . $no_kode_sub_sub_kode . '</td>';
-                                        } else {
-                                            $table2 .= '<td></td>';
-                                        }
-                                        if ($dana == $sub_sub_kode->subSubKodeToDana[0]) {
-                                            $table2 .= '<td>' . $sub_sub_kode->nama_sub_sub_kode . '</td>';
-                                        }
-                                        $table2 .= '<td>' . $dana->keterangan . '</td>';
-                                        $table2 .= '<td>Rp. ' . number_format($dana->nominal, 0, ',', '.') . '</td>';
-                                        $table2 .= '</tr>';
-                                        $table2 .= '<tr>';
-                                        $table2 .= '<td></td><td></td><td><b>JUMLAH</b></td>';
-                                        if (isset($key)) {
-                                            if ($key == count($sub_sub_kode->subSubKodeToDana) - 1) {
-                                                $table2 .= '<td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
-                                            } else {
-                                                $table2 .= '<td><b>Rp. ' . number_format($jumlah, 0, ',', '.') . '</b></td>';
-                                            }
-                                        }
-                                        $table2 .= '</tr>';
-                                    }
-                                }
+            $jumlah = 0;
+            $jumlahPengeluaran = 0;
+            foreach ($kode_pengeluarans['kode'] as $kode_pengeluaran) {
+                $no_kode_pengeluaran = "5." . $kode_pengeluaran['no_kode'];
+                $kode_pengeluaran['nama_kode'] = htmlentities($kode_pengeluaran['nama_kode']);
+                $table2 .= '<tr>';
+                $table2 .= '<th><b>' . $no_kode_pengeluaran . '</b></th><th><b>' . $kode_pengeluaran['nama_kode'] . '</b></th>';
+                $table2 .= '</tr>';
+                if (!array_key_exists('sub_kode', $kode_pengeluaran)) continue;
+                foreach ($kode_pengeluaran['sub_kode'] as $sub_kode) {
+                    if (in_array($sub_kode['id'], $listAllowIdSubKodePengeluaran)) {
+                        $table2 .= '<tr>';
+                        $table2 .= '<th><b>' . "5." . $kode_pengeluaran['no_kode'] . "." . $sub_kode['no_sub_kode'] . '</b></th>';
+                        $table2 .= '<th><b>' . $sub_kode['nama_sub_kode'] . '</b></th>';
+                        $table2 .= '<th></th><th></th>';
+                        $table2 .= '</tr>';
+                    }
+                    if (!array_key_exists('sub_sub_kode', $sub_kode)) continue;
+                    foreach ($sub_kode['sub_sub_kode'] as $sub_sub_kode) {
+                        if (!array_key_exists('dana', $sub_sub_kode)) continue;
+                        foreach ($sub_sub_kode['dana'] as $dana) {
+                            $jumlah += $dana['nominal'];
+                            $jumlahPengeluaran += $dana['nominal'];
+                            $table2 .= '<tr>';
+                            $table2 .= '<td>' . "5." . $kode_pengeluaran['no_kode'] . "." . $sub_kode['no_sub_kode'] . "." . $sub_sub_kode['no_sub_sub_kode'] . '</td>';
+                            $table2 .= '<td>' . $sub_sub_kode['nama_sub_sub_kode'] . '</td>';
+                            $table2 .= '<td>' . $dana['keterangan'] . '</td>';
+                            $table2 .= '<td>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</td>';
+                            $table2 .= '</tr>';
+                            $table2 .= '<tr>';
+                            $table2 .= '<td></td><td></td><td><b>JUMLAH</b></td>';
+                            if (last($sub_sub_kode['dana'])) {
+                                $table2 .= '<td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
+                            } else {
+                                $table2 .= '<td><b>Rp. ' . number_format($jumlah, 0, ',', '.') . '</b></td>';
                             }
+                            $table2 .= '</tr>';
                         }
-                        $jumlah = 0;
-
-                        // if ($kode->id == $kodes->where('jenis_kode', 'Pengeluaran')->last()->id) {
-                        //     $table2 .= '</tbody></table>';
-                        // }
                     }
                 }
             }
-            $table2 .= '<tr><td colspan="3"><b>JUMLAH PENGELUARAN</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td></tr>';
-        } else {
-            $closeTable == 1 ? '</thead></body></table' : '</thead></table>';
+            $table2 .= '<tr>';
+            $table2 .= '<td colspan="3"><b>JUMLAH PENGELUARAN</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td>';
+            $table2 .= '</tr>';
         }
 
         $table3 = '<tr></tr>';
@@ -399,11 +364,10 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         }
         $table3 .= '</tbody></table>';
 
-        // $html = $table;
-        // $html = $table2;
-        // $html .= $table3;
 
-        // die($html);
+        $html = $table;
+        $html .= $table2;
+        $html .= $table3;
 
         return view('exports.cetak_laporan', compact('table', 'table2', 'table3'));
     }
