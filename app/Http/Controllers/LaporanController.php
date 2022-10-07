@@ -155,6 +155,7 @@ class LaporanController extends Controller
             ->get();
 
         $kode_penerimaans = [];
+        $listAllowIdSubKodePenerimaan = [];
         foreach ($kodes_penerimaan as $keyKode => $kode_penerimaan) {
             $kode_penerimaans['kode'][$keyKode]['no_kode'] = $kode_penerimaan->no_kode;
             $kode_penerimaans['kode'][$keyKode]['nama_kode'] = $kode_penerimaan->nama_kode;
@@ -188,6 +189,7 @@ class LaporanController extends Controller
             ->get();
 
         $kode_pengeluarans = [];
+        $listAllowIdSubKodePengeluaran = [];
         foreach ($kodes_pengeluaran as $keyKode => $kode_pengeluaran) {
             $kode_pengeluarans['kode'][$keyKode]['no_kode'] = $kode_pengeluaran->no_kode;
             $kode_pengeluarans['kode'][$keyKode]['nama_kode'] = $kode_pengeluaran->nama_kode;
