@@ -283,11 +283,11 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                             $table .= '<td class="text-center py-0 px-2">' . $dana['keterangan'] . '</td>';
                             $table .= '<td class="py-0 px-2"><span class="float-right">Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</span></td>';
                             $table .= '</tr>';
-                            $table .= '<tr>';
+                        }
+                        $table .= '<tr>';
                             $table .= '<td></td><td></td>';
                             $table .= '<td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
                             $table .= '</tr>';
-                        }
                     }
                     $jumlah = 0;
                 }
@@ -329,7 +329,8 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                             $table2 .= '<td>' . $dana['keterangan'] . '</td>';
                             $table2 .= '<td>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</td>';
                             $table2 .= '</tr>';
-                            $table2 .= '<tr>';
+                        }
+                        $table2 .= '<tr>';
                             $table2 .= '<td></td><td></td><td><b>JUMLAH</b></td>';
                             if (last($sub_sub_kode['dana'])) {
                                 $table2 .= '<td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
@@ -337,7 +338,6 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                                 $table2 .= '<td><b>Rp. ' . number_format($jumlah, 0, ',', '.') . '</b></td>';
                             }
                             $table2 .= '</tr>';
-                        }
                     }
                 }
             }

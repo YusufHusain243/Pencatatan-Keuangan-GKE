@@ -191,20 +191,6 @@
                                                     @currency($dana['nominal'])</span></td>
                                         </tr>
                                     @endforeach
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td class="py-0 px-2 text-center font-weight-bold">JUMLAH</td>
-                                        @if ($key == count($sub_sub_kode['dana']))
-                                            <td class="py-0 px-2">Rp.<span class="float-right">Rp.
-                                                    @currency($jumlah)</span>
-                                            </td>
-                                        @else
-                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
-                                                    @currency($jumlah)</span>
-                                            </td>
-                                        @endif
-                                    </tr>
                                 @endforeach
                             @endif
                         @endforeach
