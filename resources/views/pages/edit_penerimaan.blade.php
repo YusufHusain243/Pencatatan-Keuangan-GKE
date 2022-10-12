@@ -174,17 +174,8 @@
             }
         }
         $(document).ready(function() {
-            $('#nominal').val(formatRupiah($('#nominal').val(), 'Rp. '));
-            $('#nominal').on('input', function(e) {
-                $(this).val($(this).val().replace(/[^0-9]/g, ''));
-            });
-            $('#nominal').focusout(function(e) {
-                $(this).val(formatRupiah(e.target.value, 'Rp. '));
-            });
-            $('#nominal').focus(function(e) {
-                let text = e.target.value;
-                text = text.replace(/\D/g, "");
-                $(this).val(text);
+            $('#nominal').on('input', function() {
+                $(this).val(formatRupiah(this.value, 'Rp. '));
             });
 
             function makeOption(selector, val) {

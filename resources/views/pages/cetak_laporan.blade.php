@@ -97,7 +97,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    @if ($jumlah != 0)
+                                    {{-- @if ($jumlah != 0)
                                         <tr>
                                             <td colspan="3" class="py-0 px-2 text-center font-weight-bold">JUMLAH
                                             </td>
@@ -105,11 +105,18 @@
                                                     @currency($jumlah)</span>
                                             </td>
                                         </tr>
-                                    @endif
+                                    @endif --}}
                                 @endforeach
                             @endif
                         @endforeach
                     @endforeach
+                    <tr class="bg-success">
+                        <td class="py-0 px-2 text-center font-weight-bold" colspan="3">JUMLAH PENERIMAAN
+                        </td>
+                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
+                                @currency($jumlahPenerimaan)</span>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
 
@@ -195,7 +202,7 @@
                             @endif
                         @endforeach
                     @endforeach
-                    <tr>
+                    <tr class="bg-danger">
                         <td class="py-0 px-2 text-center font-weight-bold" colspan="3">JUMLAH PENGELUARAN</td>
                         <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlahPengeluaran)</span>
                         </td>
@@ -257,12 +264,24 @@
                         <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0 pl-5">Kas Tunai<span
                                 class="float-right">Rp. @currency($saldo_tunai)</span></td>
                     </tr>
+                    @php
+                        $totalSaldoBank = 0;
+                        $totalKasGereja = 0;
+                    @endphp
                     @foreach ($saldo_banks as $saldo_bank)
+                        @php
+                            $totalSaldoBank += $saldo_bank['nominalDana'];
+                            $totalKasGereja = ($totalSaldoBank + $saldo_tunai);
+                        @endphp
                         <tr>
                             <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0 pl-5">
                                 {{ $saldo_bank['nama_bank'] }}<span class="float-right">Rp. @currency($saldo_bank['nominalDana'])</span></td>
                         </tr>
                     @endforeach
+                    <tr>
+                        <td class="py-0 px-2 font-weight-bold border-bottom-0">
+                            TOTAL SALDO KAS GEREJA<span class="float-right">Rp. @currency($totalKasGereja)</span></td>
+                    </tr>
                 </tbody>
             </table>
         </div>

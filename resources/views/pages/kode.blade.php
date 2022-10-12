@@ -143,9 +143,9 @@
             $('#jenis_kode').change(function(e) {
                 $('#no_kode').val('');
                 if (e.target.value == 'Penerimaan') {
-                    $('#no_kode').inputmask('4.9{1,}');
+                    $('#no_kode').inputmask('4.99');
                 } else if (e.target.value == 'Pengeluaran') {
-                    $('#no_kode').inputmask('5.9{1,}');
+                    $('#no_kode').inputmask('5.99');
                 }
             });
 
@@ -156,9 +156,9 @@
                     alert('kode tidak boleh 0');
                     $(this).val('')
                     if (kode[0] == 4) {
-                        $(this).inputmask('4.9{1,}');
+                        $(this).inputmask('4.99');
                     } else if (kode[0] == 5) {
-                        $(this).inputmask('5.9{1,}');
+                        $(this).inputmask('4.99');
                     }
                 }
             })
