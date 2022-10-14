@@ -50,7 +50,7 @@
 @push('after-script')
     <script>
         $(document).ready(function() {
-            $('#no_rekening').inputmask('9{10,16}');
+            $('#no_rekening').inputmask('9{10,16}', {"placeholder": ""});
         });
     </script>
 @endpush

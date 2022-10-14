@@ -3,6 +3,7 @@
 use App\Http\Controllers\AkunBankController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DropdownController;
 use App\Http\Controllers\ForecastingController;
 use App\Http\Controllers\KodeController;
 use App\Http\Controllers\SubKodeController;
@@ -86,6 +87,11 @@ Route::middleware(['auth', 'isLogin'])->group(function () {
     Route::post('/forecasting-penerimaan/prediksi', [ForecastingController::class, 'hitungForecasting']);
     Route::get('/forecasting-pengeluaran', [ForecastingController::class, 'forecastingPengeluaran']);
     Route::post('/forecasting-pengeluaran/prediksi', [ForecastingController::class, 'hitungForecasting']);
+
+    Route::post('/dropdowns/kode-anggaran', [DropdownController::class, 'get_kode_anggaran']);
+    Route::post('/dropdowns/sub-kode-anggaran', [DropdownController::class, 'get_sub_kode_anggaran']);
+    Route::post('/dropdowns/sub-sub-kode-anggaran', [DropdownController::class, 'get_sub_sub_kode_anggaran']);
+    Route::post('/dropdowns/no-sub-kode-anggaran', [DropdownController::class, 'get_no_sub_kode_anggaran']);
 
     Route::get('/logout', [LoginController::class, 'logout']);
 });

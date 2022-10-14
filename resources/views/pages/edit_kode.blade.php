@@ -89,17 +89,17 @@
         $(document).ready(function() {
             var jenis_kode = $('#jenis_kode').val();
             if (jenis_kode == 'Penerimaan') {
-                $('#no_kode').inputmask('4.99');
+                $('#no_kode').inputmask('4.99', {"placeholder": ""});
             } else if (jenis_kode == 'Pengeluaran') {
-                $('#no_kode').inputmask('5.99');
+                $('#no_kode').inputmask('5.99', {"placeholder": ""});
             }
 
             $('#jenis_kode').change(function(e) {
                 $('#no_kode').val('');
                 if (e.target.value == 'Penerimaan') {
-                    $('#no_kode').inputmask('4.99');
+                    $('#no_kode').inputmask('4.99', {"placeholder": ""});
                 } else if (e.target.value == 'Pengeluaran') {
-                    $('#no_kode').inputmask('5.99');
+                    $('#no_kode').inputmask('5.99', {"placeholder": ""});
                 }
             });
 
@@ -110,9 +110,9 @@
                     alert('kode tidak boleh 0');
                     $(this).val('')
                     if (kode[0] == 4) {
-                        $(this).inputmask('4.99');
+                        $(this).inputmask('4.99', {"placeholder": ""});
                     } else if (kode[0] == 5) {
-                        $(this).inputmask('4.99');
+                        $(this).inputmask('5.99', {"placeholder": ""});
                     }
                 }
             })

@@ -36,7 +36,7 @@
                         <div class="form-group">
                             <label for="jenis_kode">Jenis Kode <code>*</code></label>
                             <select class="form-control @error('jenis_kode') is-invalid @enderror" id="jenis_kode"
-                                name="jenis_kode" required>
+                                name="jenis_kode" onchange="getSubKode(event)" required>
                                 <option value="">Pilih Jenis Kode</option>
                                 <option value="Penerimaan">Penerimaan</option>
                                 <option value="Pengeluaran">Pengeluaran</option>
@@ -48,21 +48,18 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-3">
+                    <div class="col-3" id="sub_kode_anggaran_container">
                         <div class="form-group">
                             <label for="no_sub_kode">No Sub Kode <code>*</code></label>
                             <select class="form-control @error('no_sub_kode') is-invalid @enderror" id="no_sub_kode"
-                                name="no_sub_kode" required>
+                                name="no_sub_kode" onchange="maskSubKode(event)" required>
                                 <option value="">Pilih No Sub Kode</option>
                                 @foreach ($sub_kodes as $sub_kode)
-                                    <option value="{{ $sub_kode->id }}">
-                                        @if ($sub_kode->subKodeToKode->jenis_kode == 'Penerimaan')
-                                            4.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
-                                            ({{ $sub_kode->nama_sub_kode }})
-                                        @else
-                                            5.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
-                                            ({{ $sub_kode->nama_sub_kode }})
-                                        @endif
+                                    <option value="{{ $sub_kode->id }}"
+                                        data-type="{{ $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? 4 : 5 }}"
+                                        data-value="{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}">
+                                        {{ $sub_kode->subKodeToKode->jenis_kode == 'Penerimaan' ? 4 : 5 }}.{{ $sub_kode->subKodeToKode->no_kode }}.{{ $sub_kode->no_sub_kode }}
+                                        ({{ $sub_kode->nama_sub_kode }})
                                     </option>
                                 @endforeach
                             </select>
@@ -89,7 +86,8 @@
                         <div class="form-group">
                             <label for="nama_sub_sub_kode">Nama Sub Sub-Kode <code>*</code></label>
                             <input type="text" class="form-control @error('nama_sub_sub_kode') is-invalid @enderror"
-                                id="nama_sub_sub_kode" name="nama_sub_sub_kode" placeholder="Masukkan Nama Sub Sub-Kode" required>
+                                id="nama_sub_sub_kode" name="nama_sub_sub_kode" placeholder="Masukkan Nama Sub Sub-Kode"
+                                required>
                             @error('nama_sub_sub_kode')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -155,7 +153,8 @@
                             <td>{{ $sub_sub_kode->updated_at }}</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="/edit/sub-sub-kode/{{ Crypt::encrypt($sub_sub_kode->id) }}">
+                                    <a class="btn btn-primary"
+                                        href="/edit/sub-sub-kode/{{ Crypt::encrypt($sub_sub_kode->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="/sub-sub-kode/{{ Crypt::encrypt($sub_sub_kode->id) }}" method="post">
@@ -178,73 +177,27 @@
 
 @push('after-script')
     <script>
-        $(document).ready(function() {
-            function makeOption(selector, val) {
-                $(selector)
-                    .append('<option value="" selected>Pilih No Sub Kode</option>');
-                $.each(val, function(i, value) {
-                    $(selector)
-                        .append('<option value="' + value[0] + '">' + value[1] + '</option>');
-                });
-            }
-            var opts = $('#no_sub_kode option');
-
-            var myArray = [];
-
-            var vals = [...opts]
-                .map((val, index) => {
-                    var text = val.textContent;
-                    var value = val.value;
-                    if (value) {
-                        myArray[index] = [value, text];
-                    }
-                    return text;
-                });
-
-            $('#jenis_kode').change(function(e) {
-                $('#no_sub_kode').val('');
-                $('#no_sub_sub_kode').val('');
-                if (e.target.value == 'Penerimaan') {
-                    $("#no_sub_kode option").remove();
-                    var PATTERN = /4\..*\..*\(*[^<]*/,
-                        filtered = myArray.filter(function(str) {
-                            return PATTERN.test(str);
-                        });
-                    makeOption('#no_sub_kode', filtered)
-                } else if (e.target.value == 'Pengeluaran') {
-                    $("#no_sub_kode option").remove();
-                    var PATTERN = /5\..*\..*\(*[^<]*/,
-                        filtered = myArray.filter(function(str) {
-                            return PATTERN.test(str);
-                        });
-                    makeOption('#no_sub_kode', filtered)
-                }
-            });
-
-            $('#no_sub_kode').change(function(e) {
-                $('#no_sub_sub_kode').val('');
-                var no_kode = $('#no_sub_kode option:selected').text();
-                var split = no_kode.split('(');
-                var nomor = split[0];
-                nomor = nomor.replace(/\s/g, '');
-
-                $('#no_sub_sub_kode').inputmask(`${nomor}.99`);
-            });
-
-            $('#no_sub_sub_kode').change(function(e) {
-                var sub_sub_kode = $(this).val();
-                sub_sub_kode = sub_sub_kode.split('.');
-                if (sub_sub_kode[3] == 0 || sub_sub_kode[3] == 00 || sub_sub_kode[3] == 000) {
-
-                    alert('sub_sub_kode tidak boleh 0');
-                    $(this).val('')
-                    if (sub_sub_kode[0] == 4) {
-                        $(this).inputmask('4.99');
-                    } else if (sub_sub_kode[0] == 5) {
-                        $(this).inputmask('5.99');
-                    }
+        function getSubKode(e) {
+            var container = $('#sub_kode_anggaran_container');
+            $.ajax({
+                url: '/dropdowns/no-sub-kode-anggaran',
+                type: 'POST',
+                data: {
+                    jenis_kode: e.target.value,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    container.html(data);
                 }
             })
-        });
+        }
+
+        function maskSubKode(e) {
+            $('#no_sub_sub_kode').val('');
+            $('#no_sub_sub_kode').inputmask(
+                `${e.target[e.target.selectedIndex].getAttribute("data-type")}.${e.target[e.target.selectedIndex].getAttribute("data-value")}.999`, {
+                    "placeholder": ""
+                });
+        }
     </script>
 @endpush

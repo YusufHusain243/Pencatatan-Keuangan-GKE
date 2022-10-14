@@ -36,7 +36,7 @@
                         <div class="form-group">
                             <label for="kode_anggaran">Kode Anggaran <code>*</code></label>
                             <select class="form-control @error('kode_anggaran') is-invalid @enderror" id="kode_anggaran"
-                                name="kode_anggaran" required>
+                                name="kode_anggaran" onchange="getSubKode(event)" required>
                                 <option value="">Pilih Kode Anggaran</option>
                                 @foreach ($kodes as $kode)
                                     <option value="{{ $kode->id }}">
@@ -51,11 +51,11 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4" id="sub_kode_anggaran_container">
                         <div class="form-group">
                             <label for="sub_kode_anggaran">Sub Kode Anggaran <code>*</code></label>
-                            <select class="form-control @error('sub_kode_anggaran') is-invalid @enderror"
-                                id="sub_kode_anggaran" name="sub_kode_anggaran" required>
+                            <select class="form-control @error('sub_kode_anggaran') is-invalid @enderror" id="sub_kode_anggaran"
+                            name="sub_kode_anggaran" onchange="getSubSubKode(event)" required>
                                 <option value="">Pilih Sub Kode Anggaran</option>
                                 @foreach ($sub_kodes as $sub_kode)
                                     <option value="{{ $sub_kode->id }}">
@@ -71,7 +71,7 @@
                             @enderror
                         </div>
                     </div>
-                    <div class="col-4">
+                    <div class="col-4" id="sub_sub_kode_anggaran_container">
                         <div class="form-group">
                             <label for="sub_sub_kode_anggaran">Sub Sub Kode Anggaran <code>*</code></label>
                             <select class="form-control @error('sub_sub_kode_anggaran') is-invalid @enderror"
@@ -206,7 +206,8 @@
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a class="btn btn-primary" href="/edit/penerimaan/{{ Crypt::encrypt($dana->id) }}">
+                                        <a class="btn btn-primary"
+                                            href="/edit/penerimaan/{{ Crypt::encrypt($dana->id) }}">
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <form action="/penerimaan/{{ Crypt::encrypt($dana->id) }}" method="post">
@@ -256,105 +257,39 @@
                 document.getElementById("pilih_bank").style.display = "none";
             }
         }
+
+        function getSubKode(e) {
+            var container = $('#sub_kode_anggaran_container');
+            $.ajax({
+                url: '/dropdowns/sub-kode-anggaran',
+                type: 'POST',
+                data: {
+                    kode: e.target.value,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    container.html(data);
+                }
+            })
+        }
+
+        function getSubSubKode(e) {
+            var container = $('#sub_sub_kode_anggaran_container');
+            $.ajax({
+                url: '/dropdowns/sub-sub-kode-anggaran',
+                type: 'POST',
+                data: {
+                    sub_kode: e.target.value,
+                    _token: '{{ csrf_token() }}'
+                },
+                success: function(data) {
+                    container.html(data);
+                }
+            })
+        }
         $(document).ready(function() {
             $('#nominal').on('input', function() {
                 $(this).val(formatRupiah(this.value, 'Rp. '));
-            });
-
-            function makeOption(selector, val) {
-                $(selector)
-                    .append('<option value="" selected>Pilih Sub Kode Anggaran</option>');
-                $.each(val, function(i, value) {
-                    $(selector)
-                        .append('<option value="' + value[0] + '">' + value[1] + '</option>');
-                });
-            }
-
-            function makeOptionSub(selector, val) {
-                $(selector)
-                    .append('<option value="" selected>Pilih Sub Sub Kode Anggaran</option>');
-                $.each(val, function(i, value) {
-                    $(selector)
-                        .append('<option value="' + value[0] + '">' + value[1] + '</option>');
-                });
-            }
-
-            var opts = $('#sub_kode_anggaran option');
-
-            var myArray = [];
-
-            var vals = [...opts]
-                .map((val, index) => {
-                    var text = val.textContent;
-                    var value = val.value;
-                    if (value) {
-                        myArray[index] = [value, text];
-                    }
-                    return text;
-                });
-
-            var optsSub = $('#sub_sub_kode_anggaran option');
-
-            var myArraySub = [];
-
-            var valsSub = [...optsSub]
-                .map((val, index) => {
-                    var text = val.textContent;
-                    var value = val.value;
-                    if (value) {
-                        myArraySub[index] = [value, text];
-                    }
-                    return text;
-                });
-
-            $('#kode_anggaran').change(function(e) {
-                $('#sub_kode_anggaran').val('');
-                $('#sub_sub_kode_anggaran').val('');
-                var kodeSelected = $('#kode_anggaran option:selected').text();
-                kodeSelected = kodeSelected.replace(/\s/g, '');
-                let kodeAwal = kodeSelected.slice(0, 3);
-                let newStr = kodeAwal.replace(/\./gi, '\\.');
-                if (kodeSelected.charAt(0) == 4) {
-                    $("#sub_kode_anggaran option").remove();
-                    var PATTERN = new RegExp(newStr + '{1}'),
-                        filtered = myArray.filter(function(str) {
-                            return PATTERN.test(str);
-                        });
-                    makeOption('#sub_kode_anggaran', filtered)
-                } else if (kodeSelected.charAt(0) == 5) {
-                    $("#sub_kode_anggaran option").remove();
-                    var PATTERN = new RegExp(newStr + '{1}'),
-                        filtered = myArray.filter(function(str) {
-                            return PATTERN.test(str);
-                        });
-                    makeOption('#sub_kode_anggaran', filtered)
-                }
-            });
-
-            $('#sub_kode_anggaran').change(function(e) {
-                $('#sub_sub_kode_anggaran').val('');
-                var subKodeSelected = $('#sub_kode_anggaran option:selected').text();
-                subKodeSelected = subKodeSelected.replace(/\s/g, '');
-                let subKodeAwal = subKodeSelected.substr(0, subKodeSelected.indexOf('('));
-                let newStr = subKodeAwal.replace(/\./gi, '\\.');
-                var subKodeAnggaranSelected = $('#sub_kode_anggaran option:selected').text();
-                subKodeAnggaranSelected = subKodeAnggaranSelected.replace(/\s/g, '');
-                subKodeAnggaranSelected = subKodeAnggaranSelected.substr(0, subKodeAnggaranSelected.indexOf('('));
-                if (subKodeAwal == subKodeAnggaranSelected) {
-                    $("#sub_sub_kode_anggaran option").remove();
-                    var PATTERN = new RegExp(newStr + '{1}'),
-                        filtered = myArraySub.filter(function(str) {
-                            return PATTERN.test(str);
-                        });
-                    makeOptionSub('#sub_sub_kode_anggaran', filtered)
-                } else if (subKodeAwal == subKodeAnggaranSelected) {
-                    $("#sub_sub_kode_anggaran option").remove();
-                    var PATTERN = new RegExp(newStr + '{1}'),
-                        filtered = myArraySub.filter(function(str) {
-                            return PATTERN.test(str);
-                        });
-                    makeOptionSub('#sub_sub_kode_anggaran', filtered)
-                }
             });
         });
     </script>
