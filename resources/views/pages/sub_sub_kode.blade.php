@@ -196,8 +196,15 @@
             $('#no_sub_sub_kode').val('');
             $('#no_sub_sub_kode').inputmask(
                 `${e.target[e.target.selectedIndex].getAttribute("data-type")}.${e.target[e.target.selectedIndex].getAttribute("data-value")}.999`, {
-                    "placeholder": ""
+                    "placeholder": "0"
                 });
         }
+
+        $('#no_sub_sub_kode').focusout(function() {
+            if ($('#no_sub_sub_kode').val(0) || $('#no_sub_sub_kode').val(00) || $('#no_sub_sub_kode').val(000)) {
+                var no_sub_sub_kode = $('#no_sub_sub_kode').val().split('.');
+                alert('Nomor Sub Sub Kode tidak boleh diisi ' + no_sub_sub_kode[3]);
+            }
+        })
     </script>
 @endpush

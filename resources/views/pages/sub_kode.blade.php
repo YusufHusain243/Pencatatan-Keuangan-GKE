@@ -55,8 +55,11 @@
                                 name="no_kode" onchange="maskSubKode(event)" required>
                                 <option value="">Pilih No Kode</option>
                                 @foreach ($kodes as $kode)
-                                    <option value="{{ $kode->id }}" data-type="{{ $kode->jenis_kode == 'Penerimaan' ? 4 : 5 }}" data-value="{{ $kode->no_kode }}">
-                                        {{ $kode->jenis_kode == 'Penerimaan' ? 4 : 5 }}.{{ $kode->no_kode }} ({{ $kode->nama_kode }})
+                                    <option value="{{ $kode->id }}"
+                                        data-type="{{ $kode->jenis_kode == 'Penerimaan' ? 4 : 5 }}"
+                                        data-value="{{ $kode->no_kode }}">
+                                        {{ $kode->jenis_kode == 'Penerimaan' ? 4 : 5 }}.{{ $kode->no_kode }}
+                                        ({{ $kode->nama_kode }})
                                     </option>
                                 @endforeach
                             </select>
@@ -181,7 +184,17 @@
 
         function maskSubKode(e) {
             $('#no_sub_kode').val('');
-            $('#no_sub_kode').inputmask(`${e.target[e.target.selectedIndex].getAttribute("data-type")}.${e.target[e.target.selectedIndex].getAttribute("data-value")}.99`, {"placeholder": ""});
+            $('#no_sub_kode').inputmask(
+                `${e.target[e.target.selectedIndex].getAttribute("data-type")}.${e.target[e.target.selectedIndex].getAttribute("data-value") == 9 ? '\\9' : e.target[e.target.selectedIndex].getAttribute("data-value")}.99`, {
+                    "placeholder": "0"
+                });
         }
+
+        $('#no_sub_kode').focusout(function() {
+            if ($('#no_sub_kode').val(0) || $('#no_sub_kode').val(00) || $('#no_sub_kode').val(000)) {
+                var no_sub_kode = $('#no_sub_kode').val().split('.');
+                alert('Nomor Sub Kode tidak boleh diisi ' + no_sub_kode[2]);
+            }
+        })
     </script>
 @endpush

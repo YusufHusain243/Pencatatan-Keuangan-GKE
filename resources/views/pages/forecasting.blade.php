@@ -98,7 +98,8 @@
                             <td>Rp. @currency($forecasting->pengeluaran)</td>
                             <td>
                                 <div class="btn-group">
-                                    <a class="btn btn-primary" href="edit/data-forecasting/{{ Crypt::encrypt($forecasting->id) }}">
+                                    <a class="btn btn-primary"
+                                        href="edit/data-forecasting/{{ Crypt::encrypt($forecasting->id) }}">
                                         <i class="fas fa-edit"></i>
                                     </a>
                                     <form action="/data-forecasting/{{ Crypt::encrypt($forecasting->id) }}" method="post">
@@ -145,28 +146,12 @@
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
         $(function() {
-            $('#penerimaan').on('input', function(e) {
-                $(this).val($(this).val().replace(/[^0-9]/g, ''));
-            });
-            $('#penerimaan').focusout(function(e) {
-                $(this).val(formatRupiah(e.target.value, 'Rp. '));
-            });
-            $('#penerimaan').focus(function(e) {
-                let text = e.target.value;
-                text = text.replace(/\D/g, "");
-                $(this).val(text);
+            $('#penerimaan').on('input', function() {
+                $(this).val(formatRupiah(this.value, 'Rp. '));
             });
 
-            $('#pengeluaran').on('input', function(e) {
-                $(this).val($(this).val().replace(/[^0-9]/g, ''));
-            });
-            $('#pengeluaran').focusout(function(e) {
-                $(this).val(formatRupiah(e.target.value, 'Rp. '));
-            });
-            $('#pengeluaran').focus(function(e) {
-                let text = e.target.value;
-                text = text.replace(/\D/g, "");
-                $(this).val(text);
+            $('#pengeluaran').on('input', function() {
+                $(this).val(formatRupiah(this.value, 'Rp. '));
             });
 
             $("#datepicker").datepicker({
