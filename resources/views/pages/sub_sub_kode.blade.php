@@ -201,8 +201,8 @@
         }
 
         $('#no_sub_sub_kode').focusout(function() {
-            if ($('#no_sub_sub_kode').val(0) || $('#no_sub_sub_kode').val(00) || $('#no_sub_sub_kode').val(000)) {
-                var no_sub_sub_kode = $('#no_sub_sub_kode').val().split('.');
+            var no_sub_sub_kode = $('#no_sub_sub_kode').val().split('.');
+            if (no_sub_sub_kode[3] == 000) {
                 alert('Nomor Sub Sub Kode tidak boleh diisi ' + no_sub_sub_kode[3]);
             }
         })

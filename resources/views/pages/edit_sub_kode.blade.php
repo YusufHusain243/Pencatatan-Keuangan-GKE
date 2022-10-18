@@ -132,9 +132,16 @@
         function maskSubKode(e) {
             $('#no_sub_kode').val('');
             $('#no_sub_kode').inputmask(
-                `${e.target[e.target.selectedIndex].getAttribute("data-type")}.${e.target[e.target.selectedIndex].getAttribute("data-value")}.99`, {
-                    "placeholder": ""
+                `${e.target[e.target.selectedIndex].getAttribute("data-type")}.${e.target[e.target.selectedIndex].getAttribute("data-value") == 9 ? '\\9' : e.target[e.target.selectedIndex].getAttribute("data-value")}.99`, {
+                    "placeholder": "0"
                 });
         }
+
+        $('#no_sub_kode').focusout(function() {
+            var no_sub_kode = $('#no_sub_kode').val().split('.');
+            if (no_sub_kode[2] == 00) {
+                alert('Nomor Sub Kode tidak boleh diisi ' + no_sub_kode[2]);
+            }
+        })
     </script>
 @endpush

@@ -132,8 +132,15 @@
             $('#no_sub_sub_kode').val('');
             $('#no_sub_sub_kode').inputmask(
                 `${e.target[e.target.selectedIndex].getAttribute("data-type")}.${e.target[e.target.selectedIndex].getAttribute("data-value")}.999`, {
-                    "placeholder": ""
+                    "placeholder": "0"
                 });
         }
+
+        $('#no_sub_sub_kode').focusout(function() {
+            var no_sub_sub_kode = $('#no_sub_sub_kode').val().split('.');
+            if (no_sub_sub_kode[3] == 000) {
+                alert('Nomor Sub Sub Kode tidak boleh diisi ' + no_sub_sub_kode[3]);
+            }
+        })
     </script>
 @endpush
