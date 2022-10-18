@@ -107,15 +107,9 @@
                                             <td colspan="2"></td>
                                             <td class="py-0 px-2 text-right font-weight-bold">JUMLAH
                                             </td>
-                                            @if($key == count($sub_sub_kode['dana']) - 1)
-                                            <td class="py-0 px-2">Rp.<span class="float-right">
-                                                    @currency($jumlah)</span>
-                                            </td>
-                                            @else
                                             <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">
                                                     @currency($jumlah)</span>
                                             </td>
-                                            @endif
                                         </tr>
                                     @endif
                                 @endforeach
@@ -211,8 +205,7 @@
                                             <td class="py-0 px-2">
                                                 {{ $dana['keterangan'] ? '- ' . $dana['keterangan'] : '' }}
                                             </td>
-                                            <td class="py-0 px-2">Rp.<span class="float-right">Rp.
-                                                    @currency($dana['nominal'])</span></td>
+                                            <td class="py-0 px-2">Rp.<span class="float-right">                                                    @currency($dana['nominal'])</span></td>
                                         </tr>
                                     @endforeach
                                     @if ($jumlah != 0)
@@ -220,15 +213,9 @@
                                             <td colspan="2"></td>
                                             <td class="py-0 px-2 text-right font-weight-bold">JUMLAH
                                             </td>
-                                            @if($key == count($sub_sub_kode['dana']) - 1)
-                                            <td class="py-0 px-2">Rp.<span class="float-right">
-                                                    @currency($jumlah)</span>
-                                            </td>
-                                            @else
                                             <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">
                                                     @currency($jumlah)</span>
                                             </td>
-                                            @endif
                                         </tr>
                                     @endif
                                 @endforeach
@@ -237,7 +224,7 @@
                     @endforeach
                     <tr class="bg-danger">
                         <td class="py-0 px-2 text-center font-weight-bold" colspan="3">JUMLAH PENGELUARAN</td>
-                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp. @currency($jumlahPengeluaran)</span>
+                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">@currency($jumlahPengeluaran)</span>
                         </td>
                     </tr>
                 </tbody>
