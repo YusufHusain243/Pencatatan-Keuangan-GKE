@@ -78,34 +78,46 @@
                                             continue;
                                         @endphp
                                     @endif
-                                    @foreach ($sub_sub_kode['dana'] as $dana)
+                                    @foreach ($sub_sub_kode['dana'] as $key => $dana)
                                         @php
                                             $jumlah += $dana['nominal'];
                                             $jumlahPenerimaan += $dana['nominal'];
                                         @endphp
                                         <tr>
-                                            <td class="text-center py-0 px-2">
-                                                4.{{ $kode_penerimaan['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}.{{ $sub_sub_kode['no_sub_sub_kode'] }}
-                                            </td>
+                                            @if ($key == 0)
+                                                <td class="text-center py-0 px-2">
+                                                    4.{{ $kode_penerimaan['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}.{{ $sub_sub_kode['no_sub_sub_kode'] }}
+                                                </td>
+                                                <td class="py-0 px-2">
+                                                    {{ $sub_sub_kode['nama_sub_sub_kode'] }}
+                                                </td>
+                                            @else
+                                                <td></td>
+                                                <td></td>
+                                            @endif
                                             <td class="py-0 px-2">
-                                                {{ $sub_sub_kode['nama_sub_sub_kode'] }}
+                                                {{ $dana['keterangan'] ? '- ' . $dana['keterangan'] : '' }}
                                             </td>
-                                            <td class="py-0 px-2">
-                                                {{ $dana['keterangan'] }}
-                                            </td>
-                                            <td class="py-0 px-2">Rp.<span class="float-right">Rp. @currency($dana['nominal'])</span>
+                                            <td class="py-0 px-2">Rp.<span class="float-right">@currency($dana['nominal'])</span>
                                             </td>
                                         </tr>
                                     @endforeach
-                                    {{-- @if ($jumlah != 0)
+                                    @if ($jumlah != 0)
                                         <tr>
-                                            <td colspan="3" class="py-0 px-2 text-center font-weight-bold">JUMLAH
+                                            <td colspan="2"></td>
+                                            <td class="py-0 px-2 text-right font-weight-bold">JUMLAH
                                             </td>
-                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
+                                            @if($key == count($sub_sub_kode['dana']) - 1)
+                                            <td class="py-0 px-2">Rp.<span class="float-right">
                                                     @currency($jumlah)</span>
                                             </td>
+                                            @else
+                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">
+                                                    @currency($jumlah)</span>
+                                            </td>
+                                            @endif
                                         </tr>
-                                    @endif --}}
+                                    @endif
                                 @endforeach
                             @endif
                         @endforeach
@@ -113,7 +125,7 @@
                     <tr class="bg-success">
                         <td class="py-0 px-2 text-center font-weight-bold" colspan="3">JUMLAH PENERIMAAN
                         </td>
-                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">Rp.
+                        <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">
                                 @currency($jumlahPenerimaan)</span>
                         </td>
                     </tr>
@@ -185,19 +197,40 @@
                                             $jumlahPengeluaran += $dana['nominal'];
                                         @endphp
                                         <tr>
-                                            <td class="text-center py-0 px-2">
-                                                5.{{ $kode['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}.{{ $sub_sub_kode['no_sub_sub_kode'] }}
-                                            </td>
+                                            @if ($key == 0)
+                                                <td class="text-center py-0 px-2">
+                                                    5.{{ $kode['no_kode'] }}.{{ $sub_kode['no_sub_kode'] }}.{{ $sub_sub_kode['no_sub_sub_kode'] }}
+                                                </td>
+                                                <td class="py-0 px-2">
+                                                    {{ $sub_sub_kode['nama_sub_sub_kode'] }}
+                                                </td>
+                                            @else
+                                                <td></td>
+                                                <td></td>
+                                            @endif
                                             <td class="py-0 px-2">
-                                                {{ $sub_sub_kode['nama_sub_sub_kode'] }}
-                                            </td>
-                                            <td class="py-0 px-2">
-                                                {{ $dana['keterangan'] }}
+                                                {{ $dana['keterangan'] ? '- ' . $dana['keterangan'] : '' }}
                                             </td>
                                             <td class="py-0 px-2">Rp.<span class="float-right">Rp.
                                                     @currency($dana['nominal'])</span></td>
                                         </tr>
                                     @endforeach
+                                    @if ($jumlah != 0)
+                                        <tr>
+                                            <td colspan="2"></td>
+                                            <td class="py-0 px-2 text-right font-weight-bold">JUMLAH
+                                            </td>
+                                            @if($key == count($sub_sub_kode['dana']) - 1)
+                                            <td class="py-0 px-2">Rp.<span class="float-right">
+                                                    @currency($jumlah)</span>
+                                            </td>
+                                            @else
+                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">
+                                                    @currency($jumlah)</span>
+                                            </td>
+                                            @endif
+                                        </tr>
+                                    @endif
                                 @endforeach
                             @endif
                         @endforeach
@@ -271,7 +304,7 @@
                     @foreach ($saldo_banks as $saldo_bank)
                         @php
                             $totalSaldoBank += $saldo_bank['nominalDana'];
-                            $totalKasGereja = ($totalSaldoBank + $saldo_tunai);
+                            $totalKasGereja = $totalSaldoBank + $saldo_tunai;
                         @endphp
                         <tr>
                             <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0 pl-5">

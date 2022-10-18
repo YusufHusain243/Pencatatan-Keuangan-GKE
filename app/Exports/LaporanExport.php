@@ -274,24 +274,32 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                     if (!array_key_exists('sub_sub_kode', $sub_kode)) continue;
                     foreach ($sub_kode['sub_sub_kode'] as $sub_sub_kode) {
                         if (!array_key_exists('dana', $sub_sub_kode)) continue;
-                        foreach ($sub_sub_kode['dana'] as $dana) {
+                        foreach ($sub_sub_kode['dana'] as $key => $dana) {
                             $jumlah += $dana['nominal'];
                             $jumlahPenerimaan += $dana['nominal'];
                             $table .= '<tr>';
-                            $table .= '<td class="text-center py-0 px-2">' . "4." . $kode_penerimaan['no_kode'] . "." . $sub_kode['no_sub_kode'] . "." . $sub_sub_kode['no_sub_sub_kode'] . '</td>';
-                            $table .= '<td class="text-center py-0 px-2">' . $sub_sub_kode['nama_sub_sub_kode'] . '</td>';
+                            if ($key == 0) {
+                                $table .= '<td class="text-center py-0 px-2">' . "4." . $kode_penerimaan['no_kode'] . "." . $sub_kode['no_sub_kode'] . "." . $sub_sub_kode['no_sub_sub_kode'] . '</td>';
+                                $table .= '<td class="text-center py-0 px-2">' . $sub_sub_kode['nama_sub_sub_kode'] . '</td>';
+                            } else {
+                                $table .= '<td></td><td></td>';
+                            }
                             $table .= '<td class="text-center py-0 px-2">' . $dana['keterangan'] . '</td>';
                             $table .= '<td class="py-0 px-2"><span class="float-right">Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</span></td>';
                             $table .= '</tr>';
                         }
                         $table .= '<tr>';
-                            $table .= '<td></td><td></td>';
-                            $table .= '<td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
-                            $table .= '</tr>';
+                        $table .= '<td></td><td></td>';
+                        $table .= '<td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
+                        $table .= '</tr>';
                     }
                     $jumlah = 0;
                 }
             }
+            $table .= '<tr>';
+            $table .= '<td colspan="2"></td>';
+            $table .= '<td><b>JUMLAH PENERIMAAN</b></td><td><b>Rp. ' . number_format($jumlahPenerimaan, 0, ',', '.') . '</b></td>';
+            $table .= '</tr>';
         }
 
         if (count($kode_pengeluarans) > 0) {
@@ -320,29 +328,34 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                     if (!array_key_exists('sub_sub_kode', $sub_kode)) continue;
                     foreach ($sub_kode['sub_sub_kode'] as $sub_sub_kode) {
                         if (!array_key_exists('dana', $sub_sub_kode)) continue;
-                        foreach ($sub_sub_kode['dana'] as $dana) {
+                        foreach ($sub_sub_kode['dana'] as $key => $dana) {
                             $jumlah += $dana['nominal'];
                             $jumlahPengeluaran += $dana['nominal'];
                             $table2 .= '<tr>';
-                            $table2 .= '<td>' . "5." . $kode_pengeluaran['no_kode'] . "." . $sub_kode['no_sub_kode'] . "." . $sub_sub_kode['no_sub_sub_kode'] . '</td>';
-                            $table2 .= '<td>' . $sub_sub_kode['nama_sub_sub_kode'] . '</td>';
+                            if ($key == 0) {
+                                $table2 .= '<td>' . "5." . $kode_pengeluaran['no_kode'] . "." . $sub_kode['no_sub_kode'] . "." . $sub_sub_kode['no_sub_sub_kode'] . '</td>';
+                                $table2 .= '<td>' . $sub_sub_kode['nama_sub_sub_kode'] . '</td>';
+                            } else {
+                                $table2 .= '<td></td><td></td>';
+                            }
                             $table2 .= '<td>' . $dana['keterangan'] . '</td>';
                             $table2 .= '<td>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</td>';
                             $table2 .= '</tr>';
                         }
                         $table2 .= '<tr>';
-                            $table2 .= '<td></td><td></td><td><b>JUMLAH</b></td>';
-                            if (last($sub_sub_kode['dana'])) {
-                                $table2 .= '<td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
-                            } else {
-                                $table2 .= '<td><b>Rp. ' . number_format($jumlah, 0, ',', '.') . '</b></td>';
-                            }
-                            $table2 .= '</tr>';
+                        $table2 .= '<td></td><td></td><td><b>JUMLAH</b></td>';
+                        if (last($sub_sub_kode['dana'])) {
+                            $table2 .= '<td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
+                        } else {
+                            $table2 .= '<td><b>Rp. ' . number_format($jumlah, 0, ',', '.') . '</b></td>';
+                        }
+                        $table2 .= '</tr>';
                     }
                 }
             }
             $table2 .= '<tr>';
-            $table2 .= '<td colspan="3"><b>JUMLAH PENGELUARAN</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td>';
+            $table2 .= '<td colspan="2"></td>';
+            $table2 .= '<td><b>JUMLAH PENGELUARAN</b></td><td><b>Rp. ' . number_format($jumlahPengeluaran, 0, ',', '.') . '</b></td>';
             $table2 .= '</tr>';
         }
 
