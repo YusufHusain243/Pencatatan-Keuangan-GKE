@@ -183,9 +183,10 @@
         }
 
         function maskSubKode(e) {
+            var data_value = e.target[e.target.selectedIndex].getAttribute("data-value").replace(/9/g, '\\9');
             $('#no_sub_kode').val('');
             $('#no_sub_kode').inputmask(
-                `${e.target[e.target.selectedIndex].getAttribute("data-type")}.${e.target[e.target.selectedIndex].getAttribute("data-value") == 9 ? '\\9' : e.target[e.target.selectedIndex].getAttribute("data-value")}.99`, {
+                `${e.target[e.target.selectedIndex].getAttribute("data-type")}.${data_value}.99`, {
                     "placeholder": "0"
                 });
         }
