@@ -205,7 +205,8 @@
                                             <td class="py-0 px-2">
                                                 {{ $dana['keterangan'] ? '- ' . $dana['keterangan'] : '' }}
                                             </td>
-                                            <td class="py-0 px-2">Rp.<span class="float-right">                                                    @currency($dana['nominal'])</span></td>
+                                            <td class="py-0 px-2">Rp.<span class="float-right"> @currency($dana['nominal'])</span>
+                                            </td>
                                         </tr>
                                     @endforeach
                                     @if ($jumlah != 0)
