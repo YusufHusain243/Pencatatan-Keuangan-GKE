@@ -100,7 +100,8 @@
                                             <td class="py-0 px-2">
                                                 {{ $dana['keterangan'] ? '- ' . $dana['keterangan'] : '' }}
                                             </td>
-                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">@currency($dana['nominal'])</span>
+                                            <td class="py-0 px-2 font-weight-bold">Rp.<span
+                                                    class="float-right">@currency($dana['nominal'])</span>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -114,10 +115,10 @@
                                             </td>
                                         </tr>
                                     @endif
+                                    @php
+                                        $jumlahPenerimaanPerSubSubKode = 0;
+                                    @endphp
                                 @endforeach
-                                @php
-                                    $jumlahPenerimaanPerSubSubKode = 0;
-                                @endphp
                             @endif
                         @endforeach
                     @endforeach
@@ -212,7 +213,8 @@
                                             <td class="py-0 px-2">
                                                 {{ $dana['keterangan'] ? '- ' . $dana['keterangan'] : '' }}
                                             </td>
-                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right"> @currency($dana['nominal'])</span>
+                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">
+                                                    @currency($dana['nominal'])</span>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -226,6 +228,9 @@
                                             </td>
                                         </tr>
                                     @endif
+                                    @php
+                                        $jumlahPengeluaranPerSubSubKode = 0;
+                                    @endphp
                                 @endforeach
                             @endif
                         @endforeach

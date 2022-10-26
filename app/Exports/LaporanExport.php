@@ -254,6 +254,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
             $table .= '<tr><th><b>4</b></th><th><b>PENDAPATAN</b></th><th></th><th></th></tr>';
             $jumlah = 0;
             $jumlahPenerimaan = 0;
+            $jumlahPenerimaanPerSubSubKode = 0;
             foreach ($kode_penerimaans['kode'] as $kode_penerimaan) {
                 $no_kode_penerimaan = "4." . $kode_penerimaan['no_kode'];
                 $kode_penerimaan['nama_kode'] = htmlentities($kode_penerimaan['nama_kode']);
@@ -290,8 +291,9 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         }
                         $table .= '<tr>';
                         $table .= '<td></td><td></td>';
-                        $table .= '<td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
+                        $table .= '<td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlahPenerimaanPerSubSubKode, 0, ',', '.') . '</td>';
                         $table .= '</tr>';
+                        $jumlahPenerimaanPerSubSubKode = 0;
                     }
                     $jumlah = 0;
                 }
@@ -310,6 +312,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
             $table2 .= '<tr><th><b>5</b></th><th><b>BELANJA</b></th><th></th><th></th></tr>';
             $jumlah = 0;
             $jumlahPengeluaran = 0;
+            $jumlahPengeluaranPerSubSubKode = 0;
             foreach ($kode_pengeluarans['kode'] as $kode_pengeluaran) {
                 $no_kode_pengeluaran = "5." . $kode_pengeluaran['no_kode'];
                 $kode_pengeluaran['nama_kode'] = htmlentities($kode_pengeluaran['nama_kode']);
@@ -344,12 +347,9 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         }
                         $table2 .= '<tr>';
                         $table2 .= '<td></td><td></td><td><b>JUMLAH</b></td>';
-                        if (last($sub_sub_kode['dana'])) {
-                            $table2 .= '<td>Rp. ' . number_format($jumlah, 0, ',', '.') . '</td>';
-                        } else {
-                            $table2 .= '<td><b>Rp. ' . number_format($jumlah, 0, ',', '.') . '</b></td>';
-                        }
+                        $table2 .= '<td><b>Rp. ' . number_format($jumlahPengeluaranPerSubSubKode, 0, ',', '.') . '</b></td>';
                         $table2 .= '</tr>';
+                        $jumlahPengeluaranPerSubSubKode = 0;
                     }
                 }
             }
@@ -378,11 +378,6 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
             $table3 .= '<tr><td colspan="3"><b>' . $saldo_bank['nama_bank'] . '</b></td><td><b>Rp. ' . number_format($saldo_bank['nominalDana'], 0, ',', '.') . '</b></td></tr>';
         }
         $table3 .= '</tbody></table>';
-
-
-        $html = $table;
-        $html .= $table2;
-        $html .= $table3;
 
         return view('exports.cetak_laporan', compact('table', 'table2', 'table3'));
     }
