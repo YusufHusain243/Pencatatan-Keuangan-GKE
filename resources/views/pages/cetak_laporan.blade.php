@@ -40,6 +40,7 @@
                     @php
                         $jumlah = 0;
                         $jumlahPenerimaan = 0;
+                        $jumlahPenerimaanPerSubSubKode = 0;
                     @endphp
                     @foreach ($kode_penerimaans['kode'] as $kode_penerimaan)
                         <tr>
@@ -82,6 +83,7 @@
                                         @php
                                             $jumlah += $dana['nominal'];
                                             $jumlahPenerimaan += $dana['nominal'];
+                                            $jumlahPenerimaanPerSubSubKode += $dana['nominal'];
                                         @endphp
                                         <tr>
                                             @if ($key == 0)
@@ -98,7 +100,7 @@
                                             <td class="py-0 px-2">
                                                 {{ $dana['keterangan'] ? '- ' . $dana['keterangan'] : '' }}
                                             </td>
-                                            <td class="py-0 px-2">Rp.<span class="float-right">@currency($dana['nominal'])</span>
+                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">@currency($dana['nominal'])</span>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -108,11 +110,14 @@
                                             <td class="py-0 px-2 text-right font-weight-bold">JUMLAH
                                             </td>
                                             <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">
-                                                    @currency($jumlah)</span>
+                                                    @currency($jumlahPenerimaanPerSubSubKode)</span>
                                             </td>
                                         </tr>
                                     @endif
                                 @endforeach
+                                @php
+                                    $jumlahPenerimaanPerSubSubKode = 0;
+                                @endphp
                             @endif
                         @endforeach
                     @endforeach
@@ -148,6 +153,7 @@
                     @php
                         $jumlah = 0;
                         $jumlahPengeluaran = 0;
+                        $jumlahPengeluaranPerSubSubKode = 0;
                     @endphp
                     @foreach ($kode_pengeluarans['kode'] as $kode)
                         <tr>
@@ -189,6 +195,7 @@
                                         @php
                                             $jumlah += $dana['nominal'];
                                             $jumlahPengeluaran += $dana['nominal'];
+                                            $jumlahPengeluaranPerSubSubKode += $dana['nominal'];
                                         @endphp
                                         <tr>
                                             @if ($key == 0)
@@ -205,7 +212,7 @@
                                             <td class="py-0 px-2">
                                                 {{ $dana['keterangan'] ? '- ' . $dana['keterangan'] : '' }}
                                             </td>
-                                            <td class="py-0 px-2">Rp.<span class="float-right"> @currency($dana['nominal'])</span>
+                                            <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right"> @currency($dana['nominal'])</span>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -215,7 +222,7 @@
                                             <td class="py-0 px-2 text-right font-weight-bold">JUMLAH
                                             </td>
                                             <td class="py-0 px-2 font-weight-bold">Rp.<span class="float-right">
-                                                    @currency($jumlah)</span>
+                                                    @currency($jumlahPengeluaranPerSubSubKode)</span>
                                             </td>
                                         </tr>
                                     @endif
