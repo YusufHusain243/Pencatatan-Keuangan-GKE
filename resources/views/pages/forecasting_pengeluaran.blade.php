@@ -40,11 +40,11 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data_forecasting->tahun }}</td>
-                                <td>Rp. @currency($data_forecasting->penerimaan)</td>
+                                <td>Rp. @currency($data_forecasting->pengeluaran)</td>
                                 <td>{{ $i }}</td>
-                                <td>Rp. @currency($data_forecasting->penerimaan)</td>
+                                <td>Rp. @currency($data_forecasting->pengeluaran)</td>
                                 <td>{{ $i * $i }}</td>
-                                <td>Rp. @currency($i * $data_forecasting->penerimaan)</td>
+                                <td>Rp. @currency($i * $data_forecasting->pengeluaran)</td>
                             </tr>
                             <?php
                             $x += $i;
