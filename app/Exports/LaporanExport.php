@@ -278,6 +278,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         foreach ($sub_sub_kode['dana'] as $key => $dana) {
                             $jumlah += $dana['nominal'];
                             $jumlahPenerimaan += $dana['nominal'];
+                            $jumlahPenerimaanPerSubSubKode += $dana['nominal'];
                             $table .= '<tr>';
                             if ($key == 0) {
                                 $table .= '<td class="text-center py-0 px-2">' . "4." . $kode_penerimaan['no_kode'] . "." . $sub_kode['no_sub_kode'] . "." . $sub_sub_kode['no_sub_sub_kode'] . '</td>';
@@ -286,12 +287,12 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                                 $table .= '<td></td><td></td>';
                             }
                             $table .= '<td class="text-center py-0 px-2">' . $dana['keterangan'] . '</td>';
-                            $table .= '<td class="py-0 px-2"><span class="float-right">Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</span></td>';
+                            $table .= '<td class="py-0 px-2"><b>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</b></td>';
                             $table .= '</tr>';
                         }
                         $table .= '<tr>';
                         $table .= '<td></td><td></td>';
-                        $table .= '<td><b>JUMLAH</b></td><td>Rp. ' . number_format($jumlahPenerimaanPerSubSubKode, 0, ',', '.') . '</td>';
+                        $table .= '<td><b>JUMLAH</b></td><td><b>Rp. ' . number_format($jumlahPenerimaanPerSubSubKode, 0, ',', '.') . '</b></td>';
                         $table .= '</tr>';
                         $jumlahPenerimaanPerSubSubKode = 0;
                     }
@@ -334,6 +335,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                         foreach ($sub_sub_kode['dana'] as $key => $dana) {
                             $jumlah += $dana['nominal'];
                             $jumlahPengeluaran += $dana['nominal'];
+                            $jumlahPengeluaranPerSubSubKode += $dana['nominal'];
                             $table2 .= '<tr>';
                             if ($key == 0) {
                                 $table2 .= '<td>' . "5." . $kode_pengeluaran['no_kode'] . "." . $sub_kode['no_sub_kode'] . "." . $sub_sub_kode['no_sub_sub_kode'] . '</td>';
@@ -342,7 +344,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                                 $table2 .= '<td></td><td></td>';
                             }
                             $table2 .= '<td>' . $dana['keterangan'] . '</td>';
-                            $table2 .= '<td>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</td>';
+                            $table2 .= '<td><b>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</b></td>';
                             $table2 .= '</tr>';
                         }
                         $table2 .= '<tr>';
