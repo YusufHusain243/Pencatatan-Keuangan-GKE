@@ -287,7 +287,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                                 $table .= '<td></td><td></td>';
                             }
                             $table .= '<td class="text-center py-0 px-2">' . $dana['keterangan'] . '</td>';
-                            $table .= '<td class="py-0 px-2"><b>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</b></td>';
+                            $table .= '<td class="py-0 px-2">Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</td>';
                             $table .= '</tr>';
                         }
                         $table .= '<tr>';
@@ -344,7 +344,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                                 $table2 .= '<td></td><td></td>';
                             }
                             $table2 .= '<td>' . $dana['keterangan'] . '</td>';
-                            $table2 .= '<td><b>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</b></td>';
+                            $table2 .= '<td>Rp. ' . number_format($dana['nominal'], 0, ',', '.') . '</td>';
                             $table2 .= '</tr>';
                         }
                         $table2 .= '<tr>';
