@@ -4,14 +4,12 @@ namespace App\Exports;
 
 use App\Models\Dana;
 use App\Models\Kode;
-use App\Models\SubKode;
 use App\Models\DetailBank;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Events\AfterSheet;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithStyles;
-use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
@@ -72,6 +70,11 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
     {
         $tanggalAwal = $this->tanggalAwal;
         $tanggalAkhir = $this->tanggalAkhir;
+        $jumlahPenerimaan = 0;
+        $jumlahPengeluaran = 0;
+        $table = null;
+        $table2 = null;
+        $table3 = null;
 
         function getIndonesianDate($dates)
         {
@@ -81,6 +84,14 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                 ->format('d F Y');
         }
 
+        $id_kode_penerimaan_has_dana = Dana::query()
+            ->with('danaToKode')
+            ->whereHas('danaToKode', function ($q) use ($tanggalAwal, $tanggalAkhir) {
+                $q->where('jenis_kode', 'Penerimaan')
+                    ->where('tanggal', '>=', $tanggalAwal)
+                    ->where('tanggal', '<=', $tanggalAkhir);
+            })
+            ->pluck('id_kode');
         $kodes_penerimaan = Kode::query()
             ->where('jenis_kode', '=', 'Penerimaan')
             ->whereHas('kodeToSubKode.subKodeToSubSubKode')
@@ -89,6 +100,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                 $q->where('tanggal', '>=', $tanggalAwal)
                     ->where('tanggal', '<=', $tanggalAkhir);
             })
+            ->whereIn('id', $id_kode_penerimaan_has_dana)
             ->get();
 
         $kode_penerimaans = [];
@@ -115,6 +127,14 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
             }
         }
 
+        $id_kode_pengeluaran_has_dana = Dana::query()
+            ->with('danaToKode')
+            ->whereHas('danaToKode', function ($q) use ($tanggalAwal, $tanggalAkhir) {
+                $q->where('jenis_kode', 'Pengeluaran')
+                    ->where('tanggal', '>=', $tanggalAwal)
+                    ->where('tanggal', '<=', $tanggalAkhir);
+            })
+            ->pluck('id_kode');
         $kodes_pengeluaran = Kode::query()
             ->where('jenis_kode', '=', 'Pengeluaran')
             ->whereHas('kodeToSubKode.subKodeToSubSubKode')
@@ -123,6 +143,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
                 $q->where('tanggal', '>=', $tanggalAwal)
                     ->where('tanggal', '<=', $tanggalAkhir);
             })
+            ->whereIn('id', $id_kode_pengeluaran_has_dana)
             ->get();
 
         $kode_pengeluarans = [];

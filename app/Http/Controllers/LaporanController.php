@@ -4,13 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Dana;
 use App\Models\Kode;
-use App\Models\SubKode;
 use App\Models\DetailBank;
-use App\Models\SubSubKode;
 use Illuminate\Http\Request;
 use App\Exports\LaporanExport;
-use App\Models\AkunBank;
-use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanController extends Controller
@@ -144,6 +140,15 @@ class LaporanController extends Controller
             }
         }
 
+
+        $id_kode_penerimaan_has_dana = Dana::query()
+            ->with('danaToKode')
+            ->whereHas('danaToKode', function ($q) use ($tanggalAwal, $tanggalAkhir) {
+                $q->where('jenis_kode', 'Penerimaan')
+                    ->where('tanggal', '>=', $tanggalAwal)
+                    ->where('tanggal', '<=', $tanggalAkhir);
+            })
+            ->pluck('id_kode');
         $kodes_penerimaan = Kode::query()
             ->where('jenis_kode', '=', 'Penerimaan')
             ->whereHas('kodeToSubKode.subKodeToSubSubKode')
@@ -152,6 +157,7 @@ class LaporanController extends Controller
                 $q->where('tanggal', '>=', $tanggalAwal)
                     ->where('tanggal', '<=', $tanggalAkhir);
             })
+            ->whereIn('id', $id_kode_penerimaan_has_dana)
             ->get();
 
         $kode_penerimaans = [];
@@ -178,6 +184,14 @@ class LaporanController extends Controller
             }
         }
 
+        $id_kode_pengeluaran_has_dana = Dana::query()
+            ->with('danaToKode')
+            ->whereHas('danaToKode', function ($q) use ($tanggalAwal, $tanggalAkhir) {
+                $q->where('jenis_kode', 'Pengeluaran')
+                    ->where('tanggal', '>=', $tanggalAwal)
+                    ->where('tanggal', '<=', $tanggalAkhir);
+            })
+            ->pluck('id_kode');
         $kodes_pengeluaran = Kode::query()
             ->where('jenis_kode', '=', 'Pengeluaran')
             ->whereHas('kodeToSubKode.subKodeToSubSubKode')
@@ -186,6 +200,7 @@ class LaporanController extends Controller
                 $q->where('tanggal', '>=', $tanggalAwal)
                     ->where('tanggal', '<=', $tanggalAkhir);
             })
+            ->whereIn('id', $id_kode_pengeluaran_has_dana)
             ->get();
 
         $kode_pengeluarans = [];
