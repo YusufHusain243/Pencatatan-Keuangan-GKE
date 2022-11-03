@@ -315,13 +315,15 @@
                     @foreach ($saldo_banks as $saldo_bank)
                         @php
                             $totalSaldoBank += $saldo_bank['nominalDana'];
-                            $totalKasGereja = $totalSaldoBank + $saldo_tunai;
                         @endphp
                         <tr>
                             <td class="py-0 px-2 font-weight-bold border-top-0 border-bottom-0 pl-5">
                                 {{ $saldo_bank['nama_bank'] }}<span class="float-right">Rp. @currency($saldo_bank['nominalDana'])</span></td>
                         </tr>
                     @endforeach
+                    @php
+                    $totalKasGereja = ($totalSaldoBank + $saldo_tunai);
+                    @endphp
                     <tr>
                         <td class="py-0 px-2 font-weight-bold border-bottom-0">
                             TOTAL SALDO KAS GEREJA<span class="float-right">Rp. @currency($totalKasGereja)</span></td>

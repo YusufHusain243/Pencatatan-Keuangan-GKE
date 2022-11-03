@@ -56,11 +56,13 @@ class LaporanController extends Controller
 
         $saldo_penerimaan_tunai = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->sum('danas.nominal');
 
         $saldo_pengeluaran_tunai = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
             ->where('kodes.jenis_kode', '=', 'Pengeluaran')
             ->sum('danas.nominal');
 
@@ -70,6 +72,7 @@ class LaporanController extends Controller
             ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
             ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('danas.transaksi', '=', 'Transfer Bank')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->groupBy('detail_banks.id_bank')
             ->selectRaw('akun_banks.nama_bank, sum(danas.nominal) as nominalDana')
@@ -78,6 +81,7 @@ class LaporanController extends Controller
         $saldo_penerimaan_banks = DetailBank::join('danas', 'detail_banks.id_dana', '=', 'danas.id')
             ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
             ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->groupBy('detail_banks.id_bank')
             ->selectRaw('akun_banks.nama_bank, sum(danas.nominal) as nominalDana')
@@ -88,6 +92,7 @@ class LaporanController extends Controller
             ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
             ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('danas.transaksi', '=', 'Transfer Bank')
+            ->where('danas.tanggal', '<=', $tanggalAwal)
             ->where('kodes.jenis_kode', '=', 'Pengeluaran')
             ->groupBy('detail_banks.id_bank')
             ->selectRaw('akun_banks.nama_bank, sum(danas.nominal) as nominalDana')
@@ -139,7 +144,6 @@ class LaporanController extends Controller
                 }
             }
         }
-
 
         $id_kode_penerimaan_has_dana = Dana::query()
             ->with('danaToKode')
