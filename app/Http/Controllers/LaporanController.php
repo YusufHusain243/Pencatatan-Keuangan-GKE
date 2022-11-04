@@ -51,8 +51,7 @@ class LaporanController extends Controller
         // get saldo akhir
         $saldo_akhir = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
-            ->where('danas.tanggal', '>=', $tanggalAwal)
-            ->where('danas.tanggal', '<=', $tanggalAkhir)
+            ->where('danas.tanggal', '<=', $tanggalAwal)
             ->sum('danas.nominal');
 
         $saldo_penerimaan_tunai = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
