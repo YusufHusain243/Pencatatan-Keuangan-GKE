@@ -173,8 +173,7 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
 
         // get saldo akhir
         $saldo_akhir = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
-            ->where('danas.tanggal', '>=', $tanggalAwal)
-            ->where('danas.tanggal', '<=', $tanggalAkhir)
+            ->where('danas.tanggal', '<=', $tanggalAwal)
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->sum('danas.nominal');
 
