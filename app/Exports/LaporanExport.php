@@ -173,17 +173,21 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
 
         // get saldo akhir
         $saldo_akhir = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
-            ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->where('danas.tanggal', '<=', $tanggalAwal)
+            ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->sum('danas.nominal');
 
         $saldo_penerimaan_tunai = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->where('danas.tanggal', '>=', $tanggalAwal)
+            ->where('danas.tanggal', '<=', $tanggalAkhir)
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->sum('danas.nominal');
 
         $saldo_pengeluaran_tunai = Dana::join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('danas.transaksi', '=', 'Tunai/Cash')
+            ->where('danas.tanggal', '>=', $tanggalAwal)
+            ->where('danas.tanggal', '<=', $tanggalAkhir)
             ->where('kodes.jenis_kode', '=', 'Pengeluaran')
             ->sum('danas.nominal');
 
@@ -193,6 +197,8 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
             ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
             ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
             ->where('danas.transaksi', '=', 'Transfer Bank')
+            ->where('danas.tanggal', '>=', $tanggalAwal)
+            ->where('danas.tanggal', '<=', $tanggalAkhir)
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->groupBy('detail_banks.id_bank')
             ->selectRaw('akun_banks.nama_bank, sum(danas.nominal) as nominalDana')
@@ -201,6 +207,8 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $saldo_penerimaan_banks = DetailBank::join('danas', 'detail_banks.id_dana', '=', 'danas.id')
             ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
             ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('danas.tanggal', '>=', $tanggalAwal)
+            ->where('danas.tanggal', '<=', $tanggalAkhir)
             ->where('kodes.jenis_kode', '=', 'Penerimaan')
             ->groupBy('detail_banks.id_bank')
             ->selectRaw('akun_banks.nama_bank, sum(danas.nominal) as nominalDana')
@@ -210,6 +218,8 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $saldo_pengeluaran_banks = DetailBank::join('danas', 'detail_banks.id_dana', '=', 'danas.id')
             ->join('akun_banks', 'detail_banks.id_bank', '=', 'akun_banks.id')
             ->join('kodes', 'danas.id_kode', '=', 'kodes.id')
+            ->where('danas.tanggal', '>=', $tanggalAwal)
+            ->where('danas.tanggal', '<=', $tanggalAkhir)
             ->where('danas.transaksi', '=', 'Transfer Bank')
             ->where('kodes.jenis_kode', '=', 'Pengeluaran')
             ->groupBy('detail_banks.id_bank')
@@ -397,9 +407,14 @@ class LaporanExport implements FromView, WithStyles, WithEvents, WithColumnForma
         $table3 .= '<tr><td></td><td></td><td></td><td></td></tr>';
         $table3 .= '<tr><td><b>Tempat Penyimpanan :</b></td></tr>';
         $table3 .= '<tr><td colspan="3"><b>Kas Tunai</b></td><td><b>Rp. ' . number_format($saldo_tunai, 0, ',', '.') . '</b></td></tr>';
+        $totalSaldoBank = 0;
+        $totalKasGereja = 0;
         foreach ($saldo_banks as $saldo_bank) {
+            $totalSaldoBank += $saldo_bank['nominalDana'];
             $table3 .= '<tr><td colspan="3"><b>' . $saldo_bank['nama_bank'] . '</b></td><td><b>Rp. ' . number_format($saldo_bank['nominalDana'], 0, ',', '.') . '</b></td></tr>';
         }
+        $totalKasGereja = ($totalSaldoBank + $saldo_tunai);
+        $table3 .= '<tr><td colspan="3"><b>TOTAL SALDO KAS GEREJA</b></td><td><b>Rp. ' . number_format($totalKasGereja, 0, ',', '.') . '</b></td></tr>';
         $table3 .= '</tbody></table>';
 
         return view('exports.cetak_laporan', compact('table', 'table2', 'table3'));
