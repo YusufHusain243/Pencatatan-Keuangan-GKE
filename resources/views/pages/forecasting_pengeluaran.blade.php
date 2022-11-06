@@ -40,7 +40,7 @@
                             <tr>
                                 <td>{{ $loop->iteration }}</td>
                                 <td>{{ $data_forecasting->tahun }}</td>
-                                <td>{{$data_forecasting->pengeluaran}}</td>
+                                <td>Rp. @currency($data_forecasting->pengeluaran)</td>
                                 <td>{{ $i }}</td>
                                 <td>Rp. @currency($data_forecasting->pengeluaran)</td>
                                 <td>{{ $i * $i }}</td>
