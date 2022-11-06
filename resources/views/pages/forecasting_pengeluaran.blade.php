@@ -70,7 +70,7 @@
                             ?>
                             <td class="text-center font-weight-bold" colspan="3">Rata Rata</td>
                             <td class="font-weight-bold">{{ $avg_x }}</td>
-                            <td class="font-weight-bold">Rp. @currency($avg_y)</td>
+                            <td class="font-weight-bold">Rp. {{ number_format($avg_y, 2, ',', '.') }}</td>
                             <td class="font-weight-bold">{{ $avg_xx }}</td>
                             <td class="font-weight-bold">Rp. @currency($avg_xy)</td>
                         </tr>
